@@ -1,0 +1,208 @@
+html {
+	font-family: Roboto, sans-serif;
+	background: #eee;
+	text-rendering: optimizeLegibility;
+	font-feature-settings: 'liga';
+	hyphens: auto;
+}
+main {
+	padding-top: 2em;
+	margin: 0 auto;
+	max-width: 70em;
+}
+p {
+	font-weight: 300;
+	text-align: justify;
+}
+cases {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin-left: -10px;
+	margin-right: -10px;
+}
+case {
+	display: block;
+	flex: 1 1 20em;
+	min-width: 20em;
+	padding: 20px;
+	margin: 10px;
+	background: #fdfdfd;
+	border-radius: 2px;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+	transition: box-shadow .25s;
+	cursor: pointer;
+	user-select: none;
+}
+case h4 {
+	font-size: larger;
+}
+case h4::before {
+	font-family: 'Material Icons';
+	content: "assignment ";
+}
+case:hover {
+	background: #fff;
+	box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	animation: none !important;
+}
+
+.wiggle >:nth-child(n) {
+	transform-origin: center center;
+	animation: wiggle 200ms ease-in-out infinite; 
+}
+.wiggle >:nth-child(5n+1) { animation-delay:  -47ms; animation-duration: 157ms; }
+.wiggle >:nth-child(5n+2) { animation-delay: -187ms; animation-duration: 209ms; }
+.wiggle >:nth-child(5n+3) { animation-delay:  -92ms; animation-duration: 163ms; }
+.wiggle >:nth-child(5n+4) { animation-delay:  -75ms; animation-duration: 244ms; }
+@keyframes wiggle {
+	 0% {transform: rotate(-.2deg); }
+	50% {transform: rotate( .2deg); }
+}
+
+.placeholder {
+	position: relative;
+	visibility: hidden;
+	animation: none !important;
+	transition: width 1s, height 1s;
+}
+.placeholder >placeholder {
+	position: absolute;
+	visibility: visible;
+	display: block;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding: 10pt;
+}
+.placeholder >placeholder >placeholder {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 3px dashed rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background: rgba(0,0,0,0.1);
+}
+.drag {
+	display: block;
+	position: absolute;
+	animation: none !important;
+	background: #fff;
+	box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+
+.modal_dialog {
+	position: fixed;
+	z-index: 1003;
+	top: 10%;
+	left: 0;
+	right: 0;
+	height: 70%;
+	width: 55%;
+	margin: auto;
+	background: #fdfdfd;
+	border-radius: 2px;
+	box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
+	box-sizing: border-box;
+}
+#modal_backdrop {
+	position: fixed;
+	z-index: 1002;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+}
+.modal_dialog .contents {
+	position: absolute;
+	height: calc(100% - 3em);
+	max-height: 100%;
+	width: 100%;
+	overflow-y: auto;
+	border-radius: 2px;
+	padding: 20px;
+	box-sizing: border-box;
+}
+.modal_dialog footer {
+	display: block;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 3em;
+	border-radius: 2px;
+	vertical-align: middle;
+}
+
+.fullscreen_dialog {
+	position: fixed;
+	z-index: 1003;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: #eee;
+}
+.fullscreen_dialog .contents {
+	position: fixed;
+	top: 3em;
+	left: 0;
+	height: calc(100% - 3em);
+	max-height: 100%;
+	width: 100%;
+	overflow-y: auto;
+	border-radius: 2px;
+	padding: 20px;
+	box-sizing: border-box;
+}
+.fullscreen_dialog footer {
+	display: block;
+	position: fixed;
+	z-index: 1004;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 3em;
+	border-radius: 2px;
+	background-color: #fdd;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+
+button {
+	display: inline-block;
+	border: none;
+	border-radius: 2px;
+	height: 36px;
+	line-height: 36px;
+	outline: 0;
+	padding: 0 2rem;
+	text-transform: uppercase;
+	vertical-align: middle;
+	text-decoration: none;
+	color: #fff;
+	background-color: #26a69a;
+	text-align: center;
+	letter-spacing: .5px;
+	transition: .2s ease-out;
+	cursor: pointer;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+button:hover {
+	background-color: #2bbbad;
+	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+form button {
+	float: right;
+	color: #444;
+	background: none;
+	box-shadow: none;
+}
+form button:hover {
+	color: #000;
+	background: none;
+	box-shadow: none;
+}

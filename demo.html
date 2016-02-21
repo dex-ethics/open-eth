@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>OpenEth</title>
+	<meta name="description" content="Community-driven ethical explication system.">
+	<meta name="author" content="Remco Bloemen">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<!-- Try to load fonts from Google (but we have them local if the CDN fails) -->
+	<!--
+	<link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,300,300italic' rel='stylesheet'>
+	-->
+	<link type="text/css" rel="stylesheet" href="/css/materialize.min.css">
+	<link type="text/css" href="/dex.css" rel='stylesheet'>
+</head>
+<body>
+<header>
+<nav>
+	<div class="nav-wrapper">
+		<a href="#" class="brand-logo center">OpenEth</a>
+	</div>
+</nav>
+</header>
+<main id="main">
+
+<dilemma data-editor="edit_dilemma">
+	<h1>Dilemma: <span data-template="name"></span></h1>
+	<p data-template="description"></p>
+	<h6>Possible actions</h6>
+	<ul data-template="actions">
+		<li data-template="action" hidden></li>
+	</ul>
+	<a onclick="editm(parentNode)">Edit</a>
+</dilemma>
+
+<h2>Cases</h2>
+<cases data-template="cases">
+	<case hidden onmousedown="drag(this,event)" onclick="editf(this)" data-editor="edit_case">
+		<h4>Case: <span data-template="name"></span></h4>
+		<p data-template="description"></p>
+		<p>Correct action: <em data-template="action"></em></p>
+		<ul data-template="features">
+			<li hidden></li>
+		</ul>
+	</case>
+</cases>
+
+<h2>Principles</h2>
+<principles data-template="disjunction">
+	<principle hidden>
+		An action is ethically preferable to another if it
+		<ul data-template="conjunction">
+			<li hidden></li>
+		</ul>
+	</principle>
+</principles>
+
+</main>
+
+<!-- Dialogues -->
+
+<form id="guidance_case" hidden>
+	<div class="content">
+		<h4>Guidance</h4>
+		<p>Is it possible to have a case where <b data-template="action"></b> is the correct action?</p>
+	</div>
+	<footer>
+		<button type="submit">Yes</button>
+		<button type="reset">No</button>
+	</footer>
+</form>
+
+<form id="guidance_duty" hidden>
+	<div class="content">
+		<h4>Guidance</h4>
+		<p>Can one infer that there is (at least) a (prima facie) duty to minimize <span data-template="feature"></span>?</p>
+	</div>
+	<footer>
+		<button type="submit">Yes</button>
+		<button type="reset">No</button>
+	</footer>
+</form>
+
+<form id="guidance_duty_infered" hidden>
+	<div class="content">
+		<h4>Guidance</h4>
+		<p>Therefore, it can be inferred that there is (at least) a (prima facie) duty to maximize <span data-template="feature"></span>.</p>
+	</div>
+	<footer>
+		<button type="submit">Ok</button>
+	</footer>
+</form>
+
+<form id="inconsistency" hidden>
+	<div class="content">
+		<h4>Internal Inconsistency</h4>
+		<p>Another ethically relevant feature is needed in this case to resolve in internal inconsistency.</p>
+	</div>
+	<footer>
+		<button type="submit">Ok</button>
+	</footer>
+</form>
+
+<!-- Edit forms -->
+
+<form id="edit_dilemma" hidden>
+	<div class="contents">
+		<h4>Edit Dilemma</h4>
+		<p>A dilemma is a problem offering two possibilities, neither of which is unambiguously acceptable or preferable. One in this position has been traditionally described as "being on the horns of a dilemma", neither horn being comfortable. This is sometimes more colorfully described as "Finding oneself impaled upon the horns of a dilemma", referring to the sharp points of a bull's horns, equally uncomfortable (and dangerous).</p>
+		<label>Name of dilemma
+			<input type="text" data-template="name">
+		</label>
+		<label>Description of dilemma
+			<textarea data-template="description"></textarea>
+		</label>
+		<fieldset>
+			<legend>Actions</legend>
+			<div data-template="actions">
+				<p data-template="action"></p>
+			</div>
+		</fieldset>
+	</div>
+	<footer>
+		<button type="submit">Ok</button>
+		<button type="reset">Cancel</button>
+	</footer>
+</form>
+
+<form id="edit_case" hidden>
+	<div class="contents">
+		<h4>Edit Case</h4>
+		<p>A case study is a "published report about a person, group, or situation that has been studied over time." If the case study is about a group, it describes the behavior of the group as a whole, not behavior of each individual in the group. Case studies can be produced by following a formal research method. These case studies are likely to appear in formal research venues, as journals and professional conferences, rather than popular works. The resulting body of 'case study research' has long had a prominent place in many disciplines and professions, ranging from psychology, anthropology, sociology, and political science to education, clinical science, social work, and administrative science.</p>
+		<label>
+			Case name
+			<input type="text" data-template="name">
+		</label>
+		<label>
+			Case description
+			<textarea data-template="description"></textarea>
+		</label>
+		<fieldset>
+			<legend>Correct action</legend>	
+			<label>
+				<span>Action 1</span>
+				<input type="radio" selected/>
+			</label>
+			<label>
+				<span>Action 2</span>
+				<input type="radio" selected/>
+			</label>
+		</fieldset>
+		<h5>Features</h5>
+		<fieldset>
+			<legend>Feature 1</legend>
+			<fieldset>
+				<legend>State</legend>
+				<label>
+					Presence
+					<input type="radio"/>
+				</label>
+				<label>
+					Absence
+					<input type="radio"/>
+				</label>
+			</fieldset>
+			
+			<label>
+				of amount
+				<input type="text" value="1">
+			</label>
+			
+			<label>
+				degree of
+				<select>
+					<option disabled selected>Choose your option</option>
+					<option>harm</option>
+					<option>Option 3</option>
+				</select>
+			</label>
+			
+			<fieldset>
+				<legend>in action</legend>
+				<label>
+					Notify
+					<input type="radio" selected/>
+				</label>
+				<label>
+					Do not notify
+					<input type="radio"/>
+				</label>
+			</fieldset>
+		</fieldset>
+		
+		<a>Add feature</a>
+	</div>
+	<footer>
+		<button type="submit">Ok</button>
+		<button type="reset">Cancel</button>
+	</footer>
+</form>
+
+
+<footer class="page-footer">
+	<div class="footer-copyright">
+		<div class="container">
+			© 2014—2016 The Dex Ethics Team.
+		</div>
+	</div>
+</footer>
+<script type="text/javascript" src='/dex.js'></script>
+<script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="/js/materialize.min.js"></script>
+<script>
+'use strict';
+
+function editm(node)
+{
+	console.log(extract('main'));
+	
+	let data = extract(node);
+	let form = document.getElementById(node.dataset.editor);
+	join(form, data);
+	show_modal(form, function() { join(node, extract(form)); });
+}
+
+function editf(node)
+{
+	let data = extract(node);
+	let form = document.getElementById(node.dataset.editor);
+	join(form, data);
+	show_fullscreen(form, function() { join(node, extract(form)); });
+}
+
+window.addEventListener('DOMContentLoaded',
+	get.bind(null, '/example1a.json', join.bind(null, 'main')));
+
+</script>
+</body>
+</html>
