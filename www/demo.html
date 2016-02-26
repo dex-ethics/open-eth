@@ -7,10 +7,8 @@
 	<meta name="author" content="Remco Bloemen">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<!-- Try to load fonts from Google (but we have them local if the CDN fails) -->
-	<!--
 	<link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,300,300italic' rel='stylesheet'>
-	-->
 	<link type="text/css" rel="stylesheet" href="/css/materialize.min.css">
 	<link type="text/css" href="/dex.css" rel='stylesheet'>
 </head>
@@ -25,24 +23,59 @@
 <main id="main">
 
 <dilemma data-editor="edit_dilemma">
-	<h1>Dilemma: <span data-template="name"></span></h1>
-	<p data-template="description"></p>
-	<h6>Possible actions</h6>
-	<ul data-template="actions">
-		<li data-template="action" hidden></li>
-	</ul>
-	<a onclick="editm(parentNode)">Edit</a>
+	<h1>Dilemma:
+		<span data-content="name"></span>
+		<button onclick="editm(parentNode.parentNode)">Edit</button>
+		<button onclick="debug()">Debug</button>
+		<button onclick="test()">Test</button>
+	</h1>
+	<p data-content="description"></p>
+	<div class="row">
+		<div class="col s6">
+			<h6>Possible actions</h6>
+			<ul id="actions" data-array="actions">
+				<li
+					hidden
+					class="draggable"
+					data-content
+					onclick="edit_action(this)"
+					>
+				</li>
+			</ul>
+		</div>
+		<div class="col s6">
+			<h6>
+				Features
+				<button>Add</button>
+			</h6>
+			<ul
+				id="features"
+				data-array="features"
+				data-onreorder="features_reorder">
+				<li
+					hidden
+					data-content
+					class="draggable"
+					onclick="edit_feature(this)"
+					>
+				</li>
+			</ul>
+		</div>
+	</div>
 </dilemma>
 
-<h2>Cases</h2>
-<cases data-template="cases">
+<h2>
+	Cases
+	<button onclick="add_case()">Add</button>
+</h2>
+<cases data-array="cases">
 	<case hidden onmousedown="drag(this,event)" onclick="editf(this)" data-editor="edit_case">
-		<h4>Case: <span data-template="name"></span></h4>
-		<p data-template="description"></p>
-		<p>Correct action: <em data-template="action"></em></p>
-		<ul data-template="features">
-			<li hidden></li>
-		</ul>
+		<h4>Case: <span data-content="name"></span></h4>
+		<p data-content="description"></p>
+		<p>Correct action: <em
+			data-join="this.textContent=action_name(data.action)"
+			data-extract="return {action: action_index(this.textContent)}"
+			></em></p>
 	</case>
 </cases>
 
@@ -103,6 +136,46 @@
 </form>
 
 <!-- Edit forms -->
+
+<form id="debug" hidden>
+	<div class="contents">
+		<h4>Debug</h4>
+		<label>JSON export
+			<textarea data-join="this.value=JSON.stringify(data)"></textarea>
+		</label>
+	</div>
+	<footer>
+		<button type="submit" value="asd">Ok</button>
+	</footer>
+</form>
+
+<form id="edit_action" hidden>
+	<div class="contents">
+		<h4>Edit Action</h4>
+		<p>An action is a.</p>
+		<label>Name of action
+			<input type="text" data-value>
+		</label>
+	</div>
+	<footer>
+		<button type="submit" value="asd">Ok</button>
+		<button type="reset" value="can">Cancel</button>
+	</footer>
+</form>
+
+<form id="edit_feature" hidden>
+	<div class="contents">
+		<h4>Edit Feature</h4>
+		<p>An feature is a.</p>
+		<label>Name of feature
+			<input type="text" data-value>
+		</label>
+	</div>
+	<footer>
+		<button type="submit">Ok</button>
+		<button type="reset">Cancel</button>
+	</footer>
+</form>
 
 <form id="edit_dilemma" hidden>
 	<div class="contents">
@@ -195,8 +268,9 @@
 		<a>Add feature</a>
 	</div>
 	<footer>
-		<button type="submit">Ok</button>
+		<button type="submit" value="ok">Ok</button>
 		<button type="reset">Cancel</button>
+		<button type="submit" value="delete">Delete</button>
 	</footer>
 </form>
 
@@ -214,26 +288,103 @@
 <script>
 'use strict';
 
-function editm(node)
-{
-	console.log(extract('main'));
+var dilemma = {
+	name: "",
+	description: "",
+	actions: ["First action", "Second action"],
+	features: [],
+	cases: []
+};
+
+let actions = document.getElementById('actions');
+function action_name(index) {
+	return actions.children[index + 1].extract();
+}
+
+function action_index(name) {
+	return actions.extract().actions.indexOf(name);
+}
+
+function edit_action(node) {
+	let form = document.getElementById('edit_action');
+	join(form, extract(node));
+	show_modal(form, function() {
+		join(node, extract(form));
+		
+		
+		// Update any cases that refer to this action
+		
+	});
+}
+
+function edit_feature(node) {
+	let form = document.getElementById('edit_feature');
+	join(form, extract(node));
+	show_modal(form, function() {
+		join(node, extract(form));
+	});
+}
+
+
+function add_case() {
+	let cases = document.getElementsByTagName('cases')[0];
+	let inst = cases.children[0].cloneNode(true);
+	inst.removeAttribute('hidden');
+	cases.appendChild(inst);
+	editf(inst);
+}
+
+
+function del_case() {
 	
-	let data = extract(node);
-	let form = document.getElementById(node.dataset.editor);
-	join(form, data);
-	show_modal(form, function() { join(node, extract(form)); });
 }
 
-function editf(node)
+function editm(node) {
+}
+
+function editf(node) {
+	let form = document.getElementById(node.dataset.editor);
+	join(form, extract(node));
+	show_fullscreen(form, function() {
+		join(node, extract(form));
+	});
+}
+
+function debug()
 {
-	let data = extract(node);
-	let form = document.getElementById(node.dataset.editor);
+	let data = extract('main');
+	let form = document.getElementById('debug');
 	join(form, data);
-	show_fullscreen(form, function() { join(node, extract(form)); });
+	show_modal(form);
 }
 
-window.addEventListener('DOMContentLoaded',
-	get.bind(null, '/example1a.json', join.bind(null, 'main')));
+function test()
+{
+	let data1 = extract('main');
+	join('main', data1);
+	let data2 = extract('main');
+	console.log(data1, data2);
+	if(JSON.stringify(data1) !== JSON.stringify(data2)) {
+		console.log("Test failed");
+	}
+}
+
+function my_func(data, join)
+{
+	console.log('my_func: ', this, data);
+}
+
+window.addEventListener('DOMContentLoaded', get.bind(null, '/example1b.json', function(data) {
+	dilemma = data;
+	join('main', dilemma);
+}));
+
+window.addEventListener('DOMContentLoaded', function() {
+	// We do this by setAttribute so the cloneNode() will copy it.
+	for(let elm of document.querySelectorAll('.draggable'))
+		elm.setAttribute('onmousedown', 'drag(this,event)');
+})
+
 
 </script>
 </body>

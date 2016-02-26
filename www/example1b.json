@@ -1,0 +1,40 @@
+{
+	"name" : "Medical Reminding",
+	"description" : "A doctor has prescribed medication that should be taken at a particular time. When the system reminds the patient to take the medication, the patient says that he wants to take it later. Should the system notify the overseer that the patient won't take the medication at the prescribed time or not?",
+	"actions" : ["Notify", "Do not notify"],
+	"features" : ["harm", "respect for autonomy", "benefit"],
+	"cases" : [
+			{
+				"name" : "Harm from noncompliance",
+				"description" : "A doctor has prescribed a medication that needs to be taken at a particular time or the patient will be harmed by not taking it at that time. When reminded, the patient refuses to take it at that time.",
+				"action" : 0,
+				"features" : [
+						"Presence of 1 degree(s) of Harm in Do Not Notify",
+						"Presence of 1 degree(s) of Respect For Autonomy in Do Not Notify"
+					]
+			},
+			{
+				"name" : "Small Benefit / Refusal",
+				"description" : "A doctor has prescribed a particular medication that ideally should be taken at a certain time in order for the patient to receive a small benefit (i.e. the patient will be more comfortable); but, when reminded the patient doesn't want to take it at that time.",
+				"action" : 1,
+				"features" : [
+						"Absence of 1 degree(s) of Benefit in Do Not Notify",
+						"Presence of 1 degree(s) of Respect For Autonomy in Do Not Notify"
+					]
+			},
+			{
+				"name" : "Considerable benefit",
+				"description" : "A doctor has prescribed a particular medication that would provide considerable benefit for the patient (e.g. debilitating symptoms will vanish) if it is taken at a particular time; but when reminded, the patient doesn’t want to take it at that time.",
+				"action" : 0,
+				"features" : [
+						"Absence of 2 degree(s) of Benefit in Do Not Notify",
+						"Presence of 1 degree(s) of Respect For Autonomy in Do Not Notify"
+					]
+			},
+			{
+				"name" : "No response",
+				"description" : "A doctor has prescribed a particular medication that ideally should be taken at a particular time in order for the patient to receive a small benefit; but, when reminded, the patient refuses to respond, one way or the other.",
+				"action" : 0
+			}
+		]
+}
