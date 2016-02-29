@@ -171,6 +171,8 @@ case:hover {
 	height: calc(100% - 3em);
 	max-height: 100%;
 	width: 100%;
+	max-width: 50em;
+	margin: auto;
 	overflow-y: auto;
 	border-radius: 2px;
 	padding: 20px;

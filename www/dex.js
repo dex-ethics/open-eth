@@ -205,10 +205,9 @@ function drag(node, e) {
 	return false;
 }
 
-
-// Show a <form> as a modal dialogue
+// Show a <form> as a modal or fullscreen dialogue
 // TODO: Make the browser back button act as [cancel]
-function show_modal(form, on_accept, on_reject)
+function show_form(fullscreen, form, on_accept, on_reject)
 {
 	if(form.constructor == String)
 		form = document.getElementById(form);
@@ -217,11 +216,16 @@ function show_modal(form, on_accept, on_reject)
 	if(backdrop === null) {
 		backdrop = document.createElement('div');
 		backdrop.id = 'modal_backdrop';
+		backdrop.setAttribute('hidden','');
 		body.appendChild(backdrop);
 	}
-	form.className += ' modal_dialog';
+	if(fullscreen) {
+		form.className += ' fullscreen_dialog';
+	} else {
+		form.className += ' modal_dialog';
+		backdrop.removeAttribute('hidden');
+	}
 	form.removeAttribute('hidden');
-	backdrop.removeAttribute('hidden');
 	body.style.overflow = 'hidden';
 	
 	let backdrop_click = function(event) {
@@ -246,11 +250,15 @@ function show_modal(form, on_accept, on_reject)
 			value = document.activeElement.value;
 		}
 		
-		form.className = form.className.replace(/\bmodal_dialog\b/,'');
+		if(fullscreen) {
+			form.className = form.className.replace(/\bfullscreen_dialog\b/,'');
+		} else {
+			form.className = form.className.replace(/\bmodal_dialog\b/,'');
+			backdrop.setAttribute('hidden','');
+			backdrop.removeEventListener('click', backdrop_click, true);
+		}
 		form.setAttribute('hidden','');
-		backdrop.setAttribute('hidden','');
 		body.style.overflow = '';
-		backdrop.removeEventListener('click', backdrop_click, true);
 		document.removeEventListener('keydown', escape_handler, true);
 		form.removeEventListener('reset', form_reset, true);
 		form.removeEventListener('submit', form_submit, true);
@@ -264,63 +272,15 @@ function show_modal(form, on_accept, on_reject)
 	};
 	form_reset = close.bind(null, false);
 	form_submit = close.bind(null, true);
-	backdrop.addEventListener('click', backdrop_click, true);
+	if(!fullscreen) {
+		backdrop.addEventListener('click', backdrop_click, true);
+	}
 	document.addEventListener('keydown', escape_handler, true);
 	form.addEventListener('reset', form_reset, true);
 	form.addEventListener('submit', form_submit, true);
 }
-
-// Show a <form> as a full screen dialogue
-// TODO: Make the browser back button act as [cancel]
-function show_fullscreen(form, on_accept, on_reject)
-{
-	if(form.constructor == String)
-		form = document.getElementById(form);
-	let body = document.getElementsByTagName('body')[0];
-	form.method = 'none';
-	form.target = 'none';
-	form.className += ' fullscreen_dialog';
-	form.removeAttribute('hidden');
-	body.style.overflow = 'hidden';
-	
-	let form_reset;
-	let form_submit;
-	let escape_handler = function(e) {
-		if(e.keyCode === 27) {
-			form.reset();
-			e.preventDefault();
-			e.stopPropagation();
-			return false;
-		}
-	};
-	let close = function(accept, event) {
-		// Get the value of the submit button used
-		let value = undefined;
-		if(document.activeElement instanceof HTMLButtonElement
-			&& document.activeElement.type === "submit") {
-			value = document.activeElement.value;
-		}
-		
-		form.className = form.className.replace(/\bfullscreen_dialog\b/,'');
-		form.setAttribute('hidden','');
-		body.style.overflow = '';
-		document.removeEventListener('keydown', escape_handler, true);
-		form.removeEventListener('reset', form_reset, true);
-		form.removeEventListener('submit', form_submit, true);
-		if(accept && typeof on_accept === 'function')
-			on_accept(value);
-		if(!accept && typeof on_reject === 'function')
-			on_reject();
-		event.preventDefault();
-		event.stopPropagation();
-		return false;
-	};
-	form_reset = close.bind(null, false);
-	form_submit = close.bind(null, true);
-	document.addEventListener('keydown', escape_handler, true);
-	form.addEventListener('reset', form_reset, true);
-	form.addEventListener('submit', form_submit, true);
-}
+let show_modal = show_form.bind(null, false);
+let show_fullscreen = show_form.bind(null, true);
 
 document.addEventListener('DOMContentLoaded', function() {
 	for(let el of document.getElementsByTagName('submit')) {
