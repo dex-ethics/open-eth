@@ -1,6 +1,20 @@
 'use strict';
 // Author: Remco Bloemen
 
+RegExp.escape = function(str) {
+	return String(str).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1");
+};
+
+let HTMLEscapeElement = document.createElement('div');
+function HTMLEscape(str) {
+	HTMLEscapeElement.textContent = str;
+	return HTMLEscapeElement.innerHTML;
+}
+function HTMLUnescape(str) {
+	HTMLEscapeElement.innerHTML = str;
+	return HTMLEscapeElement.textContent;
+}
+
 // Work around chrome bug
 // https://code.google.com/p/chromium/issues/detail?id=401699
 NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];

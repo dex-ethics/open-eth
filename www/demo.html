@@ -73,6 +73,7 @@
 		<h4>Case: <span data-content="name"></span></h4>
 		<p data-content="description"></p>
 		<p>Correct action: <em
+			class="action"
 			data-join="this.textContent=action_name(data.action)"
 			data-extract="return {action: action_index(this.textContent)}"
 			></em></p>
@@ -182,17 +183,11 @@
 		<h4>Edit Dilemma</h4>
 		<p>A dilemma is a problem offering two possibilities, neither of which is unambiguously acceptable or preferable. One in this position has been traditionally described as "being on the horns of a dilemma", neither horn being comfortable. This is sometimes more colorfully described as "Finding oneself impaled upon the horns of a dilemma", referring to the sharp points of a bull's horns, equally uncomfortable (and dangerous).</p>
 		<label>Name of dilemma
-			<input type="text" data-template="name">
+			<input type="text" data-value="name">
 		</label>
 		<label>Description of dilemma
-			<textarea data-template="description"></textarea>
+			<textarea data-value="description"></textarea>
 		</label>
-		<fieldset>
-			<legend>Actions</legend>
-			<div data-template="actions">
-				<p data-template="action"></p>
-			</div>
-		</fieldset>
 	</div>
 	<footer>
 		<button type="submit">Ok</button>
@@ -288,32 +283,86 @@
 <script>
 'use strict';
 
-var dilemma = {
-	name: "",
-	description: "",
-	actions: ["First action", "Second action"],
-	features: [],
-	cases: []
-};
+function make_unique(existing, name)
+{
+	let original = name;
+	
+	// If name doesn't exist, we are done
+	if(!existing.includes(name)) {
+		return name;
+	}
+	
+	// Remove the " (n)" suffix from name
+	name = name.replace(/ \(\d+\)$/, '');
+	
+	// Find the highest " (n)" suffix
+	let n = 0;
+	let r = new RegExp("^" + RegExp.escape(name) + " \\((\\d+)\\)$");
+	for(let s of existing) {
+		let matches = s.match(r);
+		if(matches !== null) {
+			n = Math.max(n, matches[1]);
+		}
+	}
+	
+	// Append " (n+1)"
+	name = name + " (" + (n + 1) + ")";
+	
+	// Toast notify
+	Materialize.toast("Renamed to <em>" + HTMLEscape(name) +"</em>.", 4000);
+	return name;
+}
 
 let actions = document.getElementById('actions');
+let cases = document.getElementsByTagName('cases')[0];
+
 function action_name(index) {
-	return actions.children[index + 1].extract();
+	return extract(actions).actions[index];
 }
 
 function action_index(name) {
-	return actions.extract().actions.indexOf(name);
+	return extract(actions).actions.indexOf(name);
 }
 
 function edit_action(node) {
 	let form = document.getElementById('edit_action');
-	join(form, extract(node));
+	let original = extract(node);
+	let original_index = action_index(original);
+	let original_actions = extract(actions).actions;
+	let others = original_actions.slice();
+	others.splice(original_index, 1);
+	
+	join(form, original);
 	show_modal(form, function() {
-		join(node, extract(form));
+		let edited = extract(form);
 		
+		// Trim leading/trailing white space
+		edited = edited.trim();
 		
-		// Update any cases that refer to this action
+		// The empty string is not allowed
+		if(edited === "") {
+			Materialize.toast("Invalid name.", 4000);
+			return;
+		}
 		
+		// No-op fast path
+		if(edited === original) {
+			return;
+		}
+		
+		// If the name is not unique, append a " (n)"
+		edited = make_unique(others, edited);
+		
+		// Commit
+		join(node, edited);
+		
+		// Update in the cases
+		// TODO Empty strings also match the array template
+		for(let e of cases.querySelectorAll('.action')) {
+			if(e.textContent === original) {
+				e.textContent = edited;
+			}
+		}
 	});
 }
 
@@ -340,6 +389,15 @@ function del_case() {
 }
 
 function editm(node) {
+	let form = document.getElementById(node.dataset.editor);
+	let data = extract(node);
+	console.log(data);
+	join(form, data);
+	show_modal(form, function() {
+		let data = extract(form);
+		console.log(data);
+		join(node, data);
+	});
 }
 
 function editf(node) {
@@ -375,8 +433,7 @@ function my_func(data, join)
 }
 
 window.addEventListener('DOMContentLoaded', get.bind(null, '/example1b.json', function(data) {
-	dilemma = data;
-	join('main', dilemma);
+	join('main', data);
 }));
 
 window.addEventListener('DOMContentLoaded', function() {
