@@ -270,14 +270,21 @@ h1 button, h2 button, h3 button, h4 button, h5 button, h6 button {
 	float: right;
 }
 
+fieldset {
+	width: 100%;
+	max-width: 35em;
+}
+
 label {
 /*	display: block; */
+	max-width: 35em;
 }
 label >input,
 label >textarea {
 	display: block;
 	width: 100%;
 	max-width: 35em;
+	font-size: inherit;
 }
 label >textarea {
 	height: 5em;

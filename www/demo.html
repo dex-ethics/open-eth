@@ -231,9 +231,10 @@
 				<legend></legend>
 				<div>
 					<label hidden>
-						<input type="checkbox">
+						<input type="checkbox" onchange="cases.change_checkbox(this)">
 						<span></span>
-						<input type="range" min="-5" max="5">
+						<span style="float: right;">0</span>
+						<input type="range" min="-5" max="5" oninput="cases.change_range(this)">
 					</label>
 				</div>
 			</fieldset>
@@ -245,7 +246,6 @@
 		<button type="submit" value="remove">Remove</button>
 	</footer>
 </form>
-
 
 <footer class="page-footer">
 	<div class="footer-copyright">
@@ -502,16 +502,19 @@ cases.join_features = function(data) {
 			let d = data.features[i][j];
 			let checkbox = k.children[0];
 			let label = k.children[1];
-			let range = k.children[2];
+			let number = k.children[2];
+			let range = k.children[3];
 			label.textContent = f[j];
 			if(d === null) {
 				checkbox.checked = false;
 				range.value = 0;
 				range.disabled = true;
+				number.textContent = "";
 			} else {
 				checkbox.checked = true;
 				range.value = d;
 				range.disabled = false;
+				number.textContent = d;
 			}
 		}
 	}
@@ -528,7 +531,7 @@ cases.extract_features = function() {
 		for(var j = 1; j < div.children.length; ++j) {
 			let k = div.children[j];
 			let checkbox = k.children[0];
-			let range = k.children[2];
+			let range = k.children[3];
 			if(checkbox.checked) {
 				rr.push(parseInt(range.value));
 			} else {
@@ -538,6 +541,33 @@ cases.extract_features = function() {
 		r.push(rr);
 	}
 	return {features: r};
+}
+
+
+cases.change_checkbox = function(node) {
+	let label = node.parentNode;
+	let checkbox = label.children[0];
+	let span = label.children[1];
+	let number = label.children[2];
+	let range = label.children[3];
+	
+	if(checkbox.checked) {
+		number.textContent = range.value;
+		range.disabled = false;
+	} else {
+		number.textContent = "";
+		range.disabled = true;
+	}
+}
+
+cases.change_range = function(node) {
+	let label = node.parentNode;
+	let checkbox = label.children[0];
+	let span = label.children[1];
+	let number = label.children[2];
+	let range = label.children[3];
+	
+	number.textContent = range.value;
 }
 
 function debug()
