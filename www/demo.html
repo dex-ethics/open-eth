@@ -9,7 +9,6 @@
 	<!-- Try to load fonts from Google (but we have them local if the CDN fails) -->
 	<link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,300,300italic' rel='stylesheet'>
-	<link type="text/css" rel="stylesheet" href="/css/materialize.min.css">
 	<link type="text/css" href="/dex.css" rel='stylesheet'>
 </head>
 <body>
@@ -74,6 +73,9 @@
 			data-join="this.textContent=actions.name(data.action)"
 			data-extract="return {action: actions.index(this.textContent)}"
 			></em></p>
+		<div hidden
+			data-join="this.textContent=JSON.stringify(data.features)"
+			data-extract="return {features:JSON.parse(this.textContent)}">[]</div>
 	</case>
 </cases>
 
@@ -205,7 +207,7 @@
 			Case description
 			<textarea data-value="description"></textarea>
 		</label>
-		<fieldset>
+		<fieldset class="radio">
 			<legend>Correct action</legend>
 			<label>
 				<input type="radio" name="action"
@@ -222,53 +224,20 @@
 		</fieldset>
 		
 		<h5>Features</h5>
-		<fieldset data-array>
-			
-			<label hidden>
-				<span data-content></span>
-				<input type="range" min="-10" max="10">
-			</label>
-			
-			<legend>Feature 1</legend>
-			<fieldset>
-				<legend>State</legend>
-				<label>
-					<input type="radio"/>
-					Presence
-				</label>
-				<label>
-					<input type="radio"/>
-					Absence
-				</label>
+		<div id="case_features"
+			data-join="cases.join_features(data)"
+			data-extract="return cases.extract_features()">
+			<fieldset hidden>
+				<legend></legend>
+				<div>
+					<label hidden>
+						<input type="checkbox">
+						<span></span>
+						<input type="range" min="-5" max="5">
+					</label>
+				</div>
 			</fieldset>
-			
-			<label>
-				of amount
-				<input type="text" value="1">
-			</label>
-			
-			<label>
-				degree of
-				<select>
-					<option disabled selected>Choose your option</option>
-					<option>harm</option>
-					<option>Option 3</option>
-				</select>
-			</label>
-			
-			<fieldset>
-				<legend>in action</legend>
-				<label>
-					Notify
-					<input type="radio" selected/>
-				</label>
-				<label>
-					Do not notify
-					<input type="radio"/>
-				</label>
-			</fieldset>
-			
-		</fieldset>
+		</div>
 	</div>
 	<footer>
 		<button type="submit">Ok</button>
@@ -286,8 +255,6 @@
 	</div>
 </footer>
 <script type="text/javascript" src='/dex.js'></script>
-<script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="/js/materialize.min.js"></script>
 <script>
 'use strict';
 
@@ -471,7 +438,7 @@ cases.form = document.getElementById('edit_case');
 
 cases.edit = function(node) {
 	let data = extract(node);
-	console.log(data);
+	
 	join(cases.form, data);
 	show_fullscreen(cases.form, function(action) {
 		if(action === 'remove') {
@@ -479,7 +446,6 @@ cases.edit = function(node) {
 		}
 		
 		let data = extract(cases.form);
-		console.log(data);
 		join(node, data);
 	});
 }
@@ -517,6 +483,61 @@ cases.add = function() {
 
 cases.remove = function(node) {
 	node.parentNode.removeChild(node);
+}
+
+cases.join_features = function(data) {
+	let a = extract(actions).actions;
+	let f = extract(features).features;
+	let root = document.getElementById('case_features');
+	
+	rescale_array(root, a.length);
+	for(var i = 0; i < a.length; ++i) {
+		let e = root.children[i + 1];
+		let legend = e.getElementsByTagName('legend')[0];
+		let div = e.getElementsByTagName('div')[0];
+		legend.textContent = a[i];
+		rescale_array(div, f.length);
+		for(var j = 0; j < f.length; ++j) {
+			let k = div.children[j + 1];
+			let d = data.features[i][j];
+			let checkbox = k.children[0];
+			let label = k.children[1];
+			let range = k.children[2];
+			label.textContent = f[j];
+			if(d === null) {
+				checkbox.checked = false;
+				range.value = 0;
+				range.disabled = true;
+			} else {
+				checkbox.checked = true;
+				range.value = d;
+				range.disabled = false;
+			}
+		}
+	}
+}
+
+cases.extract_features = function() {
+	let root = document.getElementById('case_features');
+	
+	let r = [];
+	for(var i = 1; i < root.children.length; ++i) {
+		let e = root.children[i];
+		let rr = [];
+		let div = e.getElementsByTagName('div')[0];
+		for(var j = 1; j < div.children.length; ++j) {
+			let k = div.children[j];
+			let checkbox = k.children[0];
+			let range = k.children[2];
+			if(checkbox.checked) {
+				rr.push(parseInt(range.value));
+			} else {
+				rr.push(null);
+			}
+		}
+		r.push(rr);
+	}
+	return {features: r};
 }
 
 function debug()

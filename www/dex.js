@@ -20,6 +20,17 @@ function HTMLUnescape(str) {
 NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 
+function rescale_array(node, size) {
+	let template = node.children[0];
+	for(var i = node.children.length; i < size + 1; ++i) {
+		let inst = template.cloneNode(true);
+		inst.removeAttribute('hidden');
+		node.appendChild(inst);
+	}
+	while(node.children.length > size + 1)
+		node.removeChild(node.children[node.children.length - 1]);
+}
+
 // Super simple template engine
 function join(node, data) {
 	if(node === undefined || data === undefined)
@@ -35,13 +46,9 @@ function join(node, data) {
 			return eval('(function(data){'+node.dataset.join+'})').apply(node, [data]);
 		if(node.dataset.array !== undefined) {
 			let a = node.dataset.array === '' ? data : data[node.dataset.array];
-			for(var i = node.children.length; i < a.length + 1; ++i) {
-				let inst = node.children[0].cloneNode(true);
-				inst.removeAttribute('hidden');
-				node.appendChild(inst);
-			}
-			while(node.children.length > a.length + 1)
-				node.removeChild(node.children[node.children.length - 1]);
+			if(!(a instanceof Array))
+				return;
+			rescale_array(node, a.length);
 			for(var i = 0; i < a.length; ++i)
 				join(node.children[i + 1], a[i]);
 			return;
