@@ -177,9 +177,14 @@ function drag(node, e) {
 		
 		// If we changed places, call reorder handler
 		if(parent.dataset !== undefined && parent.dataset.onreorder !== undefined) {
-			let handler = eval(parent.dataset.onreorder);
-			let new_index = Array.prototype.indexOf.call(parent.children, node);
-			handler(old_index, new_index);
+			try {
+				let handler = eval(parent.dataset.onreorder);
+				let new_index = Array.prototype.indexOf.call(parent.children, node);
+				handler(old_index, new_index);
+			}
+			catch(e) {
+				console.log(e);
+			};
 		}
 		
 		// Cancel event propagation
@@ -202,6 +207,7 @@ function drag(node, e) {
 
 
 // Show a <form> as a modal dialogue
+// TODO: Make the browser back button act as [cancel]
 function show_modal(form, on_accept, on_reject)
 {
 	if(form.constructor == String)
@@ -218,22 +224,42 @@ function show_modal(form, on_accept, on_reject)
 	backdrop.removeAttribute('hidden');
 	body.style.overflow = 'hidden';
 	
-	let backdrop_click = function() { form.reset(); };
+	let backdrop_click = function(e) {
+		form.reset();
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	};
+	let escape_handler = function(e) {
+		if(e.keyCode === 27) {
+			form.reset();
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		}
+	};
 	let form_reset;
 	let form_submit;
 	let close = function(accept, event) {
+		// Get the value of the submit button used
+		let value = undefined;
+		if(document.activeElement instanceof HTMLButtonElement
+			&& document.activeElement.type === "submit") {
+			value = document.activeElement.value;
+		}
+		
 		form.className = form.className.replace(/\bmodal_dialog\b/,'');
 		form.setAttribute('hidden','');
 		backdrop.setAttribute('hidden','');
 		body.style.overflow = '';
 		backdrop.removeEventListener('click', backdrop_click, true);
+		document.removeEventListener('keydown', escape_handler, true);
 		form.removeEventListener('reset', form_reset, true);
 		form.removeEventListener('submit', form_submit, true);
 		if(accept && typeof on_accept === 'function')
-			on_accept();
+			on_accept(value);
 		if(!accept && typeof on_reject === 'function')
 			on_reject();
-		console.log(form.action);
 		event.preventDefault();
 		event.stopPropagation();
 		return false;
@@ -241,11 +267,13 @@ function show_modal(form, on_accept, on_reject)
 	form_reset = close.bind(null, false);
 	form_submit = close.bind(null, true);
 	backdrop.addEventListener('click', backdrop_click, true);
+	document.addEventListener('keydown', escape_handler, true);
 	form.addEventListener('reset', form_reset, true);
 	form.addEventListener('submit', form_submit, true);
 }
 
 // Show a <form> as a full screen dialogue
+// TODO: Make the browser back button act as [cancel]
 function show_fullscreen(form, on_accept, on_reject)
 {
 	if(form.constructor == String)
@@ -259,23 +287,39 @@ function show_fullscreen(form, on_accept, on_reject)
 	
 	let form_reset;
 	let form_submit;
+	let escape_handler = function(e) {
+		if(e.keyCode === 27) {
+			form.reset();
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		}
+	};
 	let close = function(accept, event) {
+		// Get the value of the submit button used
+		let value = undefined;
+		if(document.activeElement instanceof HTMLButtonElement
+			&& document.activeElement.type === "submit") {
+			value = document.activeElement.value;
+		}
+		
 		form.className = form.className.replace(/\bfullscreen_dialog\b/,'');
 		form.setAttribute('hidden','');
 		body.style.overflow = '';
+		document.removeEventListener('keydown', escape_handler, true);
 		form.removeEventListener('reset', form_reset, true);
 		form.removeEventListener('submit', form_submit, true);
 		if(accept && typeof on_accept === 'function')
-			on_accept();
+			on_accept(value);
 		if(!accept && typeof on_reject === 'function')
 			on_reject();
-		console.log(form.action);
 		event.preventDefault();
 		event.stopPropagation();
 		return false;
 	};
 	form_reset = close.bind(null, false);
 	form_submit = close.bind(null, true);
+	document.addEventListener('keydown', escape_handler, true);
 	form.addEventListener('reset', form_reset, true);
 	form.addEventListener('submit', form_submit, true);
 }
