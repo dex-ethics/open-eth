@@ -38,7 +38,7 @@
 					hidden
 					data-content
 					class="draggable"
-					onclick="edit_action(this)"
+					onclick="actions.edit(this)"
 					>
 				</li>
 			</ul>
@@ -46,14 +46,14 @@
 		<div class="col s6">
 			<h6>
 				Features
-				<button onclick="add_feature()">Add</button>
+				<button onclick="features.add()">Add</button>
 			</h6>
 			<ul id="features" data-array="features">
 				<li
 					hidden
 					data-content
 					class="draggable"
-					onclick="edit_feature(this)"
+					onclick="features.edit(this)"
 					>
 				</li>
 			</ul>
@@ -63,16 +63,16 @@
 
 <h2>
 	Cases
-	<button onclick="add_case()">Add</button>
+	<button onclick="cases.add()">Add</button>
 </h2>
-<cases data-array="cases">
-	<case hidden onmousedown="drag(this,event)" onclick="editf(this)" data-editor="edit_case">
+<cases data-array="cases" id="cases">
+	<case hidden class="draggable" onclick="cases.edit(this)">
 		<h4>Case: <span data-content="name"></span></h4>
 		<p data-content="description"></p>
 		<p>Correct action: <em
 			class="action"
-			data-join="this.textContent=action_name(data.action)"
-			data-extract="return {action: action_index(this.textContent)}"
+			data-join="this.textContent=actions.name(data.action)"
+			data-extract="return {action: actions.index(this.textContent)}"
 			></em></p>
 	</case>
 </cases>
@@ -199,35 +199,46 @@
 		<p>A case study is a "published report about a person, group, or situation that has been studied over time." If the case study is about a group, it describes the behavior of the group as a whole, not behavior of each individual in the group. Case studies can be produced by following a formal research method. These case studies are likely to appear in formal research venues, as journals and professional conferences, rather than popular works. The resulting body of 'case study research' has long had a prominent place in many disciplines and professions, ranging from psychology, anthropology, sociology, and political science to education, clinical science, social work, and administrative science.</p>
 		<label>
 			Case name
-			<input type="text" data-template="name">
+			<input type="text" data-value="name">
 		</label>
 		<label>
 			Case description
-			<textarea data-template="description"></textarea>
+			<textarea data-value="description"></textarea>
 		</label>
 		<fieldset>
-			<legend>Correct action</legend>	
+			<legend>Correct action</legend>
 			<label>
-				<span>Action 1</span>
-				<input type="radio" selected/>
+				<input type="radio" name="action"
+					data-join="this.checked=data.action==0"
+					data-extract="return this.checked?{action:0}:{}"/>
+				<span data-join="this.textContent=actions.name(0)"></span>
 			</label>
 			<label>
-				<span>Action 2</span>
-				<input type="radio" selected/>
+				<input type="radio" name="action"
+					data-join="this.checked=data.action==1"
+					data-extract="return this.checked?{action:1}:{}"/>
+				<span data-join="this.textContent=actions.name(1)"></span>
 			</label>
 		</fieldset>
+		
 		<h5>Features</h5>
-		<fieldset>
+		<fieldset data-array>
+			
+			<label hidden>
+				<span data-content></span>
+				<input type="range" min="-10" max="10">
+			</label>
+			
 			<legend>Feature 1</legend>
 			<fieldset>
 				<legend>State</legend>
 				<label>
-					Presence
 					<input type="radio"/>
+					Presence
 				</label>
 				<label>
-					Absence
 					<input type="radio"/>
+					Absence
 				</label>
 			</fieldset>
 			
@@ -256,14 +267,13 @@
 					<input type="radio"/>
 				</label>
 			</fieldset>
+			
 		</fieldset>
-		
-		<a>Add feature</a>
 	</div>
 	<footer>
-		<button type="submit" value="ok">Ok</button>
+		<button type="submit">Ok</button>
 		<button type="reset">Cancel</button>
-		<button type="submit" value="delete">Delete</button>
+		<button type="submit" value="remove">Remove</button>
 	</footer>
 </form>
 
@@ -310,27 +320,29 @@ function make_unique(existing, name) {
 }
 
 let actions = document.getElementById('actions');
-let cases = document.getElementsByTagName('cases')[0];
+let cases = document.getElementById('cases');
+let features = document.getElementById('features');
 
-function action_name(index) {
+actions.form = document.getElementById('edit_action');
+
+actions.name = function(index) {
 	return extract(actions).actions[index];
 }
 
-function action_index(name) {
+actions.index = function(name) {
 	return extract(actions).actions.indexOf(name);
 }
 
-function edit_action(node) {
-	let form = document.getElementById('edit_action');
+actions.edit = function(node) {
 	let original = extract(node);
-	let original_index = action_index(original);
+	let original_index = actions.index(original);
 	let original_actions = extract(actions).actions;
 	let others = original_actions.slice();
 	others.splice(original_index, 1);
 	
-	join(form, original);
-	show_modal(form, function() {
-		let edited = extract(form);
+	join(actions.form, original);
+	show_modal(actions.form, function() {
+		let edited = extract(actions.form);
 		
 		// Trim leading/trailing white space
 		edited = edited.trim();
@@ -362,7 +374,8 @@ function edit_action(node) {
 	});
 }
 
-let features = document.getElementById('features');
+features.form = document.getElementById('edit_feature');
+
 features.name = function (index) {
 	return extract(features).features[index];
 }
@@ -370,24 +383,23 @@ features.index = function (name) {
 	return extract(features).features.indexOf(name);
 }
 
-function edit_feature(node) {
-	let form = document.getElementById('edit_feature');
+features.edit = function (node) {
 	let original = extract(node);
 	let original_index = features.index(original);
 	let original_features = extract(features).features;
 	let others = original_features.slice();
 	others.splice(original_index, 1);
 	
-	join(form, extract(node));
-	show_modal(form, function(action) {
+	join(features.form, extract(node));
+	show_modal(features.form, function(action) {
 		
 		// User clicked [remove]
 		if(action === "remove") {
-			return remove_feature(node);
+			return features.remove(node);
 		}
 		
 		// Extract the result
-		let edited = extract(form);
+		let edited = extract(features.form);
 		
 		// Trim leading/trailing white space
 		edited = edited.trim();
@@ -414,21 +426,19 @@ function edit_feature(node) {
 	});
 }
 
-function add_feature() {
-	
-	let form = document.getElementById('edit_feature');
+features.add = function () {
 	let others = extract(features).features;
 	
-	join(form, "");
+	join(features.form, "");
 	
 	// TODO: Set the form to a 'new feature' mode.
 	//       This should remove the [remove] button
 	//       and probably change [ok] to [add].
-	show_modal(form, function(action) {
+	show_modal(features.form, function(action) {
 		
-				
+		
 		// Extract the result
-		let edited = extract(form);
+		let edited = extract(features.form);
 		
 		// Trim leading/trailing white space
 		edited = edited.trim();
@@ -450,44 +460,63 @@ function add_feature() {
 	});
 }
 
-function remove_feature(node) {
+features.remove = function(node) {
 	node.parentNode.removeChild(node);
 	/// TODO: Remove features from cases.
 }
 
 
 
-function add_case() {
-	let cases = document.getElementsByTagName('cases')[0];
-	let inst = cases.children[0].cloneNode(true);
-	inst.removeAttribute('hidden');
-	cases.appendChild(inst);
-	editf(inst);
-}
+cases.form = document.getElementById('edit_case');
 
-
-function del_case() {
-	
-}
-
-function editm(node) {
-	let form = document.getElementById(node.dataset.editor);
+cases.edit = function(node) {
 	let data = extract(node);
 	console.log(data);
-	join(form, data);
-	show_modal(form, function() {
-		let data = extract(form);
+	join(cases.form, data);
+	show_fullscreen(cases.form, function(action) {
+		if(action === 'remove') {
+			return cases.remove(node);
+		}
+		
+		let data = extract(cases.form);
 		console.log(data);
 		join(node, data);
 	});
 }
 
-function editf(node) {
-	let form = document.getElementById(node.dataset.editor);
-	join(form, extract(node));
-	show_fullscreen(form, function() {
-		join(node, extract(form));
+cases.add = function() {
+	let existing = extract(cases).cases.map(function (o){ return o.name; });
+	console.log(existing);
+	
+	join(cases.form, {name: "New Case", description: "", action: undefined, features: []});
+	
+	show_fullscreen(cases.form, function(action) {
+		
+		// Extract the result
+		let edited = extract(cases.form);
+		console.log(edited);
+		
+		// Trim leading/trailing white space
+		edited.name = edited.name.trim();
+		
+		// The empty string is not allowed
+		if(edited.name === "") {
+			edited.name = "New Case";
+		}
+		
+		// If the name is not unique, append a " (n)"
+		edited.name = make_unique(existing, edited.name);
+		
+		// Commit
+		let inst = cases.children[0].cloneNode(true);
+		inst.removeAttribute('hidden');
+		join(inst, edited);
+		cases.appendChild(inst);
 	});
+}
+
+cases.remove = function(node) {
+	node.parentNode.removeChild(node);
 }
 
 function debug()
@@ -509,11 +538,6 @@ function test()
 	}
 }
 
-function my_func(data, join)
-{
-	console.log('my_func: ', this, data);
-}
-
 window.addEventListener('DOMContentLoaded', get.bind(null, '/example1b.json', function(data) {
 	join('main', data);
 }));
@@ -522,8 +546,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	// We do this by setAttribute so the cloneNode() will copy it.
 	for(let elm of document.querySelectorAll('.draggable'))
 		elm.setAttribute('onmousedown', 'drag(this,event)');
-})
-
+});
 
 </script>
 </body>
