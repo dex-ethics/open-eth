@@ -21,6 +21,16 @@
 </header>
 <main id="main">
 
+<div>
+	<h3>Examples:
+	<ul>
+		<li onclick="load('examples/medical_reminding.json')">Medical Reminding</li>
+		<li onclick="load('examples/assisted_driving.json')">Assisted Driving</li>
+		<li onclick="load('examples/medical_treatment.json')">Medical Treatment</li>
+		<li onclick="load('examples/rescue.json')">Rescue</li>
+	</ul>
+</div>
+
 <dilemma data-editor="edit_dilemma">
 	<h1>Dilemma:
 		<span data-content="name"></span>
@@ -641,6 +651,10 @@ cases.update_table = function(data) {
 	}
 }
 
+function update_principles() {
+	
+}
+
 function debug()
 {
 	let data = extract('main');
@@ -660,9 +674,11 @@ function test()
 	}
 }
 
-window.addEventListener('DOMContentLoaded', get.bind(null, '/example1b.json', function(data) {
-	join('main', data);
-}));
+function load(url) {
+	get(url, function(data) {
+		join('main', data);
+	});
+}
 
 window.addEventListener('DOMContentLoaded', function() {
 	// We do this by setAttribute so the cloneNode() will copy it.

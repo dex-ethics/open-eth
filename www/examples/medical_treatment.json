@@ -1,0 +1,48 @@
+{
+	"name": "Medical Treatment",
+	"description": "A healthcare professional has recommended a particular treatment for her competent adult patient, but the patient has rejected it. Given particular information about the circumstances, should the healthcare professional try to change the patient's mind or accept the patient's decision as final?",
+	"actions": [
+		"Try to change the patient's mind",
+		"Accept patient's decision"
+	],
+	"features": [
+		"respect for autonomy",
+		"beneficence", 
+		"nonmaleficence"
+	],
+	"cases": [
+		{
+			"name": "Case 1",
+			"description": "A patient refuses to take an antibiotic that's almost certain to cure an infection that would otherwise likely lead to his death. He decides this on the grounds of long-standing religious beliefs that forbid him to take medications.",
+			"action": 1,
+			"features": [
+				[-1, 2, null],
+				[2, null, -2]
+			]
+		},{
+			"name": "Case 2",
+			"description": "A patient refuses to take medication that could only help alleviate some symptoms of a virus that must run its course because he heard untrue rumors that the medication is unsafe. After clarifying the misconception, should the healthcare professional try to change the patient's mind about taking the medication or accept the patient's decision as final?",
+			"action": 1,
+			"features": [
+				[null, null, null],
+				[1, -1, null]
+			]
+		},{
+			"name": "Case 3",
+			"description": "A patient with incurable cancer refuses further chemotherapy that will let him live a few months longer, relatively pain free. He refuses the treatment because, ignoring the clear evidence to the contrary, he's convinced that he's cancer-free and doesn't need chemotherapy.",
+			"action": 0,
+			"features": [
+				[-1, 1, 1],
+				[null, null, null]
+			]
+		},{
+			"name": "Case 4",
+			"description": "A patient, who has suffered repeated rejection from others due to a very large noncancerous abnormal growth on his face, refuses to have simple and safe cosmetic surgery to remove the growth. Even though this has negatively affected his career and social life, he's resigned himself to being an outcast, convinced that this is his lot in life. The doctor is convinced that his rejection of the surgery stems from depression due to his abnormality and that having the surgery could vastly improve his life and outlook.",
+			"action": 0,
+			"features": [
+				[-1, 2, null],
+				[null, null, null]
+			]
+		}
+	]
+}
