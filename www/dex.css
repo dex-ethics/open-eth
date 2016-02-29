@@ -312,3 +312,15 @@ label >input[type="checkbox"]
 .row >.col.s6 {
 	width: 50%;
 }
+
+table th {
+	font-size: 100%;
+	font-weight: inherit;
+}
+table th,
+table td {
+	text-align: right;
+}
+table thead th {
+	border-bottom: solid thin red;
+}
