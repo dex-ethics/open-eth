@@ -36,8 +36,8 @@
 			<ul id="actions" data-array="actions">
 				<li
 					hidden
-					class="draggable"
 					data-content
+					class="draggable"
 					onclick="edit_action(this)"
 					>
 				</li>
@@ -46,12 +46,9 @@
 		<div class="col s6">
 			<h6>
 				Features
-				<button>Add</button>
+				<button onclick="add_feature()">Add</button>
 			</h6>
-			<ul
-				id="features"
-				data-array="features"
-				data-onreorder="features_reorder">
+			<ul id="features" data-array="features">
 				<li
 					hidden
 					data-content
@@ -146,7 +143,7 @@
 		</label>
 	</div>
 	<footer>
-		<button type="submit" value="asd">Ok</button>
+		<button type="submit">Ok</button>
 	</footer>
 </form>
 
@@ -159,8 +156,8 @@
 		</label>
 	</div>
 	<footer>
-		<button type="submit" value="asd">Ok</button>
-		<button type="reset" value="can">Cancel</button>
+		<button type="submit">Ok</button>
+		<button type="reset">Cancel</button>
 	</footer>
 </form>
 
@@ -175,6 +172,7 @@
 	<footer>
 		<button type="submit">Ok</button>
 		<button type="reset">Cancel</button>
+		<button type="submit" value="remove">Remove</button>
 	</footer>
 </form>
 
@@ -283,9 +281,7 @@
 <script>
 'use strict';
 
-function make_unique(existing, name)
-{
-	let original = name;
+function make_unique(existing, name) {
 	
 	// If name doesn't exist, we are done
 	if(!existing.includes(name)) {
@@ -341,7 +337,7 @@ function edit_action(node) {
 		
 		// The empty string is not allowed
 		if(edited === "") {
-			Materialize.toast("Invalid name.", 4000);
+			Materialize.toast("Action name can not be empty.", 4000);
 			return;
 		}
 		
@@ -366,13 +362,99 @@ function edit_action(node) {
 	});
 }
 
+let features = document.getElementById('features');
+features.name = function (index) {
+	return extract(features).features[index];
+}
+features.index = function (name) {
+	return extract(features).features.indexOf(name);
+}
+
 function edit_feature(node) {
 	let form = document.getElementById('edit_feature');
+	let original = extract(node);
+	let original_index = features.index(original);
+	let original_features = extract(features).features;
+	let others = original_features.slice();
+	others.splice(original_index, 1);
+	
 	join(form, extract(node));
-	show_modal(form, function() {
-		join(node, extract(form));
+	show_modal(form, function(action) {
+		
+		// User clicked [remove]
+		if(action === "remove") {
+			return remove_feature(node);
+		}
+		
+		// Extract the result
+		let edited = extract(form);
+		
+		// Trim leading/trailing white space
+		edited = edited.trim();
+		
+		// The empty string is not allowed
+		if(edited === "") {
+			Materialize.toast("Feature name can not be empty.", 4000);
+			return;
+		}
+		
+		// No-op fast path
+		if(edited === original) {
+			return;
+		}
+		
+		// If the name is not unique, append a " (n)"
+		edited = make_unique(others, edited);
+		
+		// Commit
+		join(node, edited);
+		
+		// Update cases
+		// TODO
 	});
 }
+
+function add_feature() {
+	
+	let form = document.getElementById('edit_feature');
+	let others = extract(features).features;
+	
+	join(form, "");
+	
+	// TODO: Set the form to a 'new feature' mode.
+	//       This should remove the [remove] button
+	//       and probably change [ok] to [add].
+	show_modal(form, function(action) {
+		
+				
+		// Extract the result
+		let edited = extract(form);
+		
+		// Trim leading/trailing white space
+		edited = edited.trim();
+		
+		// The empty string is not allowed
+		if(edited === "") {
+			Materialize.toast("Feature name can not be empty.", 4000);
+			return;
+		}
+		
+		// If the name is not unique, append a " (n)"
+		edited = make_unique(others, edited);
+		
+		// Commit
+		let inst = features.children[0].cloneNode(true);
+		inst.removeAttribute('hidden');
+		join(inst, edited);
+		features.appendChild(inst);
+	});
+}
+
+function remove_feature(node) {
+	node.parentNode.removeChild(node);
+	/// TODO: Remove features from cases.
+}
+
 
 
 function add_case() {

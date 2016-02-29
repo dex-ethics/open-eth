@@ -224,18 +224,16 @@ function show_modal(form, on_accept, on_reject)
 	backdrop.removeAttribute('hidden');
 	body.style.overflow = 'hidden';
 	
-	let backdrop_click = function(e) {
+	let backdrop_click = function(event) {
 		form.reset();
-		e.preventDefault();
-		e.stopPropagation();
-		return false;
+		event.preventDefault();
+		event.stopPropagation();
 	};
-	let escape_handler = function(e) {
-		if(e.keyCode === 27) {
+	let escape_handler = function(event) {
+		if(event.keyCode === 27) {
 			form.reset();
-			e.preventDefault();
-			e.stopPropagation();
-			return false;
+			event.preventDefault();
+			event.stopPropagation();
 		}
 	};
 	let form_reset;
@@ -256,13 +254,13 @@ function show_modal(form, on_accept, on_reject)
 		document.removeEventListener('keydown', escape_handler, true);
 		form.removeEventListener('reset', form_reset, true);
 		form.removeEventListener('submit', form_submit, true);
+		event.preventDefault();
+		event.stopPropagation();
+		
 		if(accept && typeof on_accept === 'function')
 			on_accept(value);
 		if(!accept && typeof on_reject === 'function')
 			on_reject();
-		event.preventDefault();
-		event.stopPropagation();
-		return false;
 	};
 	form_reset = close.bind(null, false);
 	form_submit = close.bind(null, true);
