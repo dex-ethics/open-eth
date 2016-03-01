@@ -12,6 +12,14 @@ RegExp.escape = function(str) {
 	return String(str).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1");
 };
 
+Array.prototype.remove = function(x) {
+	return this.splice(x, 1)[0];
+}
+
+Array.prototype.insert = function(x, v) {
+	this.splice(x, 0, v);
+}
+
 Array.prototype.swap = function (x,y) {
 	let b = this[x];
 	this[x] = this[y];
@@ -24,7 +32,8 @@ Array.prototype.swap = function (x,y) {
 Array.prototype.reorder = function(from, to) {
 	// @note this could also be done in place using a loop
 	//       and a temp variable.
-	this.splice(to, 0, this.splice(from, 1)[0]);
+	// @todo test for to < from and from > to
+	this.insert(to, this.remove(from));
 }
 
 let HTMLEscapeElement = document.createElement('div');

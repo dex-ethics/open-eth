@@ -462,12 +462,34 @@ features.add = function () {
 		inst.removeAttribute('hidden');
 		join(inst, edited);
 		features.appendChild(inst);
+		
+		// Update the case matrices
+		for(let e of cases.getElementsByTagName('case')) {
+			if(e.hasAttribute('hidden')) {
+				continue;
+			}
+			let div = e.getElementsByTagName('div')[0];
+			let matrix = extract(div);
+			matrix.features.forEach(function (e){ e.insert(index, null); });
+			join(div, matrix);
+		}
 	});
 }
 
 features.remove = function(node) {
+	let index = Array.prototype.indexOf.call(node.parentNode.children, node) - 1;
 	node.parentNode.removeChild(node);
-	/// TODO: Remove features from cases.
+	
+	// Update the case matrices
+	for(let e of cases.getElementsByTagName('case')) {
+		if(e.hasAttribute('hidden')) {
+			continue;
+		}
+		let div = e.getElementsByTagName('div')[0];
+		let matrix = extract(div);
+		matrix.features.forEach(function (e){ e.remove(index); });
+		join(div, matrix);
+	}
 }
 
 features.reorder = function(old_index, new_index) {
@@ -476,7 +498,6 @@ features.reorder = function(old_index, new_index) {
 	// the matrices.
 	old_index -= 1;
 	new_index -= 1;
-	console.log(old_index, new_index);
 	for(let e of cases.getElementsByTagName('case')) {
 		if(e.hasAttribute('hidden')) {
 			continue;
@@ -636,7 +657,6 @@ function flesh_out(table) {
 	for(let i = 0; i < rows; ++i) {
 		for(let j = 0; j < cols; ++j) {
 			if(table[i][j] === null) {
-				console.log(table, rows, cols);
 				table[i][j] = -table[rows - i - 1][j];
 			}
 			if(table[i][j] === null) {
