@@ -74,6 +74,26 @@
 	</div>
 </dilemma>
 
+<h2>Guidance</h2>
+<img id="buddha" src="buddha.png" style="">
+<div id="buddha_shadow"></div>
+<p>
+	
+</p>
+
+<h2>Principles</h2>
+<p id="principles">
+</p>
+
+<h2>Prima facie duties</h2>
+<p>
+* http://ethics.csc.ncsu.edu/basics/principles/study.php
+* http://people.wku.edu/jan.garrett/ethics/rossethc.htm
+</p>
+<p id="duties">
+</p>
+
+
 <h2>
 	Cases
 	<button onclick="cases.add()">Add</button>
@@ -92,16 +112,6 @@
 			data-extract="return {features:JSON.parse(this.textContent)}">[]</div>
 	</case>
 </cases>
-
-<h2>Principles</h2>
-<principles data-template="disjunction">
-	<principle hidden>
-		An action is ethically preferable to another if it
-		<ul data-template="conjunction">
-			<li hidden></li>
-		</ul>
-	</principle>
-</principles>
 
 </main>
 
@@ -310,6 +320,7 @@ function make_unique(existing, name) {
 let actions = document.getElementById('actions');
 let cases = document.getElementById('cases');
 let features = document.getElementById('features');
+let principles = document.getElementById('principles');
 
 actions.form = document.getElementById('edit_action');
 
@@ -359,6 +370,9 @@ actions.edit = function(node) {
 				e.textContent = edited;
 			}
 		}
+		
+		// Update the principles
+		principles.update();
 	});
 }
 
@@ -377,6 +391,9 @@ actions.reorder = function(old_index, new_index) {
 		matrix.features.reorder(old_index, new_index);
 		join(div, matrix);
 	}
+	
+	// Update the principles
+	principles.update();
 }
 
 features.form = document.getElementById('edit_feature');
@@ -426,8 +443,8 @@ features.edit = function (node) {
 		// Commit
 		join(node, edited);
 		
-		// Update cases
-		// TODO
+		// Update the principles
+		principles.update();
 	});
 }
 
@@ -473,6 +490,9 @@ features.add = function () {
 			matrix.features.forEach(function (e){ e.insert(index, null); });
 			join(div, matrix);
 		}
+		
+		// Update the principles
+		principles.update();
 	});
 }
 
@@ -490,6 +510,9 @@ features.remove = function(node) {
 		matrix.features.forEach(function (e){ e.remove(index); });
 		join(div, matrix);
 	}
+	
+	// Update the principles
+	principles.update();
 }
 
 features.reorder = function(old_index, new_index) {
@@ -507,6 +530,9 @@ features.reorder = function(old_index, new_index) {
 		matrix.features.forEach(function (e){ e.reorder(old_index, new_index); });
 		join(div, matrix);
 	}
+	
+	// Update the principles
+	principles.update();
 }
 
 cases.form = document.getElementById('edit_case');
@@ -524,6 +550,9 @@ cases.edit = function(node) {
 		
 		let data = extract(cases.form);
 		join(node, data);
+		
+		// Update the principles
+		principles.update();
 	});
 }
 
@@ -555,11 +584,17 @@ cases.add = function() {
 		inst.removeAttribute('hidden');
 		join(inst, edited);
 		cases.appendChild(inst);
+		
+		// Update the principles
+		principles.update();
 	});
 }
 
 cases.remove = function(node) {
 	node.parentNode.removeChild(node);
+	
+	// Update the principles
+	principles.update();
 }
 
 cases.join_features = function(data) {
@@ -710,8 +745,21 @@ cases.update_table = function(data) {
 	}
 }
 
-function update_principles() {
-	
+principles.update = function() {
+	let data = extract(cases);
+	for(let c of data.cases) {
+		let mat = flesh_out(c.features);
+		
+		let pos = mat[c.action];
+		let neg = mat[1 - c.action];
+		
+		let vec = [];
+		for(let i = 0; i < pos.length; ++i) {
+			vec[i] = pos[i] - neg[i];
+		}
+		console.log(c.action, pos, neg, vec);
+	}
+	this.textContent = Date().toString();
 }
 
 function debug()
@@ -736,6 +784,9 @@ function test()
 function load(url) {
 	get(url, function(data) {
 		join('main', data);
+		
+		// Update the principles
+		principles.update();
 	});
 }
 

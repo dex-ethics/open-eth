@@ -26,7 +26,7 @@ h3 {
 	font-size: 150%;
 }
 
-dilemma h1::before {
+dilemma h1:before {
 	font-family: 'Material Icons';
 	content: "assignment_ind ";
 }
@@ -72,8 +72,9 @@ case:hover {
 .wiggle >:nth-child(5n+3) { animation-delay:  -92ms; animation-duration: 163ms; }
 .wiggle >:nth-child(5n+4) { animation-delay:  -75ms; animation-duration: 244ms; }
 @keyframes wiggle {
-	 0% {transform: rotate(-.2deg); }
-	50% {transform: rotate( .2deg); }
+	  0% {transform: rotate(-.2deg); }
+	 50% {transform: rotate( .2deg); }
+	100% {transform: rotate(-.2deg); }
 }
 
 .placeholder {
@@ -323,4 +324,24 @@ table td {
 }
 table thead th {
 	border-bottom: solid thin red;
+}
+
+img#buddha {
+	border-radius: 20px;
+	transform-origin: 50% 85%;
+	animation: float 10s ease-in-out infinite;
+}
+@keyframes float {
+	  0% {transform: rotate(-1deg) translate(0px, -10px); }
+	 50% {transform: rotate( 0deg) translate(0px, -15px); }
+	100% {transform: rotate(-1deg) translate(0px, -10px); }
+}
+div#buddha_shadow {
+	border-radius: 50%;
+	background-color: rgba(0, 0, 0, 0.18);
+	box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.18);
+	height: 30px;
+	width: 130px;
+	margin: 10px;
+	margin-top: -30px;
 }
