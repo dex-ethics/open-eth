@@ -1,6 +1,13 @@
 'use strict';
 // Author: Remco Bloemen
 
+
+
+// CSS vendor prefixes
+
+// CSS hyphen polyfill
+// https://leaverou.github.io/prefixfree/
+
 RegExp.escape = function(str) {
 	return String(str).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1");
 };

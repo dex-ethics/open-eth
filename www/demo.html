@@ -42,7 +42,9 @@
 	<div class="row">
 		<div class="col s6">
 			<h6>Possible actions</h6>
-			<ul id="actions" data-array="actions">
+			<ul id="actions"
+				data-array="actions"
+				data-onreorder="actions.reorder">
 				<li
 					hidden
 					data-content
@@ -356,6 +358,25 @@ actions.edit = function(node) {
 			}
 		}
 	});
+}
+
+actions.reorder = function(old_index, new_index) {
+	// This event handler is triggered by dragging the items in the list.
+	// The list itself is already updated. But we still need to update
+	// the matrices.
+	old_index -= 1;
+	new_index -= 1;
+	for(let e of cases.getElementsByTagName('case')) {
+		if(e.hasAttribute('hidden')) {
+			continue;
+		}
+		let div = e.getElementsByTagName('div')[0];
+		let matrix = extract(div);
+		let t = matrix.features[new_index];
+		matrix.features[new_index] = matrix.features[old_index];
+		matrix.features[old_index] = t;
+		join(div, matrix);
+	}
 }
 
 features.form = document.getElementById('edit_feature');
