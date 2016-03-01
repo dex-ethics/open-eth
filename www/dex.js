@@ -12,6 +12,21 @@ RegExp.escape = function(str) {
 	return String(str).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1");
 };
 
+Array.prototype.swap = function (x,y) {
+	let b = this[x];
+	this[x] = this[y];
+	this[y] = b;
+	return this;
+}
+
+// Take element at position x and move it to position y, shifting
+// all elements in between.
+Array.prototype.reorder = function(from, to) {
+	// @note this could also be done in place using a loop
+	//       and a temp variable.
+	this.splice(to, 0, this.splice(from, 1)[0]);
+}
+
 let HTMLEscapeElement = document.createElement('div');
 function HTMLEscape(str) {
 	HTMLEscapeElement.textContent = str;
@@ -204,7 +219,6 @@ function drag(node, e) {
 		// Cancel event propagation
 		e.preventDefault();
 		e.stopPropagation();
-		return false;
 	}
 	document.addEventListener('mousemove', mousemove, true);
 	document.addEventListener('mouseup', function mouseup(e) {

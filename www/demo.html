@@ -59,7 +59,9 @@
 				Features
 				<button onclick="features.add()">Add</button>
 			</h6>
-			<ul id="features" data-array="features">
+			<ul id="features"
+				data-array="features"
+				data-onreorder="features.reorder">
 				<li
 					hidden
 					data-content
@@ -372,9 +374,7 @@ actions.reorder = function(old_index, new_index) {
 		}
 		let div = e.getElementsByTagName('div')[0];
 		let matrix = extract(div);
-		let t = matrix.features[new_index];
-		matrix.features[new_index] = matrix.features[old_index];
-		matrix.features[old_index] = t;
+		matrix.features.reorder(old_index, new_index);
 		join(div, matrix);
 	}
 }
@@ -470,7 +470,23 @@ features.remove = function(node) {
 	/// TODO: Remove features from cases.
 }
 
-
+features.reorder = function(old_index, new_index) {
+	// This event handler is triggered by dragging the items in the list.
+	// The list itself is already updated. But we still need to update
+	// the matrices.
+	old_index -= 1;
+	new_index -= 1;
+	console.log(old_index, new_index);
+	for(let e of cases.getElementsByTagName('case')) {
+		if(e.hasAttribute('hidden')) {
+			continue;
+		}
+		let div = e.getElementsByTagName('div')[0];
+		let matrix = extract(div);
+		matrix.features.forEach(function (e){ e.reorder(old_index, new_index); });
+		join(div, matrix);
+	}
+}
 
 cases.form = document.getElementById('edit_case');
 
@@ -482,6 +498,8 @@ cases.edit = function(node) {
 		if(action === 'remove') {
 			return cases.remove(node);
 		}
+		
+		// TODO name treatment
 		
 		let data = extract(cases.form);
 		join(node, data);
