@@ -77,9 +77,8 @@
 <h2>Guidance</h2>
 <img id="buddha" src="buddha.png" style="">
 <div id="buddha_shadow"></div>
-<p>
-Hmmm.... Zen.
-</p>
+<div id="guidance">
+</div>
 
 <h2>Prima facie duties</h2>
 <div id="duties">
@@ -316,6 +315,8 @@ function make_unique(existing, name) {
 let actions = document.getElementById('actions');
 let cases = document.getElementById('cases');
 let features = document.getElementById('features');
+let guidance = document.getElementById('guidance');
+let duties = document.getElementById('duties');
 let principles = document.getElementById('principles');
 
 actions.form = document.getElementById('edit_action');
@@ -789,12 +790,16 @@ function findSigns(positive, negative) {
 		console.log("Inconsistent signs!");
 	}
 	
-	// TODO handle ambiguity
-	if(possibleSigns.length > 1) {
-		console.log("Ambiguous signs.");
+	// The result is zero if there there is ambiguity
+	let result = possibleSigns[0];
+	for(let signs of possibleSigns) {
+		for(let i = 0; i < n; ++i) {
+			if(result[i] !== signs[i]) {
+				result[i] = 0;
+			}
+		}
 	}
-	
-	return possibleSigns[0];
+	return result;
 }
 
 // Maximize the volume {x | x ≥ clause} s.t. forbidden ∩ volume = ∅
@@ -864,8 +869,12 @@ principles.update = function() {
 	
 	// Print the duties
 	duties.innerHTML = "<ul><li>It can be inferred that there are (prima facie) duties to <ul>"
-		+ signs.map((e, i) => (e < 0 ? "minimize " : "maximize ") + f[i])
-		.map(e => "<li>" + e + "</li>").join() + "</ul></li></ul>";
+		+ signs.map((e, i) => e === 0 ? undefined : ((e < 0 ? "minimize " : "maximize ") + f[i]))
+		.filter(e => e !== undefined).map(e => "<li>" + e + "</li>").join() + "</ul></li></ul>";
+	
+	// Give guidance on ambiguity
+	guidance.innerHTML = signs.map((e,i) => e !== 0 ? "" :
+		("<p>Could not determine if " + f[i] + " is a good or a bad thing.</p>")).join();
 	
 	// Apply signs
 	positive = positive.map(e => e.map((e, i) => e * signs[i]));
@@ -901,7 +910,6 @@ principles.update = function() {
 		console.log("Still some ambiguity remaining.");
 	}
 	let solution = solutions[0];
-	
 	
 	// Print the clauses
 	let principle = "<ul>";
