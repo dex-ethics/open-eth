@@ -21,14 +21,27 @@
 </header>
 <main id="main">
 
-<div>
-	<h3>Examples:
-	<ul>
-		<li onclick="load('examples/medical_reminding.json')">Medical Reminding</li>
-		<li onclick="load('examples/assisted_driving.json')">Assisted Driving</li>
-		<li onclick="load('examples/medical_treatment.json')">Medical Treatment</li>
-		<li onclick="load('examples/rescue.json')">Rescue</li>
-	</ul>
+<div class="row">
+	<div class="col s4">
+		<h2>Examples</h2>
+		<ul>
+			<li onclick="load('examples/medical_reminding.json')">Medical Reminding</li>
+			<li onclick="load('examples/assisted_driving.json')">Assisted Driving</li>
+			<li onclick="load('examples/medical_treatment.json')">Medical Treatment</li>
+			<li onclick="load('examples/rescue.json')">Rescue</li>
+		</ul>
+	</div>
+	<div class="col s8">
+		<h2>Guidance</h2>
+		<div class="speechbubble">
+			<div style="float: left;">
+				<img id="buddha" src="buddha.png">
+				<div id="buddha_shadow"></div>
+			</div>
+			<div id="guidance"></div>
+			<div style="clear: both;"></div>
+		</div>
+	</div>
 </div>
 
 <dilemma data-editor="edit_dilemma">
@@ -74,18 +87,17 @@
 	</div>
 </dilemma>
 
-<h2>Guidance</h2>
-<img id="buddha" src="buddha.png" style="">
-<div id="buddha_shadow"></div>
-<div id="guidance">
-</div>
-
-<h2>Prima facie duties</h2>
-<div id="duties">
-</div>
-
-<h2>Principles</h2>
-<div id="principles">
+<div class="row">
+	<div class="col s6">
+		<h2>Prima facie duties</h2>
+		<div id="duties">
+		</div>
+	</div>
+	<div class="col s6">
+		<h2>Principles</h2>
+		<div id="principles">
+		</div>
+	</div>
 </div>
 
 <h2>
@@ -977,10 +989,23 @@ function load(url) {
 	});
 }
 
+
 window.addEventListener('DOMContentLoaded', function() {
 	// We do this by setAttribute so the cloneNode() will copy it.
 	for(let elm of document.querySelectorAll('.draggable'))
 		elm.setAttribute('onmousedown', 'drag(this,event)');
+		
+	// Load an empty case
+	join('main', {
+		"name": "New Dilemma",
+		"description": "Please edit this dilemma.",
+		"actions": [
+			"Action A",
+			"Action B"
+		],
+		"features": ["Feature 1"],
+		"cases": []
+	});
 });
 
 </script>
