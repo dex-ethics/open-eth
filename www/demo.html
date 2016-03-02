@@ -800,8 +800,6 @@ function findSigns(positive, negative) {
 // Maximize the volume {x | x ≥ clause} s.t. forbidden ∩ volume = ∅
 function maximizeVolume(clause, forbidden)
 {
-	console.log(clause, forbidden.map(e => '[' + e.join(' ') + ']'));
-
 	// Check consistency
 	// ∀ n ∊ forbidden ∃ i nᵢ < clauseᵢ
 	if(!forbidden.every(n => n.some((e, i) => e < clause[i]))) {
@@ -812,20 +810,30 @@ function maximizeVolume(clause, forbidden)
 	// For every permutation of the dimensions
 	let options = Array.range(clause.length).permutations().map(order => 
 		// Maximize the volume greedy one dimension at a time
-		order.reduce(function (clause, dimension) {
+		order.reduce(function (option, dimension) {
 			// Set the dimension to the minimal dimension of
 			// the forbidden vectors that would fall inside the volume
-			clause[dimension] = Math.max.apply(null, forbidden.filter(e =>
-				e.every((x, i) => i === dimension || x >= clause[i])
-			).map(e => 1 + e[dimension]));
-			return clause;
-		}, clause.splice(0))
-	
+			let bound = Math.max.apply(null,
+				forbidden.filter(e =>
+					e.every((x, i) => i === dimension || x >= option[i])
+				).map(e => 1 + e[dimension]));
+			if(bound > option[dimension]) {
+				console.log("Illegal bound in maximizeVolume");
+			}
+			option[dimension] = bound;
+			return option;
+		}, clause.clone())
+		
 	// Unique the solutions
 	).filter((e,i,a) => i == a.findIndex(f => f.every((g, j) => g == e[j])));
 	
+	// Prefer solutions with the least number of variables
+	let variables = Math.min.apply(null, options.map(e => e.length - e.filter(f => f === -Infinity).length));
+	options = options.filter(e => e.length - e.filter(f => f === -Infinity).length == variables);
+	
 	if(options.length > 1) {
 		console.log("Ambiguous clause generalization.");
+		console.log(options.map(e => e.join(' ')));
 	}
 	
 	// TODO handle multiple options

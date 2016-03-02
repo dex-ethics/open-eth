@@ -12,6 +12,10 @@ RegExp.escape = function(str) {
 	return String(str).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1");
 };
 
+Array.prototype.clone = function(x) {
+	return this.slice(0);
+}
+
 Array.prototype.remove = function(x) {
 	return this.splice(x, 1)[0];
 }
