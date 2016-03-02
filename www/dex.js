@@ -214,7 +214,7 @@ Node.prototype.join = function(data) { join(this, data); }
 Node.prototype.extract = function() { return extract(this); }
 
 // Fancy draggable elements
-function drag(node, e) {
+window.data_onreorder_onmousedown = (node, e)=>{
 	let parent = node.parentNode;
 	let was_dragged = false;
 	let bounds = node.getBoundingClientRect();
@@ -224,7 +224,7 @@ function drag(node, e) {
 	
 	// Create a draggable clone
 	let clone = node.cloneNode(true);
-	clone.className += ' drag';
+	clone.className += ' data_onreorder_dragging';
 	clone.style.left = e.clientX - grabX * bounds.width + 'px';
 	clone.style.top = e.clientY - grabY * bounds.height + 'px';
 	clone.style.width = bounds.width + 'px';
@@ -232,17 +232,19 @@ function drag(node, e) {
 	parent.appendChild(clone);
 	
 	// Turn the element into a placeholder
-	let placeholder = document.createElement('placeholder');
-	let placeholder2 = document.createElement('placeholder');
+	let placeholder = document.createElement('div');
+	let placeholder2 = document.createElement('div');
+	node.className += ' data_onreorder_placeholder0';
+	placeholder.className = 'data_onreorder_placeholder1';
+	placeholder2.className = 'data_onreorder_placeholder2';
 	placeholder.appendChild(placeholder2);
 	node.appendChild(placeholder);
-	node.className += ' placeholder';
 	
 	// Enable wiggle on the parent
 	parent.className += ' wiggle';
 	
 	// Install mouse event handlers
-	let mousemove = function(e) {
+	let mousemove = (e)=>{
 		
 		// We are now officially dragging
 		// Todo: require some initial offset
@@ -279,10 +281,10 @@ function drag(node, e) {
 		clone.style.left = e.clientX - grabX * bounds.width + 'px';
 		clone.style.top = e.clientY - grabY * bounds.height + 'px';
 	};
-	let finish = function(e) {
+	let finish = (e)=>{
 		// Remove dragging stuff
-		node.className = node.className.replace(/\bplaceholder\b/,'');
-		parent.className = parent.className.replace(/\bwiggle\b/,'');
+		node.className = node.className.replace(/\bdata_onreorder_placeholder0\b/,'');
+		parent.className = parent.className.replace(/\bdata_onreorder_wiggle\b/,'');
 		parent.removeChild(clone);
 		node.removeChild(placeholder);
 		
@@ -294,8 +296,10 @@ function drag(node, e) {
 		if(parent.dataset !== undefined && parent.dataset.onreorder !== undefined) {
 			try {
 				let handler = eval(parent.dataset.onreorder);
-				let new_index = Array.prototype.indexOf.call(parent.children, node);
-				handler(old_index, new_index);
+				if(typeof handler === "function") {
+					let new_index = Array.prototype.indexOf.call(parent.children, node);
+					handler(old_index, new_index);
+				}
 			}
 			catch(e) {
 				console.log(e);
@@ -316,8 +320,13 @@ function drag(node, e) {
 	// Cancel event propagation
 	e.preventDefault();
 	e.stopPropagation();
-	return false;
-}
+};
+window.addEventListener('DOMContentLoaded', ()=>{
+	// We do this by setAttribute so the cloneNode() will copy it.
+	for(let elm of document.querySelectorAll('[data-onreorder] >*'))
+		elm.setAttribute('onmousedown', 'data_onreorder_onmousedown(this,event)');
+});
+
 
 // Show a <form> as a modal or fullscreen dialogue
 // TODO: Make the browser back button act as [cancel]
@@ -395,13 +404,6 @@ function show_form(fullscreen, form, on_accept, on_reject)
 }
 let show_modal = show_form.bind(null, false);
 let show_fullscreen = show_form.bind(null, true);
-
-document.addEventListener('DOMContentLoaded', function() {
-	for(let el of document.getElementsByTagName('submit')) {
-		console.log(el);
-		el.onclick = function() { console.log(this.value); this.form.action = this.value; };
-	}
-});
 
 // JSON API callback
 function request(method, url, data, on_succes, on_error)

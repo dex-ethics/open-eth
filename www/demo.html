@@ -61,7 +61,6 @@
 				<li
 					hidden
 					data-content
-					class="draggable"
 					onclick="actions.edit(this)"
 					>
 				</li>
@@ -78,7 +77,6 @@
 				<li
 					hidden
 					data-content
-					class="draggable"
 					onclick="features.edit(this)"
 					>
 				</li>
@@ -104,8 +102,8 @@
 	Cases
 	<button onclick="cases.add()">Add</button>
 </h2>
-<cases data-array="cases" id="cases">
-	<case hidden class="draggable" onclick="cases.edit(this)">
+<cases id="cases" data-array="cases" data-onreorder>
+	<case hidden onclick="cases.edit(this)">
 		<h4>Case: <span data-content="name"></span></h4>
 		<p data-content="description"></p>
 		<p>Correct action: <em
@@ -991,10 +989,6 @@ function load(url) {
 
 
 window.addEventListener('DOMContentLoaded', function() {
-	// We do this by setAttribute so the cloneNode() will copy it.
-	for(let elm of document.querySelectorAll('.draggable'))
-		elm.setAttribute('onmousedown', 'drag(this,event)');
-		
 	// Load an empty case
 	join('main', {
 		"name": "New Dilemma",
