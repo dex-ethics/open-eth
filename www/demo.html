@@ -830,14 +830,7 @@ function maximizeVolume(clause, forbidden)
 	// Prefer solutions with the least number of variables
 	let variables = Math.min.apply(null, options.map(e => e.length - e.filter(f => f === -Infinity).length));
 	options = options.filter(e => e.length - e.filter(f => f === -Infinity).length == variables);
-	
-	if(options.length > 1) {
-		console.log("Ambiguous clause generalization.");
-		console.log(options.map(e => e.join(' ')));
-	}
-	
-	// TODO handle multiple options
-	return options[0];
+	return options;
 }
 
 principles.update = function() {
@@ -878,21 +871,41 @@ principles.update = function() {
 	positive = positive.map(e => e.map((e, i) => e * signs[i]));
 	negative = negative.map(e => e.map((e, i) => e * signs[i]));
 	
-	console.log("Positive: [" + positive.map(e => e.join(' ')).join('], [')+']');
-	console.log("Negative: [" + negative.map(e => e.join(' ')).join('], [')+']');
-	
 	// Find different maximal volumes of positive clauses
 	let clauses = positive.map(e => maximizeVolume(e, negative));
 	
-	console.log(f);
-	console.log('['+clauses.map(e => e.join(' ')).join('], [')+']');
+	// If there are multiple solutions, find the simplest one
+	function findSolutions(remaining) {
+		if(remaining.length === 0) {
+			return [[]];
+		}
+		let current = remaining[0];
+		let recurse = findSolutions(remaining.slice(1));
+		let result = [];
+		for(let clause of current) {
+			for(let r of recurse) {
+				result.push([clause].concat(r));
+			}
+		}
+		return result;
+	}
+	let solutions = findSolutions(clauses);
 	
-	// Unique the clauses
-	clauses = clauses.filter((e,i,a) => i == a.findIndex(f => f.every((g, j) => g == e[j])));
+	// Minimize the solutions by removing duplicate clauses
+	solutions = solutions.map(s => s.unique((a,b) => a.equals(b)));
+	
+	// Find the solutions with the smallest number of clauses
+	let num_clauses = Math.min.apply(null, solutions.map(s => s.length));
+	solutions = solutions.filter(s => s.length === num_clauses);
+	if(solutions.length > 1) {
+		console.log("Still some ambiguity remaining.");
+	}
+	let solution = solutions[0];
+	
 	
 	// Print the clauses
 	let principle = "<ul>";
-	for(let clause of clauses) {
+	for(let clause of solution) {
 		principle += "<li>An action is ethically preferable to another if it <ul>"
 		let i = 0;
 		for(let constraint of clause) {

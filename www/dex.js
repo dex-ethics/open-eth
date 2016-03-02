@@ -61,6 +61,20 @@ Array.prototype.permutations = function() {
 	}, []);
 }
 
+Array.prototype.equals = function(other, equality) {
+	if(equality === undefined) {
+		equality = (a, b) => a === b;
+	}
+	return this.length === other.length && this.every((e, i) => equality(e, other[i]));
+}
+
+Array.prototype.unique = function(equality) {
+	if(equality === undefined) {
+		equality = (a, b) => a === b;
+	}
+	return this.filter((e,i,a) => i == a.findIndex(f => equality(e, f)));
+}
+
 // An improved join that understands a final_interjection to
 // create sentences like "A, B, and C".
 Array.prototype.join = function(interjection, final_interjection) {
