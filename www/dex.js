@@ -27,6 +27,65 @@ Array.prototype.swap = function (x,y) {
 	return this;
 }
 
+Array.prototype.repeat = function(times) {
+	let arrays = [];
+	for(let i =0; i < times; ++i) {
+		arrays.push(this);
+	}
+	return Function.prototype.call.apply(Array.prototype.concat, arrays);
+}
+
+Array.range = function(a, b, s) {
+	let start = b === undefined ? 0 : a;
+	let end = b === undefined ? a : b;
+	let step = s === undefined ? 1 : s;
+	let result = [];
+	for(let n = start; n < end; n += step) {
+		result.push(n);
+	}
+	return result;
+}
+
+Array.prototype.permutations = function() {
+	return this.reduce(function permute(res, item, key, arr) {
+		return res.concat(arr.length > 1
+			&& arr.slice(0, key)
+				.concat(arr.slice(key + 1))
+				.reduce(permute, [])
+				.map(perm => [item].concat(perm))
+			|| item);
+	}, []);
+}
+
+// An improved join that understands a final_interjection to
+// create sentences like "A, B, and C".
+Array.prototype.join = function(interjection, final_interjection) {
+	if(this.length == 0)
+		return undefined;
+	if(this.length == 1)
+		return this[0];
+	let result = this[0];
+	for(let i = 1; i < this.length; ++i) {
+		if(interjection !== undefined) {
+			if(i < this.length - 1) {
+				result += interjection;
+			} else if(i === this.length - 1) {
+				if(final_interjection !== undefined) {
+					result += final_interjection;
+				} else {
+					result += interjection;
+				}
+			}
+		}
+		result += this[i];
+	}
+	return result;
+}
+
+Array.prototype.equals = function(other) {
+	return this.every((e,i) => e == other[i]);
+}
+
 // Take element at position x and move it to position y, shifting
 // all elements in between.
 Array.prototype.reorder = function(from, to) {

@@ -78,21 +78,16 @@
 <img id="buddha" src="buddha.png" style="">
 <div id="buddha_shadow"></div>
 <p>
-	
-</p>
-
-<h2>Principles</h2>
-<p id="principles">
+Hmmm.... Zen.
 </p>
 
 <h2>Prima facie duties</h2>
-<p>
-* http://ethics.csc.ncsu.edu/basics/principles/study.php
-* http://people.wku.edu/jan.garrett/ethics/rossethc.htm
-</p>
-<p id="duties">
-</p>
+<div id="duties">
+</div>
 
+<h2>Principles</h2>
+<div id="principles">
+</div>
 
 <h2>
 	Cases
@@ -313,7 +308,8 @@ function make_unique(existing, name) {
 	name = name + " (" + (n + 1) + ")";
 	
 	// Toast notify
-	Materialize.toast("Renamed to <em>" + HTMLEscape(name) +"</em>.", 4000);
+	// Materialize.toast("Renamed to <em>" + HTMLEscape(name) +"</em>.", 4000);
+	console.log("Renamed to <em>" + HTMLEscape(name) +"</em>.");
 	return name;
 }
 
@@ -348,7 +344,7 @@ actions.edit = function(node) {
 		
 		// The empty string is not allowed
 		if(edited === "") {
-			Materialize.toast("Action name can not be empty.", 4000);
+			console.log("Action name can not be empty.", 4000);
 			return;
 		}
 		
@@ -558,9 +554,15 @@ cases.edit = function(node) {
 
 cases.add = function() {
 	let existing = extract(cases).cases.map(function (o){ return o.name; });
-	console.log(existing);
+	let a = extract(actions).actions;
+	let f = extract(features).features;
 	
-	join(cases.form, {name: "New Case", description: "", action: undefined, features: []});
+	join(cases.form, {
+		name: "New Case",
+		description: "",
+		action: undefined,
+		features: [[null].repeat(f.length)].repeat(a.length)
+	});
 	
 	show_fullscreen(cases.form, function(action) {
 		
@@ -688,7 +690,11 @@ cases.change_range = function(node) {
 
 function flesh_out(table) {
 	let rows = table.length;
+	if(rows === 0)
+		return table;
 	let cols = table[0].length;
+	if(cols === 0)
+		return table;
 	for(let i = 0; i < rows; ++i) {
 		for(let j = 0; j < cols; ++j) {
 			if(table[i][j] === null) {
@@ -745,21 +751,173 @@ cases.update_table = function(data) {
 	}
 }
 
+Array.prototype.greaterOrEqualThan = function(other) {
+	return this.every((e, i) => e >= other[i]);
+}
+
+Array.prototype.zip = function(other) {
+	let result = [];
+	for(let i = 0; i < this.length; ++i) {
+		result.push([this[i], other[i]]);
+	}
+	return result;
+}
+
+function findSigns(positive, negative) {
+	let n = positive[0].length;
+	
+	let possibleSigns = [];
+	for(let i = 0; i < Math.pow(2, n); ++i) {
+		
+		// Create a signing
+		let sign = [];
+		for(let j = 0; j < n; ++j) {
+			sign.push(((i & (1 << j)) != 0) ? -1 : 1);
+		}
+		
+		// Apply the sign
+		let pos = positive.map(e => e.map((e, i) => e * sign[i]));
+		let neg = negative.map(e => e.map((e, i) => e * sign[i]));
+		
+		// Check the consistency
+		// ∀ p ∊ pos ∀ n ∊ neg ∃ i nᵢ < pᵢ
+		if(pos.every(p => neg.every(n => n.some((e, i) => e < p[i])))) {
+			possibleSigns.push(sign);
+		}
+	}
+	if(possibleSigns.length == 0) {
+		console.log("Inconsistent signs!");
+	}
+	
+	// TODO handle ambiguity
+	if(possibleSigns.length > 1) {
+		console.log("Ambiguous signs.");
+	}
+	
+	return possibleSigns[0];
+}
+
+// Maximize the volume {x | x ≥ clause} s.t. forbidden ∩ volume = ∅
+function maximizeVolume(clause, forbidden)
+{
+	console.log(clause, forbidden.map(e => '[' + e.join(' ') + ']'));
+
+	// Check consistency
+	// ∀ n ∊ forbidden ∃ i nᵢ < clauseᵢ
+	if(!forbidden.every(n => n.some((e, i) => e < clause[i]))) {
+		console.log("Inconsistent clause!");
+		return undefined;
+	}
+	
+	// For every permutation of the dimensions
+	let options = Array.range(clause.length).permutations().map(order => 
+		// Maximize the volume greedy one dimension at a time
+		order.reduce(function (clause, dimension) {
+			// Set the dimension to the minimal dimension of
+			// the forbidden vectors that would fall inside the volume
+			clause[dimension] = Math.max.apply(null, forbidden.filter(e =>
+				e.every((x, i) => i === dimension || x >= clause[i])
+			).map(e => 1 + e[dimension]));
+			return clause;
+		}, clause.splice(0))
+	
+	// Unique the solutions
+	).filter((e,i,a) => i == a.findIndex(f => f.every((g, j) => g == e[j])));
+	
+	if(options.length > 1) {
+		console.log("Ambiguous clause generalization.");
+	}
+	
+	// TODO handle multiple options
+	return options[0];
+}
+
 principles.update = function() {
+	let a = extract(actions).actions;
+	let f = extract(features).features;
+	let n = f.length;
+	
+	// Compute the positive and negative vectors
+	let positive = [];
+	let negative = [];
 	let data = extract(cases);
 	for(let c of data.cases) {
 		let mat = flesh_out(c.features);
 		
-		let pos = mat[c.action];
-		let neg = mat[1 - c.action];
+		let correct = c.action;
+		let incorrect = 1 - c.action;
 		
-		let vec = [];
-		for(let i = 0; i < pos.length; ++i) {
-			vec[i] = pos[i] - neg[i];
+		// Δ = a₁ - a₂
+		let delta = [];
+		for(let i = 0; i < n; ++i) {
+			delta[i] = mat[correct][i] - mat[incorrect][i];
 		}
-		console.log(c.action, pos, neg, vec);
+		// Positive: prefer(correct, incorrect) =  Δ
+		// Negative: prefer(incorrect, correct) = -Δ
+		positive.push(delta);
+		negative.push(delta.map(e => -e));
 	}
-	this.textContent = Date().toString();
+	
+	// Find the signs, the prima facie duties
+	let signs = findSigns(positive, negative);
+	
+	// Print the duties
+	duties.innerHTML = "<ul><li>It can be inferred that there are (prima facie) duties to <ul>"
+		+ signs.map((e, i) => (e < 0 ? "minimize " : "maximize ") + f[i])
+		.map(e => "<li>" + e + "</li>").join() + "</ul></li></ul>";
+	
+	// Apply signs
+	positive = positive.map(e => e.map((e, i) => e * signs[i]));
+	negative = negative.map(e => e.map((e, i) => e * signs[i]));
+	
+	console.log("Positive: [" + positive.map(e => e.join(' ')).join('], [')+']');
+	console.log("Negative: [" + negative.map(e => e.join(' ')).join('], [')+']');
+	
+	// Find different maximal volumes of positive clauses
+	let clauses = positive.map(e => maximizeVolume(e, negative));
+	
+	console.log(f);
+	console.log('['+clauses.map(e => e.join(' ')).join('], [')+']');
+	
+	// Unique the clauses
+	clauses = clauses.filter((e,i,a) => i == a.findIndex(f => f.every((g, j) => g == e[j])));
+	
+	// Print the clauses
+	let principle = "<ul>";
+	for(let clause of clauses) {
+		principle += "<li>An action is ethically preferable to another if it <ul>"
+		let i = 0;
+		for(let constraint of clause) {
+			if(constraint === -Infinity) {
+				++i;
+				continue;
+			}
+			principle += "<li>";
+			if(constraint > 0) {
+				principle += "satisfies the duty to "
+			} else {
+				principle += "does not violate the duty to "
+			}
+			if(signs[i] < 0) {
+				principle += "minimize "
+			} else {
+				principle += "maximize "
+			}
+			principle += f[i];
+			principle += " by a value ";
+			if(constraint > 0) {
+				principle += "at least "
+			} else {
+				principle += "greater than "
+			}
+			principle += Math.abs(constraint)
+			principle += " more"
+			principle += "</li>";
+			++i;
+		}
+		principle += "</ul></li>"
+	}
+	principles.innerHTML = principle;
 }
 
 function debug()
