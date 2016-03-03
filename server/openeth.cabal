@@ -19,3 +19,6 @@ executable openeth
                      , scotty
                      , text
                      , aeson
+                     , transformers
+                     , HDBC
+                     , HDBC-postgresql

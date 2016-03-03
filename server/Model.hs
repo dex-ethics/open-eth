@@ -4,6 +4,8 @@ import GHC.Generics (Generic)
 import Data.Text.Lazy (Text)
 import Data.Aeson (FromJSON, ToJSON)
 
+-- Error is used by JsonError to communicate errors
+-- over HTTP. It is never written to the DB.
 data Error =
 	Error {
 		error         :: !Text
@@ -17,4 +19,5 @@ data Dilemma =
 		description   :: !Text
 	} deriving (Show, Generic)
 instance FromJSON Dilemma
-instance ToJSON Dilemma
+instance ToJSON   Dilemma
+
