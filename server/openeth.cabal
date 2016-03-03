@@ -18,4 +18,4 @@ executable openeth
                      , resourcet
                      , scotty
                      , text
-
+                     , aeson

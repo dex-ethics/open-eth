@@ -1,33 +1,25 @@
 {-# LANGUAGE OverloadedStrings #-}
-
-{-|
-Module      : Main
-Description : The OpenEth server
-Copyright   : (c) Dex Ethics, 2016
-Maintainer  : Remco Bloemen <openeth@2π.com>
-Stability   : experimental
-Portability : POSIX
--}
-
--- https://github.com/scotty-web/scotty/wiki
--- http://taylor.fausak.me/2014/10/21/building-a-json-rest-api-in-haskell/
-
 module Main where
-
+import Actions
+import JsonError
 import Control.Applicative ((<$>))
 import System.Environment (getEnv)
-import Data.Text.Lazy.Encoding (decodeUtf8)
-import Network.Wai.Middleware.RequestLogger (logStdoutDev)
-import Web.Scotty (middleware, scotty, get, post, put, delete, json, body, html)
-import Data.Text.Lazy (pack)
+import Network.Wai.Middleware.RequestLogger (logStdout)
+import Web.Scotty (ActionM, ScottyM, middleware, notFound, defaultHandler, scotty, get, post, put, delete)
+
+router :: ScottyM ()
+router = do
+	middleware          logStdout
+	defaultHandler      jsonErrorHandler
+	
+	get    "/api/test"  testGet
+	post   "/api/test"  testPost
+	put    "/api/test"  testGet
+	delete "/api/test"  testGet
+	
+	notFound            jsonNotFoundHandler
 
 main :: IO ()
 main = do
 	port <- read <$> getEnv "PORT"
-	scotty port $ do
-		middleware logStdoutDev
-		get  "/api"      $ html "Hi there"
-		get  "/api/port" $ html (pack (show port))
-		post "/api/echo" $ do
-			stuff <- fmap decodeUtf8 body
-			html stuff
+	scotty port router
