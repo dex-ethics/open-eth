@@ -1,0 +1,21 @@
+name:                openeth
+version:             0.0.1
+synopsis:            Server for OpenEth
+author:              Remco Bloemen
+maintainer:          openeth@2π.com
+category:            Network
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable openeth
+  default-language:    Haskell2010
+  main-is:             Main.hs
+  build-depends:       base
+                     , wai
+                     , wai-extra
+                     , warp
+                     , http-types
+                     , resourcet
+                     , scotty
+                     , text
+

@@ -1,0 +1,54 @@
+# Sets up infrastructure where Nginx handles TLS and
+# static content. Nginx proxies API requests to the
+# server. The server is connected to a PostgreSQL
+# database.
+#
+# see https://docs.docker.com/compose/compose-file/
+
+nginx:
+   image: nginx
+   volumes:
+   - ./www:/srv/openeth/www:ro
+   - ./access.log:/srv/openeth/access.log:rw
+   - ./error.log:/srv/openeth/error.log:rw
+   - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+   links:
+   - server
+   ports:
+   - "8080:80"
+
+# TODO: Automatically handle letsencrypt certificates
+# letsencrypt:
+#   image: jrcs/letsencrypt-nginx-proxy-companion
+#
+#$ docker run -d \
+#    -v /path/to/certs:/etc/nginx/certs:rw \
+#    --volumes-from nginx-proxy \
+#    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+#    jrcs/letsencrypt-nginx-proxy-companion
+
+server:
+   build: server
+   links:
+   - postgres
+   environment:
+     DATABASE_URL: 'postgresql://openeth:EmSH7bIXL9si4cWx4Iyw@postgres/openth'
+     PORT: 3000
+   expose:
+   - '3000'
+
+postgres:
+   image: postgres:9.5
+   volumes:
+   - ./data:/var/lib/postgresql/data:rw
+   environment:
+     POSTGRES_DB: 'openeth'
+     POSTGRES_USER: 'openeth'
+     POSTGRES_PASSWORD: 'EmSH7bIXL9si4cWx4Iyw'
+
+# To start a psql session:
+#
+#   docker run -it --link dex_postgres_1:postgres --rm postgres sh\
+#      -c 'exec psql -h postgres -p 5432 -U postgres'
+#
+
