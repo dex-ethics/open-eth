@@ -12,6 +12,10 @@ WORKDIR /opt/server
 
 RUN cabal update
 
+RUN apt-get update
+
+RUN apt-get install -y libpq-dev
+
 # Add just the .cabal file to capture dependencies
 COPY ./openeth.cabal /opt/server/
 

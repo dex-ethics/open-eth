@@ -22,7 +22,8 @@ services:
       links:
          - db
       environment:
-         DATABASE_URL: 'postgresql://openeth:EmSH7bIXL9si4cWx4Iyw@postgres/openth'
+         DATABASE_URL: 'postgresql://openeth:EmSH7bIXL9si4cWx4Iyw@db/openeth'
+         DATABASE_POOL_SIZE: 10
          PORT: 3000
       expose:
          - '3000'

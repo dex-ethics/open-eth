@@ -7,9 +7,7 @@
 {-# LANGUAGE FlexibleInstances          #-}
 module Model where
 import Database.Persist.TH (share, mkPersist, sqlSettings, mkMigrate, persistLowerCase)
-import Data.Text (Text)
-
--- https://github.com/yesodweb/persistent/wiki/Persistent-entity-syntax
+import Data.Text.Lazy (Text)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 	

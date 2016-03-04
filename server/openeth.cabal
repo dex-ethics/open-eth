@@ -25,3 +25,6 @@ executable openeth
                      , persistent-template
                      , persistent-postgresql
                      , monad-logger
+                     , esqueleto
+                     , monad-control
+                     , mtl >= 2.2.1

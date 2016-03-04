@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 module JsonError where
-import Model
+import Actions (Action)
 import GHC.Generics (Generic)
 import Data.Text.Lazy (Text)
-import Web.Scotty (ActionM, json)
+import Web.Scotty.Trans (json)
 import Data.Aeson (FromJSON, ToJSON)
 
 -- Error is used by JsonError to communicate errors
@@ -16,8 +16,8 @@ data Error =
 instance FromJSON Error
 instance ToJSON Error
 
-errorHandler :: Text -> ActionM ()
+errorHandler :: Text -> Action ()
 errorHandler x = json $ Error x
 
-notFoundHandler :: ActionM ()
+notFoundHandler :: Action ()
 notFoundHandler = json $ Error "Not found"
