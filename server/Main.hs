@@ -23,22 +23,21 @@ import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Reader (Reader, ReaderT, ask, runReader, runReaderT)
 import Control.Monad.Identity (Identity)
 
---type WithLogging = LoggingT IO ()
---type WithPool = ReaderT ConnectionPool WithLogging
---type WithTransaction = WithPool
+type WithLogging = LoggingT IO
+type WithPool = ReaderT ConnectionPool WithLogging
+type WithTransaction = SqlPersistT WithPool
 
--- transaction :: (MonadBaseControl IO m, WithPool m) => SqlPersistT m b -> m b
+transaction :: WithTransaction a -> WithPool a
 transaction queries = do
 	pool <- ask
 	runSqlPool queries pool
 
--- test :: WithPool ()
+test :: WithPool ()
 test = do
 	liftIO $ putStrLn "Hello!"
 
-dumpTable :: (MonadIO m, Functor m) => SqlPersistT m [Dilemma]
+dumpTable :: WithTransaction [Dilemma]
 dumpTable = map entityVal <$> (select . from $ return)
-
 
 main :: IO ()
 main = do
@@ -47,7 +46,6 @@ main = do
 	db_url  <- pack <$> getEnv "DATABASE_URL"
 	db_pool <- read <$> getEnv "DATABASE_POOL_SIZE"
 	-- port    <- read <$> getEnv "PORT"
-	
 	
 	-- Connect to the database
 	runStdoutLoggingT $ withPostgresqlPool db_url db_pool $ runReaderT $ do
@@ -65,3 +63,4 @@ main = do
 		transaction $ do
 			dilemmas <- dumpTable
 			liftIO $ print dilemmas
+		
