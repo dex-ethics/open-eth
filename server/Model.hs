@@ -1,23 +1,21 @@
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE GADTs                      #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses      #-}
+{-# LANGUAGE QuasiQuotes                #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TypeFamilies               #-}
+{-# LANGUAGE FlexibleInstances          #-}
 module Model where
-import GHC.Generics (Generic)
-import Data.Text.Lazy (Text)
-import Data.Aeson (FromJSON, ToJSON)
+import Database.Persist.TH (share, mkPersist, sqlSettings, mkMigrate, persistLowerCase)
+import Data.Text (Text)
 
--- Error is used by JsonError to communicate errors
--- over HTTP. It is never written to the DB.
-data Error =
-	Error {
-		error         :: !Text
-	} deriving (Show, Generic)
-instance FromJSON Error
-instance ToJSON Error
+-- https://github.com/yesodweb/persistent/wiki/Persistent-entity-syntax
 
-data Dilemma =
-	Dilemma {
-		name          :: !Text,
-		description   :: !Text
-	} deriving (Show, Generic)
-instance FromJSON Dilemma
-instance ToJSON   Dilemma
-
+share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+	
+	Dilemma         json
+		name         Text
+		description  Text
+		deriving     Show
+	
+|]

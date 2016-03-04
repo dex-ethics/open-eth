@@ -20,5 +20,8 @@ executable openeth
                      , text
                      , aeson
                      , transformers
-                     , HDBC
-                     , HDBC-postgresql
+                     , bytestring
+                     , persistent
+                     , persistent-template
+                     , persistent-postgresql
+                     , monad-logger
