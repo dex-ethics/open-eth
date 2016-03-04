@@ -6,13 +6,16 @@ import Control.Applicative ((<$>))
 import System.Environment (getEnv)
 import Data.ByteString.Char8 (pack)
 import Network.Wai.Middleware.RequestLogger (logStdout)
-import Web.Scotty.Trans (ActionT, ScottyT, middleware, notFound, defaultHandler, scottyT, get, json)
+import Web.Scotty.Trans (ActionT, ScottyT, middleware, notFound, defaultHandler, scottyT, get, json, raise, liftAndCatchIO)
 import Database.Persist.Postgresql (SqlPersistT, SqlPersistM, runMigration, withPostgresqlPool, insert)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.Logger
+import Control.Monad.Trans (lift)
 import Database.Persist.Postgresql (runSqlPool)
+import qualified Database.Persist.Postgresql as DB
 import Database.Esqueleto (entityVal, select, from)
-
+import Network.Wai.Handler.Warp (Port)
+import Data.Text.Lazy (Text)
 
 -- http://www.yesodweb.com/book/persistent
 -- https://www.schoolofhaskell.com/school/advanced-haskell/persistent-in-detail/existing-database
@@ -22,22 +25,24 @@ import Database.Persist.Sql (ConnectionPool)
 import Control.Monad.Trans.Control (MonadBaseControl)
 import Control.Monad.Reader (Reader, ReaderT, ask, runReader, runReaderT)
 import Control.Monad.Identity (Identity)
+import Network.Wai (Response)
 
-type WithLogging = LoggingT IO
-type WithPool = ReaderT ConnectionPool WithLogging
-type WithTransaction = SqlPersistT WithPool
+type Action = ActionT Text (ReaderT ConnectionPool IO)
 
-transaction :: WithTransaction a -> WithPool a
+transaction :: SqlPersistT Action a -> Action a
 transaction queries = do
-	pool <- ask
+	pool <- lift ask
 	runSqlPool queries pool
 
-test :: WithPool ()
-test = do
-	liftIO $ putStrLn "Hello!"
-
-dumpTable :: WithTransaction [Dilemma]
-dumpTable = map entityVal <$> (select . from $ return)
+handler :: Action ()
+handler = do
+	r <- transaction $ do
+		dilemmaId <- DB.insert $ Dilemma "Michael" "Dilemma"
+		dilemma <- DB.get dilemmaId
+		return dilemma
+	case r of
+		Just n -> json (n :: Dilemma)
+		Nothing -> raise "Not found"
 
 main :: IO ()
 main = do
@@ -45,22 +50,15 @@ main = do
 	-- Read environment variables
 	db_url  <- pack <$> getEnv "DATABASE_URL"
 	db_pool <- read <$> getEnv "DATABASE_POOL_SIZE"
-	-- port    <- read <$> getEnv "PORT"
+	port    <- read <$> getEnv "PORT"
 	
 	-- Connect to the database
-	runStdoutLoggingT $ withPostgresqlPool db_url db_pool $ runReaderT $ do
+	runStdoutLoggingT $ withPostgresqlPool db_url db_pool $ \pool -> liftIO $ do
 		
-		test
-		
-		-- Run safe database migrations
-		transaction $ do
+		-- Migrate the database
+		flip runSqlPool pool $ do
 			runMigration migrateAll
 		
-		transaction $ do
-			insert $ Dilemma "Hello" "Dilemma"
-		
-		-- Dump table dilemmas
-		transaction $ do
-			dilemmas <- dumpTable
-			liftIO $ print dilemmas
-		
+		-- Start scotty
+		scottyT port (flip runReaderT pool) $ do
+			get "/api/test" handler
