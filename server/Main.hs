@@ -1,7 +1,6 @@
 module Main where
 import Model (migrateAll)
 import Actions (actions)
-import JsonError (errorHandler, notFoundHandler)
 import Control.Applicative ((<$>))
 import Control.Monad.Logger (runStdoutLoggingT)
 import Control.Monad.Trans (lift)
@@ -12,7 +11,7 @@ import Database.Persist.Postgresql (withPostgresqlPool, runMigration)
 import Database.Persist.Postgresql (runSqlPool)
 import Network.Wai.Handler.Warp (Port)
 import Network.Wai.Middleware.RequestLogger (logStdout)
-import Web.Scotty.Trans (scottyT, middleware, defaultHandler, notFound)
+import Web.Scotty.Trans (scottyT, middleware)
 
 main :: IO ()
 main = do
@@ -32,6 +31,4 @@ main = do
 		-- Start scotty
 		scottyT port (flip runReaderT pool) $ do
 			middleware     logStdout
-			defaultHandler errorHandler
 			actions
-			notFound       notFoundHandler
