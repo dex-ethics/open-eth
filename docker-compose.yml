@@ -18,19 +18,20 @@ services:
       ports:
          - "8080:80"
    server:
-      build: server
+      image: recmo/postgrest
       links:
          - db
       environment:
-         DATABASE_URL: 'postgresql://openeth:EmSH7bIXL9si4cWx4Iyw@db/openeth'
-         DATABASE_POOL_SIZE: 10
-         PORT: 3000
-      expose:
-         - '3000'
+         PG_ENV_POSTGRES_USER: 'openeth'
+         PG_ENV_POSTGRES_PASSWORD: 'EmSH7bIXL9si4cWx4Iyw'
+         PG_ENV_POSTGRES_DB: 'openeth'
+         PG_PORT_5432_TCP_ADDR: 'db'
+         PG_PORT_5432_TCP_PORT: '5432'
    db:
       image: postgres:9.5
       volumes:
-      - ./data:/var/lib/postgresql/data:rw
+      - ./database:/docker-entrypoint-initdb.d:ro
+      - ./data:/var/lib/postgresql/:rw
       environment:
          POSTGRES_DB: 'openeth'
          POSTGRES_USER: 'openeth'
