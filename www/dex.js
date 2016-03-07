@@ -405,9 +405,10 @@ function show_form(fullscreen, form, on_accept, on_reject)
 let show_modal = show_form.bind(null, false);
 let show_fullscreen = show_form.bind(null, true);
 
+let token = undefined;
+
 // JSON API callback
-function request(method, url, data, on_succes, on_error)
-{
+function request(method, url, data, on_succes, on_error) {
 	console.log(method + ' ' + url);
 	let r = new XMLHttpRequest();
 	r.open(method, url, true);
@@ -415,15 +416,69 @@ function request(method, url, data, on_succes, on_error)
 		if(r.readyState !== 4)
 			return;
 		if(r.status != 200) {
-			if(typeof on_error === 'function')
-				on_error(url, r.status, r);
-			return;
+			if(typeof on_error === 'function') {
+				let message = r.responseText;
+				try {
+					message = JSON.parse(r.responseText).message;
+				}
+				catch(e) {
+				}
+				on_error(message, r.status, url, r);
+			}
+		} else {
+			on_succes(JSON.parse(r.responseText));
 		}
-		on_succes(JSON.parse(r.responseText));
 	};
+	if(data !== undefined) {
+		r.setRequestHeader('Content-Type', 'application/json');
+	}
+	if(token !== undefined) {
+		r.setRequestHeader('Authorization', 'Bearer ' + token);
+	}
+	r.setRequestHeader('Prefer', 'count=none');
+	r.setRequestHeader('Accept', 'application/json');
+	// r.setRequestHeader('Range-Unit', 'items');
+	// r.setRequestHeader('Range', '0-14');
 	r.send(data === undefined ? data : JSON.stringify(data));
 }
 let get = function(url, on_succes, on_error) {
 	request('GET', url, undefined, on_succes, on_error);
 };
 let post = request.bind(undefined, 'POST');
+
+
+function signup(email, pass) {
+	token = undefined;
+	post('/api/v1/rpc/signup', {email: email, pass: pass}, function(result) {
+		token = result.token;
+	}, function(error) {
+		console.log(error);
+	});
+}
+
+function request_password_reset(email) {
+	token = undefined;
+	post('/api/v1/rpc/request_password_reset', {email: email}, function(result) {
+		token = result.token;
+	}, function(error) {
+		console.log(error);
+	});
+}
+
+function reset_password(email, token, pass) {
+	token = undefined;
+	post('/api/v1/rpc/reset_password', {email: email, token: token, pass: pass}, function(result) {
+		token = result.token;
+	}, function(error) {
+		console.log(error);
+	});
+}
+
+function login(email, pass) {
+	token = undefined;
+	post('/api/v1/rpc/login', {email: email, pass: pass}, function(result) {
+		token = result.token;
+	}, function(error) {
+		console.log(error);
+	});
+}
