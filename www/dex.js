@@ -475,7 +475,7 @@ let post = request.bind(undefined, 'POST');
 			login.addEventListener('click', ()=>{
 				lock.show({
 					icon: 'buddha.png',
-					authParams: { scope: 'openid role' }
+					authParams: { scope: 'openid role userid' }
 				});
 			});
 		}
