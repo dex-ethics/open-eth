@@ -459,7 +459,7 @@ let post = request.bind(undefined, 'POST');
 	let lock = undefined;
 	let script = document.createElement('script');
 	script.type = 'text/javascript';
-	script.src = '//cdn.auth0.com/js/lock-8.2.min.js';
+	script.src = '//cdn.auth0.com/js/lock-8.2.js';
 	
 	// Then bind the event to the callback function.
 	// There are several events for cross browser compatibility.
