@@ -24,9 +24,10 @@ services:
       links:
          - db:db
       environment:
-         POSTGREST_JWT_SECRET: 'Vljn/spHRgflxrCT7oG/8uh3pvbCDZOsE0CqMkg40c8'
-         PG_ENV_POSTGRES_USER: 'openeth'
-         PG_ENV_POSTGRES_PASSWORD: 'EmSH7bIXL9si4cWx4Iyw'
+         POSTGREST_JWT_SECRET: '<INSERT Auth0 JWT SECRET HERE>'
+         PG_ENV_POSTGRES_USER: 'authenticator'
+         POSTGREST_ANONYMOUS: 'anonymous'
+         PG_ENV_POSTGRES_PASSWORD: 'vGsg4-Nxkn0xpSFRCthXDN'
          PG_ENV_POSTGRES_DB: 'openeth'
          PG_PORT_5432_TCP_ADDR: 'db'
          PG_PORT_5432_TCP_PORT: '5432'
@@ -38,7 +39,6 @@ services:
          - ./data:/var/lib/postgresql/:rw
       environment:
          POSTGRES_DB: 'openeth'
-         POSTGRES_USER: 'openeth'
          POSTGRES_PASSWORD: 'EmSH7bIXL9si4cWx4Iyw'
 
 # TODO: Automatically handle letsencrypt certificates

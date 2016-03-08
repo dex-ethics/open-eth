@@ -457,6 +457,7 @@ let post = request.bind(undefined, 'POST');
 	let client_id = 'AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo';
 	
 	// Load Auth0 script
+	// TODO: Load on click
 	let lock = undefined;
 	let script = document.createElement('script');
 	script.type = 'text/javascript';
@@ -515,3 +516,43 @@ let post = request.bind(undefined, 'POST');
 
 // TODO: https://auth0.com/docs/user-profile
 // https://auth0.com/docs/user-profile/normalized
+
+//
+// PostgREST
+//
+
+function req(method, url, data, on_succes, on_error) {
+	url = "/api/" + url;
+	console.log(method + ' ' + url);
+	let r = new XMLHttpRequest();
+	r.open(method, url, true);
+	r.onreadystatechange = function () {
+		if(r.readyState !== 4)
+			return;
+		if(r.status != 200) {
+			if(typeof on_error === 'function') {
+				let message = r.responseText;
+				try {
+					message = JSON.parse(r.responseText).message;
+				}
+				catch(e) {
+				}
+				on_error(message, r.status, url, r);
+			}
+		} else {
+			on_succes(JSON.parse(r.responseText));
+		}
+	};
+	if(data !== undefined) {
+		r.setRequestHeader('Content-Type', 'application/json');
+	}
+	let token = localStorage.getItem('id_token');
+	if(token !== null) {
+		r.setRequestHeader('Authorization', 'Bearer ' + token);
+	}
+	r.setRequestHeader('Prefer', 'count=none');
+	r.setRequestHeader('Accept', 'application/json');
+	// r.setRequestHeader('Range-Unit', 'items');
+	// r.setRequestHeader('Range', '0-14');
+	r.send(data === undefined ? data : JSON.stringify(data));
+}

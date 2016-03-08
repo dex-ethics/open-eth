@@ -27,3 +27,25 @@ To start with a clean build
 	sudo rm -rf data/data
 	docker-compose rm -f
 
+
+## JWT token:
+
+Example token (with signature removed):
+
+```
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYXV0aG9yIiwiaXNzIjoiaHR0cHM6Ly9vcGVuZXRoLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NmRlYTBiMzgxZGUyOTJlMGNiNzU5NjUiLCJhdWQiOiJBWm10a0JONXpER0VSSmVzRlpHRlM4dllKWXlaVHJEbyIsImV4cCI6MTQ1NzQ2OTQwNSwiaWF0IjoxNDU3NDMzNDA1fQ
+```
+
+```
+{
+  "role": "author",
+  "iss": "https://openeth.auth0.com/",
+  "sub": "auth0|56dea0b381de292e0cb75965",
+  "aud": "AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo",
+  "exp": 1457469405,
+  "iat": 1457433405
+}
+```
+
+The `role` gets mapped to a PostgreSQL role.
+
