@@ -468,20 +468,24 @@ let post = request.bind(undefined, 'POST');
 		
 		// Add the click handler
 		let login = document.getElementById('btn-login');
-		login.disabled = false;
-		login.addEventListener('click', ()=>{
-			lock.show({
-				icon: 'buddha.png',
-				authParams: { scope: 'openid' } 
+		if(login instanceof HTMLButtonElement) {
+			login.disabled = false;
+			login.addEventListener('click', ()=>{
+				lock.show({
+					icon: 'buddha.png',
+					authParams: { scope: 'openid' } 
+				});
 			});
-		});
+		}
 		
 		let logout = document.getElementById('btn-logout');
-		logout.disabled = true;
-		logout.addEventListener('click', ()=>{
-			localStorage.removeItem('id_token');
-			window.location.href = "/";
-		});
+		if(logout instanceof HTMLButtonElement) {
+			logout.disabled = true;
+			logout.addEventListener('click', ()=>{
+				localStorage.removeItem('id_token');
+				window.location.href = "/";
+			});
+		}
 		
 		let hash = lock.parseHash(window.location.hash);
 		if (hash) {
