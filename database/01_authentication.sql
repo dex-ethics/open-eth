@@ -10,21 +10,27 @@ BEGIN;
 CREATE USER authenticator WITH NOINHERIT LOGIN
 	PASSWORD 'vGsg4-Nxkn0xpSFRCthXDN';
 CREATE ROLE anonymous;
-CREATE ROLE admin;
 CREATE ROLE author;
-GRANT author, admin, anonymous TO authenticator;
+GRANT anonymous, author TO authenticator;
 
 GRANT USAGE ON SCHEMA public TO anonymous, author;
 
 -- The user id is a string stored in postgrest.claims.sub. Let's
 -- wrap this in a nice function.
 
-CREATE FUNCTION current_user_id()
-RETURNS text
+CREATE or replace FUNCTION current_user_id() RETURNS text
 STABLE
-LANGUAGE SQL
+LANGUAGE plpgsql
 AS $$
-	SELECT current_setting('postgrest.claims.sub');
+BEGIN
+	RETURN current_setting('postgrest.claims.userid');
+EXCEPTION
+	-- handle unrecognized configuration parameter error
+	WHEN undefined_object THEN RETURN '';
+END;
 $$;
+
+GRANT EXECUTE ON FUNCTION current_user_id()
+	TO anonymous, author;
 
 COMMIT;

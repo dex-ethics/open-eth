@@ -28,24 +28,30 @@ To start with a clean build
 	docker-compose rm -f
 
 
+## Raw database access
+
+	docker exec -ti -u postgres dex_db_1 psql -d openeth -P pager=off
+
+
 ## JWT token:
 
 Example token (with signature removed):
 
 ```
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYXV0aG9yIiwiaXNzIjoiaHR0cHM6Ly9vcGVuZXRoLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NmRlYTBiMzgxZGUyOTJlMGNiNzU5NjUiLCJhdWQiOiJBWm10a0JONXpER0VSSmVzRlpHRlM4dllKWXlaVHJEbyIsImV4cCI6MTQ1NzQ2OTQwNSwiaWF0IjoxNDU3NDMzNDA1fQ
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYXV0aG9yIiwidXNlcmlkIjoiYXV0aDB8NTZkZWEwYjM4MWRlMjkyZTBjYjc1OTY1IiwiaXNzIjoiaHR0cHM6Ly9vcGVuZXRoLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1NmRlYTBiMzgxZGUyOTJlMGNiNzU5NjUiLCJhdWQiOiJBWm10a0JONXpER0VSSmVzRlpHRlM4dllKWXlaVHJEbyIsImV4cCI6MTQ1NzQ4NjM5MywiaWF0IjoxNDU3NDUwMzkzfQ.2DIZz2bf19Jr9UaNA3DLl263JqzXvrAUky3Vr_ZgIbQ
 ```
 
 ```
 {
-  "role": "author",
-  "iss": "https://openeth.auth0.com/",
-  "sub": "auth0|56dea0b381de292e0cb75965",
-  "aud": "AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo",
-  "exp": 1457469405,
-  "iat": 1457433405
+	"role": "author",
+	"userid": "auth0|56dea0b381de292e0cb75965",
+	"iss": "https://openeth.auth0.com/",
+	"sub": "auth0|56dea0b381de292e0cb75965",
+	"aud": "AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo",
+	"exp": 1457486393,
+	"iat": 1457450393
 }
 ```
 
-The `role` gets mapped to a PostgreSQL role.
-
+The `role` gets mapped to a PostgreSQL role, `sub` is used to uniquely identify
+users.
