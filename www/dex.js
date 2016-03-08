@@ -454,7 +454,6 @@ let post = request.bind(undefined, 'POST');
 //
 
 (()=>{
-	
 	let client_id = 'AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo';
 	
 	// Load Auth0 script
@@ -489,7 +488,6 @@ let post = request.bind(undefined, 'POST');
 			});
 		}
 		
-		console.log(window.location.hash);
 		let hash = lock.parseHash(window.location.hash);
 		if (hash) {
 			if (hash.error) {
@@ -500,10 +498,10 @@ let post = request.bind(undefined, 'POST');
 				localStorage.setItem('id_token', hash.id_token);
 				localStorage.setItem('access_token', hash.access_token);
 				
-				console.log(hash);
-				
 				// Remove the hash from the url
 				window.location.hash = '';
+				history.replaceState("", document.title,
+					window.location.pathname + window.location.search);
 			}
 		} else {
 			console.log("There was no hash.");
