@@ -487,6 +487,7 @@ let post = request.bind(undefined, 'POST');
 			});
 		}
 		
+		console.log(window.location.hash);
 		let hash = lock.parseHash(window.location.hash);
 		if (hash) {
 			if (hash.error) {
