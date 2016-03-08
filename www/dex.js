@@ -447,38 +447,63 @@ let get = function(url, on_succes, on_error) {
 let post = request.bind(undefined, 'POST');
 
 
-function signup(email, pass) {
-	token = undefined;
-	post('/api/v1/rpc/signup', {email: email, pass: pass}, function(result) {
-		token = result.token;
-	}, function(error) {
-		console.log(error);
-	});
-}
+//
+// Authentication using Auth0
+//
 
-function request_password_reset(email) {
-	token = undefined;
-	post('/api/v1/rpc/request_password_reset', {email: email}, function(result) {
-		token = result.token;
-	}, function(error) {
-		console.log(error);
-	});
-}
+(()=>{
+	
+	let client_id = 'AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo';
+	
+	// Load Auth0 script
+	let lock = undefined;
+	let script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = '//cdn.auth0.com/js/lock-8.2.min.js';
+	
+	// Then bind the event to the callback function.
+	// There are several events for cross browser compatibility.
+	script.onload = script.onreadystatechange = ()=>{
+		lock = new Auth0Lock(client_id, 'openeth.auth0.com');
+		
+		// Add the click handler
+		let login = document.getElementById('btn-login');
+		login.disabled = false;
+		login.addEventListener('click', ()=>{
+			lock.show({
+				icon: 'buddha.png',
+				authParams: { scope: 'openid' } 
+			});
+		});
+		
+		let logout = document.getElementById('btn-logout');
+		logout.disabled = true;
+		logout.addEventListener('click', ()=>{
+			localStorage.removeItem('id_token');
+			window.location.href = "/";
+		});
+		
+		let hash = lock.parseHash(window.location.hash);
+		if (hash) {
+			if (hash.error) {
+				console.log("There was an error logging in", hash.error);
+				alert('There was an error: ' + hash.error + '\n' + hash.error_description);
+			} else {
+				//save the token in the session:
+				localStorage.setItem('id_token', hash.id_token);
+				
+				// TODO: show that we are logged in.
+				
+			}
+		} else {
+			console.log("There was no hash.");
+		}
+	};
+	
+	// Fire the loading
+	document.getElementsByTagName('body')[0].appendChild(script);
+	
+})();
 
-function reset_password(email, token, pass) {
-	token = undefined;
-	post('/api/v1/rpc/reset_password', {email: email, token: token, pass: pass}, function(result) {
-		token = result.token;
-	}, function(error) {
-		console.log(error);
-	});
-}
-
-function login(email, pass) {
-	token = undefined;
-	post('/api/v1/rpc/login', {email: email, pass: pass}, function(result) {
-		token = result.token;
-	}, function(error) {
-		console.log(error);
-	});
-}
+// TODO: https://auth0.com/docs/user-profile
+// https://auth0.com/docs/user-profile/normalized
