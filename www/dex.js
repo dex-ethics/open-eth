@@ -82,7 +82,7 @@ Array.prototype.join = function(interjection, final_interjection) {
 		return undefined;
 	if(this.length == 1)
 		return this[0];
-	let result = this[0];
+	let result = this[0] !== undefined ? this[0] : '';
 	for(let i = 1; i < this.length; ++i) {
 		if(interjection !== undefined) {
 			if(i < this.length - 1) {
@@ -95,7 +95,9 @@ Array.prototype.join = function(interjection, final_interjection) {
 				}
 			}
 		}
-		result += this[i];
+		if(this[i] !== undefined) {
+			result += this[i];
+		}
 	}
 	return result;
 }
