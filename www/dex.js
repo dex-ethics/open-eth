@@ -489,11 +489,14 @@ let post = request.bind(undefined, 'POST');
 				console.log("There was an error logging in", hash.error);
 				alert('There was an error: ' + hash.error + '\n' + hash.error_description);
 			} else {
-				//save the token in the session:
+				// Save the token in the session:
 				localStorage.setItem('id_token', hash.id_token);
+				localStorage.setItem('access_token', hash.access_token);
 				
-				// TODO: show that we are logged in.
+				console.log(hash);
 				
+				// Remove the hash from the url
+				window.location.hash = '';
 			}
 		} else {
 			console.log("There was no hash.");
