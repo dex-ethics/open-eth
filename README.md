@@ -33,6 +33,10 @@ To start with a clean build
 	docker exec -ti -u postgres dex_db_1 psql -d openeth -P pager=off
 
 
+## Dump database
+
+	docker exec -ti -u postgres dex_db_1 pg_dump -a --insert openeth
+
 ## JWT token:
 
 Example token (with signature removed):
