@@ -456,26 +456,49 @@ let post = request.bind(undefined, 'POST');
 (()=>{
 	let client_id = 'AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo';
 	
-	// Load Auth0 script
-	// TODO: Load on click
-	let lock = undefined;
-	let script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.src = '//cdn.auth0.com/js/lock-8.2.js';
+	let lock = null;
+	let with_lock = (action, failed)=>{
+		
+		if(lock !== null) {
+			action(lock);
+			return;
+		}
+		
+		// Load Auth0 script
+		let script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = '//cdn.auth0.com/js/lock-8.2.min.js';
+		
+		// Then bind the event to the callback function.
+		// There are several events for cross browser compatibility.
+		script.onload = script.onreadystatechange = function(a,b,c,d){
+			console.log(a,b,c,d);
+			
+			lock = new Auth0Lock(client_id, 'openeth.auth0.com');
+			
+			action(lock);
+		}
+		
+		// TODO: Error handling
+		
+		// Fire the loading
+		document.getElementsByTagName('body')[0].appendChild(script);
+	}
 	
-	// Then bind the event to the callback function.
-	// There are several events for cross browser compatibility.
-	script.onload = script.onreadystatechange = ()=>{
-		lock = new Auth0Lock(client_id, 'openeth.auth0.com');
+	
+	// Add onclick handlers to buttons
+	window.addEventListener('DOMContentLoaded', ()=>{
 		
 		// Add the click handler
 		let login = document.getElementById('btn-login');
 		if(login instanceof HTMLButtonElement) {
 			login.disabled = false;
 			login.addEventListener('click', ()=>{
-				lock.show({
-					icon: 'buddha.png',
-					authParams: { scope: 'openid role userid' }
+				with_lock((lock)=>{
+					lock.show({
+						icon: 'buddha.png',
+						authParams: { scope: 'openid role userid' }
+					});
 				});
 			});
 		}
@@ -488,29 +511,30 @@ let post = request.bind(undefined, 'POST');
 				window.location.href = "/";
 			});
 		}
-		
-		let hash = lock.parseHash(window.location.hash);
-		if (hash) {
-			if (hash.error) {
-				console.log("There was an error logging in", hash.error);
-				alert('There was an error: ' + hash.error + '\n' + hash.error_description);
-			} else {
-				// Save the token in the session:
-				localStorage.setItem('id_token', hash.id_token);
-				localStorage.setItem('access_token', hash.access_token);
-				
-				// Remove the hash from the url
-				window.location.hash = '';
-				history.replaceState("", document.title,
-					window.location.pathname + window.location.search);
-			}
-		} else {
-			console.log("There was no hash.");
-		}
-	};
+	});
 	
-	// Fire the loading
-	document.getElementsByTagName('body')[0].appendChild(script);
+	// Login using hash token
+	if(window.location.hash.indexOf('id_token=') != -1
+		|| window.location.hash.indexOf('error=') != -1) {
+		with_lock((lock)=>{
+			let hash = lock.parseHash(window.location.hash);
+			if (hash) {
+				if (hash.error) {
+					console.log("There was an error logging in", hash.error);
+					alert('There was an error: ' + hash.error + '\n' + hash.error_description);
+				} else {
+					// Save the token in the session:
+					localStorage.setItem('id_token', hash.id_token);
+					localStorage.setItem('access_token', hash.access_token);
+					
+					// Remove the hash from the url
+					window.location.hash = '';
+					history.replaceState("", document.title,
+						window.location.pathname + window.location.search);
+				}
+			}
+		});
+	}
 	
 })();
 
