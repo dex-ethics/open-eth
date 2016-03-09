@@ -21,16 +21,14 @@
 </header>
 <button id="btn-login" disabled/>Login</button>
 
-<main id="main">
-
 <div class="row">
 	<div class="col s4">
 		<h2>Examples</h2>
-		<ul>
-			<li onclick="load('examples/medical_reminding.json')">Medical Reminding</li>
-			<li onclick="load('examples/assisted_driving.json')">Assisted Driving</li>
-			<li onclick="load('examples/medical_treatment.json')">Medical Treatment</li>
-			<li onclick="load('examples/rescue.json')">Rescue</li>
+		<ul id="examples" data-array>
+			<li hidden onclick="load(this.children[0].value)">
+				<input type="hidden" data-value="id">
+				<span data-content="name"></span>
+			</li>
 		</ul>
 	</div>
 	<div class="col s8">
@@ -46,12 +44,18 @@
 	</div>
 </div>
 
+<main id="main">
+
 <dilemma data-editor="edit_dilemma">
+	<input type="hidden" data-value="id">
 	<h1>Dilemma:
 		<span data-content="name"></span>
-		<button onclick="editm(parentNode.parentNode)">Edit</button>
+		<button onclick="main.edit()">Edit</button>
 		<button onclick="debug()">Debug</button>
 		<button onclick="test()">Test</button>
+		<button onclick="store()">Store</button>
+		<button onclick="delete_()">Delete</button>
+		<button onclick="reset()">New</button>
 	</h1>
 	<p data-content="description"></p>
 	<div class="row">
@@ -106,6 +110,7 @@
 </h2>
 <cases id="cases" data-array="cases" data-onreorder>
 	<case hidden onclick="cases.edit(this)">
+		<input type="hidden" data-value="id">
 		<h4>Case: <span data-content="name"></span></h4>
 		<p data-content="description"></p>
 		<p>Correct action: <em
@@ -324,12 +329,27 @@ function make_unique(existing, name) {
 	return name;
 }
 
+let main = document.getElementById('main');
 let actions = document.getElementById('actions');
 let cases = document.getElementById('cases');
 let features = document.getElementById('features');
 let guidance = document.getElementById('guidance');
 let duties = document.getElementById('duties');
 let principles = document.getElementById('principles');
+
+
+main.form = document.getElementById('edit_dilemma');
+
+main.edit = function() {
+	
+	let original = extract(main);
+	join(main.form, original);
+	show_modal(main.form, function() {
+		let edited = extract(main.form);
+		
+		join(main, edited);
+	});
+}
 
 actions.form = document.getElementById('edit_action');
 
@@ -571,6 +591,7 @@ cases.add = function() {
 	let f = extract(features).features;
 	
 	join(cases.form, {
+		id: null,
 		name: "New Case",
 		description: "",
 		action: undefined,
@@ -992,40 +1013,98 @@ function load(url) {
 
 window.addEventListener('DOMContentLoaded', function() {
 	// Load an empty case
-	join('main', {
-		"name": "New Dilemma",
-		"description": "Please edit this dilemma.",
-		"actions": [
-			"Action A",
-			"Action B"
-		],
-		"features": ["Feature 1"],
-		"cases": []
-	});
+	reset();
+	
+	// Load the examples
+	api.get('dilemmas').select('id, name').order('id', true).range(0,4)
+	.then(result => join('examples', result));
 });
 
-
-function store() {
-	let data = extract('main');
-	console.log(data);
-	
-	// Get ID
-	api.get('dilemmas').match({name: data.name}).select('id').single()
-	.catch(error => console.log("Could not fetch id: " + error))
+function load(id) {
+	api.get('dilemmas').eq('id', id).select('*,cases{*}').single()
 	.then(dilemma => {
-		data.cases.forEach((e, i)=>{
-			e.dilemma = dilemma.id;
-			e.position = i;
-			
-			api.post('cases').body(e)
-			.catch(error => console.log("Could not store case " + i + ": " + error))
-			.then(() => console.log("Stored " + i));
-			
-			console.log(e, i);
-		});
-	})
+		
+		// TODO: Sort the cases
+		
+		join('main', dilemma);
+		principles.update();
+	});
 }
 
+function store() {
+	let d = extract('main');
+	
+	if(d.id) {
+		// Update
+		api.patch('dilemmas').eq('id', d.id).body({
+			name: d.name,
+			description: d.description,
+			actions: d.actions,
+			features: d.features
+		}).send();
+		d.cases.forEach((c, i)=>{
+			if(c.id) {
+				api.patch('cases').eq('id', c.id).body({
+					position: i,
+					name: c.name,
+					action: c.action,
+					features: c.features
+				}).send();
+			} else {
+				api.post('cases').representation().select('id').body({
+					dilemma: d.id,
+					position: i,
+					name: c.name,
+					action: c.action,
+					features: c.features
+				}).then(r => c.id = r.id);
+			}
+		});
+	} else {
+		// Insert
+		api.post('dilemmas').representation().select('id').body({
+			name: d.name,
+			description: d.description,
+			actions: d.actions,
+			features: d.features
+		}).then(id => {
+			console.log(id);
+			d.id = id;
+			d.cases.forEach((c, i)=>{
+				api.post('cases').eq('id', c.id).body({
+					position: i,
+					name: c.name,
+					action: c.action,
+					features: c.features
+				}).then(id => c.id = id);
+			});
+			
+			console.log(d);
+		});
+		
+		// Feed the id's back up the chain
+		// join('main', d);
+	}
+}
+
+function delete_() {
+	let d = extract('main');
+	if(d.id) {
+		api.delete('dilemmas').eq('id', d.id).send();
+	}
+	reset();
+}
+
+function reset() {
+	join('main', {
+		id: null,
+		name: "New Dilemma",
+		description: "Please edit this dilemma.",
+		actions: ["Action A", "Action B"],
+		features: ["Feature 1"],
+		cases: []
+	});
+}
 
 </script>
 

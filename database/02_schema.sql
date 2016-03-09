@@ -53,7 +53,7 @@ GRANT SELECT ON TABLE cases TO anonymous;
 -- Author of dilemma can modify…
 GRANT SELECT,
 	INSERT (dilemma, position, name, description, action, features),
-	UPDATE (dilemma, position, name, description, action, features),
+	UPDATE (position, name, description, action, features),
 	DELETE
 	ON TABLE cases TO author;
 GRANT USAGE, SELECT ON SEQUENCE cases_id_seq TO author;

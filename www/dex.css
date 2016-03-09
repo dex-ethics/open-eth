@@ -327,6 +327,8 @@ table thead th {
 }
 
 img#buddha {
+	width: 150px;
+	height: 206px;
 	transform-origin: 50% 85%;
 	animation: float 10s ease-in-out infinite;
 	border-radius: 80px 80px 20px 20px;

@@ -143,15 +143,21 @@ function rescale_array(node, size) {
 
 // Super simple template engine
 function join(node, data) {
-	if(node === undefined || data === undefined)
-		return;
 	if(node.constructor === String)
 		return join(document.getElementById(node), data);
 	if(node.dataset !== undefined) {
-		if(node.dataset.value !== undefined)
-			return node.value = node.dataset.value === '' ? data : data[node.dataset.value];
-		if(node.dataset.content !== undefined)
-			return node.textContent = node.dataset.content === '' ? data : data[node.dataset.content];
+		if(node.dataset.value !== undefined) {
+			if(node.dataset.value === '')
+				return node.value = data;
+			else if(node.dataset.value in data)
+				return node.value = data[node.dataset.value];
+		}
+		if(node.dataset.content !== undefined) {
+			if(node.dataset.content === '')
+				return node.textContent = data;
+			else if(node.dataset.content in data)
+				return node.textContent = data[node.dataset.content];
+		}
 		if(node.dataset.join !== undefined)
 			return eval('(function(data){'+node.dataset.join+'})').apply(node, [data]);
 		if(node.dataset.array !== undefined) {
@@ -171,14 +177,16 @@ function join(node, data) {
 }
 function extract(node) {
 	function objectify(name, value) {
+		if(value === "undefined")
+			value = undefined;
+		if(value === "null")
+			value = null;
 		if(name === '')
 			return value;
 		let r = {};
 		r[name] = value;
 		return r;
 	}
-	if(node === undefined)
-		return undefined;
 	if(node.constructor == String)
 		return extract(document.getElementById(node));
 	if(node.dataset !== undefined) {
@@ -582,6 +590,10 @@ function Api(url) {
 				this.headers.Prefer = 'plurality=singular';
 				return this;
 			},
+			representation: function() {
+				this.headers.Prefer = 'return=representation';
+				return this;
+			},
 			body: function(data) {
 				this.payload = data;
 				return this;
@@ -612,7 +624,7 @@ function Api(url) {
 					if(this.xhr.readyState !== 4)
 						return;
 					if(this.xhr.status >= 200 && this.xhr.status < 300) {
-						const body = JSON.parse(this.xhr.responseText);
+						const body = (()=>{try{return JSON.parse(this.xhr.responseText)}catch(e){}})()||{};
 						
 						// Add range bounds
 						const range = this.xhr.getResponseHeader('Content-Range');
@@ -673,8 +685,10 @@ function Api(url) {
 		
 		// Quickly add all filters
 		'eq gt lt gte lte like ilike is in not'.split(' ').map(filter =>
-			r[filter] = (name, value) =>
+			r[filter] = (name, value) => {
 				r.query[name] = `${filter}.${Array.isArray(value) ? value.join(',') : value}`
+				return r;
+			}
 		)
 		return r;
 	};
@@ -686,6 +700,3 @@ function Api(url) {
 }
 
 let api = new Api('/api/');
-
-
-
