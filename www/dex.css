@@ -1,3 +1,6 @@
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,500,300italic&subset=latin,latin-ext);
+
 html {
 	font-family: Roboto, sans-serif;
 	font-size: 14pt;
