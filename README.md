@@ -64,3 +64,18 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYXV0aG9yIiwidXNlcmlkIjoiYXV0aDB
 
 The `role` gets mapped to a PostgreSQL role, `sub` is used to uniquely identify
 users.
+
+
+## Regenerating Diffie-Hellman parameters
+
+Goal:
+
+* A+ on <https://www.ssllabs.com/ssltest/>
+* <https://cyh.herokuapp.com/cyh>
+
+<https://www.owasp.org/index.php/List_of_useful_HTTP_headers>
+
+<https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html>
+
+	openssl dhparam -out certificates/dhparam.pem 4096
+

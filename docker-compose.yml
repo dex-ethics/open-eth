@@ -12,12 +12,15 @@ services:
       volumes:
          - ./www:/srv/openeth/www:ro
          - ./log:/srv/openeth/log:rw
+         - ./certificates:/etc/ssl/certs:ro
+         - ./empty:/var/empty:ro
          - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
       links:
          - api
-         #- letsencrypt
+         #- len
       ports:
-         - "8080:80"
+         - "80:80"
+         - "443:443"
    api:
       image: recmo/postgrest
       links:
@@ -42,16 +45,10 @@ services:
          POSTGRES_PASSWORD: 'EmSH7bIXL9si4cWx4Iyw'
    #log:
    #   image: 
-   len:
-      image: dockette/letsencrypt
-      volumes:
-         - ./certificates:/var/www/certs:rw
-      environment:
-         DOMAINS: 'openeth.com'
-         EMAIL: 'openeth-admin@2π.com'
-
-# each domain will have 4 PEM-encoded files:
-# ./certificates/openeth.com/cert1.pem: domain’s certificate
-# ./certificates/openeth.com/chain1.pem: letsencrypt chain certificate
-# ./certificates/openeth.com/fullchain1.pem: contains both cert.pem and chain.pem
-# ./certificates/openeth.com/privkey1.pem: certificate’s private key
+   #len:
+      #image: dockette/letsencrypt
+      #volumes:
+         #- ./certificates:/var/www/certs:rw
+      #environment:
+         #DOMAINS: 'openeth.com'
+         #EMAIL: 'openeth-len@mytwopi.com'
