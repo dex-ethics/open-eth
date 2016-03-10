@@ -70,7 +70,7 @@ users.
 
 Goal:
 
-* A+ on <https://www.ssllabs.com/ssltest/>
+* A+ on <https://www.ssllabs.com/ssltest/analyze.html?d=openeth.com>
 * <https://cyh.herokuapp.com/cyh>
 
 <https://www.owasp.org/index.php/List_of_useful_HTTP_headers>
@@ -79,3 +79,8 @@ Goal:
 
 	openssl dhparam -out certificates/dhparam.pem 4096
 
+
+## Content Security Policy
+
+* <https://www.w3.org/TR/CSP/>
+* <https://developer.mozilla.org/en-US/docs/Web/Security/CSP/CSP_policy_directives>

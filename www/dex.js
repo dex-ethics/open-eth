@@ -529,7 +529,8 @@ let post = request.bind(undefined, 'POST');
 			if (hash) {
 				if (hash.error) {
 					console.log("There was an error logging in", hash.error);
-					alert('There was an error: ' + hash.error + '\n' + hash.error_description);
+					// TODO alert('There was an error: ' + hash.error + '\n' + hash.error_description);
+					// (Alert is not allowed in our sandbox)
 				} else {
 					// Save the token in the session:
 					localStorage.setItem('id_token', hash.id_token);
