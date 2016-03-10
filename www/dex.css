@@ -4,10 +4,14 @@
 html {
 	font-family: Roboto, sans-serif;
 	font-size: 14pt;
+	font-weight: 300;
 	background: #eee;
 	text-rendering: optimizeLegibility;
 	font-feature-settings: 'liga';
 	hyphens: auto;
+}
+strong {
+	font-weight: 500;
 }
 main {
 	padding-top: 2em;
