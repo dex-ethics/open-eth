@@ -1,4 +1,4 @@
-'use strict';
+'use strict';((window,document)=>{
 
 function make_unique(existing, name) {
 	
@@ -37,6 +37,17 @@ let guidance = document.getElementById('guidance');
 let duties = document.getElementById('duties');
 let principles = document.getElementById('principles');
 
+if(!main) {
+	return;
+}
+
+window.main = main;
+window.actions = actions;
+window.cases = cases;
+window.features = features;
+window.guidance = guidance;
+window.duties = duties;
+window.principles = principles;
 
 main.form = document.getElementById('edit_dilemma');
 
@@ -805,3 +816,5 @@ function reset() {
 		cases: []
 	});
 }
+
+})(window,document)
