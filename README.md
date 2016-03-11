@@ -27,8 +27,6 @@ To recompile the javascript you need [Google Closure](https://github.com/google/
 
 	closure-compiler --language_out ECMASCRIPT5_STRICT --js js/*.js > www/min.js
 
-	closure-compiler --language_out ECMASCRIPT5_STRICT --compilation_level ADVANCED_OPTIMIZATIONS --js js/*.js > www/min.js
-
 ## Starting
 
 	docker-compose up

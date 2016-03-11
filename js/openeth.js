@@ -727,7 +727,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	reset();
 	
 	// Load the examples
-	api.get('dilemmas').select('id, name').order('id', true).range(0,4)
+	api.get('dilemmas').select('id, name').order('id', true)//.range(0,4)
 	.then(result => join('examples', result));
 });
 

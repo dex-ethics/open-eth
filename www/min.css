@@ -1,37 +1,111 @@
-@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,500,300italic&subset=latin,latin-ext);
-
-html {
-	font-family: Roboto, sans-serif;
-	font-size: 14pt;
-	font-weight: 300;
-	background: #eee;
-	text-rendering: optimizeLegibility;
-	font-feature-settings: 'liga';
-	hyphens: auto;
+/* Using https://css-tricks.com/triangle-breadcrumbs/ */
+ul.actions {
+	display: block;
+	float: right;
+	list-style: none;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: none;
 }
-strong {
-	font-weight: 500;
+ul.actions >li {
+	float: right;
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: none;
 }
-main {
-	padding-top: 2em;
-	margin: 0 auto;
-	max-width: 50em;
+ul.actions >li >a {
+	color: white;
+	text-decoration: none; 
+	padding: 10px 0 10px 65px;
+	background: brown;                   /* fallback color */
+	background: hsla(34,85%,35%,1); 
+	position: relative; 
+	display: block;
+	float: left;
 }
-p {
-	font-size: 16pt;
-	font-weight: 300;
-	text-align: justify;
+/* Using https://css-tricks.com/triangle-breadcrumbs/ */
+ul.breadcrumb {
+	float: left;
+	display: block;
+	list-style: none;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	border: none;
+	border-radius: 0 0 0 0;
+	background: none;
 }
-h1 {
-	font-size: 300%;
+ul.breadcrumb >li {
+	float: left;
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: none;
 }
-h2 {
-	font-size: 200%;
+ul.breadcrumb >li >a {
+	color: white;
+	text-decoration: none; 
+	padding: 10px 0 10px 65px;
+	background: brown;                   /* fallback color */
+	background: hsla(34,85%,35%,1); 
+	position: relative; 
+	display: block;
+	float: left;
+	border: none;
 }
-h3 {
-	font-size: 150%;
+ul.breadcrumb >li >a:after { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid hsla(34,85%,35%,1);
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	left: 100%;
+	z-index: 2; 
 }
+ul.breadcrumb >li >a:before { 
+	content: " ";
+	display: block;
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid white;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	margin-left: 1px;
+	left: 100%;
+	z-index: 1; 
+}
+ul.breadcrumb >li:first-child >a {
+	padding-left: 10px;
+}
+ul.breadcrumb >li:nth-child(2) >a       { background:        hsla(34,85%,45%,1); }
+ul.breadcrumb >li:nth-child(2) >a:after { border-left-color: hsla(34,85%,45%,1); }
+ul.breadcrumb >li:nth-child(3) >a       { background:        hsla(34,85%,55%,1); }
+ul.breadcrumb >li:nth-child(3) >a:after { border-left-color: hsla(34,85%,55%,1); }
+ul.breadcrumb >li:nth-child(4) >a       { background:        hsla(34,85%,65%,1); }
+ul.breadcrumb >li:nth-child(4) >a:after { border-left-color: hsla(34,85%,65%,1); }
+ul.breadcrumb >li:nth-child(5) >a       { background:        hsla(34,85%,75%,1); }
+ul.breadcrumb >li:nth-child(5) >a:after { border-left-color: hsla(34,85%,75%,1); }
+ul.breadcrumb >li:last-child >a {
+	background: transparent !important;
+	color: black;
+	pointer-events: none;
+	cursor: default;
+}
+ul.breadcrumb >li:last-child >a:before { display: none; }
+ul.breadcrumb >li:last-child >a:after  { display: none; }
+ul.breadcrumb >li >a:hover { background: hsla(34,85%,25%,1); }
+ul.breadcrumb >li >a:hover:after { border-left-color: hsla(34,85%,25%,1) !important; }
 
 dilemma h1:before {
 	font-family: 'Material Icons';
@@ -369,4 +443,59 @@ div#buddha_shadow {
 
 h1, h2, h3, h4, h5, h6, .row {
 	clear: both;
+}
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,500,300italic&subset=latin,latin-ext);
+
+html {
+	font-family: Roboto, sans-serif;
+	font-size: 14pt;
+	font-weight: 300;
+	text-rendering: optimizeLegibility;
+	font-feature-settings: 'liga';
+	hyphens: auto;
+}
+p {
+	font-size: 16pt;
+	font-weight: 300;
+	text-align: justify;
+}
+strong {
+	font-weight: 500;
+}
+h1 {
+	font-size: 300%;
+}
+h2 {
+	font-size: 200%;
+}
+h3 {
+	font-size: 150%;
+}
+html {
+	background: #eee;
+	padding: 0;
+	margin: 0;
+}
+body {
+	padding: 0;
+	margin: 0;
+}
+header {
+	margin-bottom: 1em;
+	background: hsla(34,85%,90%,1);
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+header:after {
+	display: block;
+	content: "";
+	clear: both;
+}
+main {
+	padding-top: 2em;
+	margin: 0 auto;
+	max-width: 50em;
+}
+footer {
+	border: solid thin yellow;
 }

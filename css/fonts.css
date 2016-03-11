@@ -1,0 +1,28 @@
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,500,300italic&subset=latin,latin-ext);
+
+html {
+	font-family: Roboto, sans-serif;
+	font-size: 14pt;
+	font-weight: 300;
+	text-rendering: optimizeLegibility;
+	font-feature-settings: 'liga';
+	hyphens: auto;
+}
+p {
+	font-size: 16pt;
+	font-weight: 300;
+	text-align: justify;
+}
+strong {
+	font-weight: 500;
+}
+h1 {
+	font-size: 300%;
+}
+h2 {
+	font-size: 200%;
+}
+h3 {
+	font-size: 150%;
+}

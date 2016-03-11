@@ -1,0 +1,28 @@
+/* Using https://css-tricks.com/triangle-breadcrumbs/ */
+ul.actions {
+	display: block;
+	float: right;
+	list-style: none;
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: none;
+}
+ul.actions >li {
+	float: right;
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: none;
+}
+ul.actions >li >a {
+	color: white;
+	text-decoration: none; 
+	padding: 10px 0 10px 65px;
+	background: brown;                   /* fallback color */
+	background: hsla(34,85%,35%,1); 
+	position: relative; 
+	display: block;
+	float: left;
+}

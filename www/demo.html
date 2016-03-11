@@ -2,22 +2,30 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<base href="https://openeth.com/demo.html">
+	<!-- <base href="https://openeth.com/demo.html"> -->
 	<title>OpenEth</title>
 	<meta name="description" content="Community-driven ethical explication system.">
 	<meta name="author" content="Remco Bloemen">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-	<link rel="stylesheet" type="text/css" href="/dex.css">
+	<link rel="stylesheet" type="text/css" href="/min.css">
 </head>
 <body>
 <header>
-<nav>
-	<div class="nav-wrapper">
-		<a href="#" class="brand-logo center">OpenEth</a>
-	</div>
-</nav>
+	<nav>
+		<ul class="breadcrumb">
+			<li><a>OpenEth</a></li>
+			<li><a>New Dilemma</a></li>
+			<li><a>New Case</a></li>
+		</ul>
+		<ul class="actions">
+			<li><button id="btn-login" disabled/>Login</button></li>
+			<li><button onclick="main.edit()">Edit</button></li>
+			<li><button onclick="store()">Store</button></li>
+			<li><button onclick="delete_()">Delete</button></li>
+			<li><button onclick="reset()">New</button></li>
+		</ul>
+	</nav>
 </header>
-<button id="btn-login" disabled/>Login</button>
 
 <div class="row">
 	<div class="col s4">
@@ -48,12 +56,6 @@
 	<input type="hidden" data-value="id">
 	<h1>Dilemma:
 		<span data-content="name"></span>
-		<button onclick="main.edit()">Edit</button>
-		<button onclick="debug()">Debug</button>
-		<button onclick="test()">Test</button>
-		<button onclick="store()">Store</button>
-		<button onclick="delete_()">Delete</button>
-		<button onclick="reset()">New</button>
 	</h1>
 	<p data-content="description"></p>
 	<div class="row">
