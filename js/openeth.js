@@ -712,15 +712,6 @@ function test()
 	}
 }
 
-function load(url) {
-	get(url, function(data) {
-		join('main', data);
-		
-		// Update the principles
-		principles.update();
-	});
-}
-
 
 window.addEventListener('DOMContentLoaded', function() {
 	// Load an empty case
@@ -741,6 +732,7 @@ function load(id) {
 		principles.update();
 	});
 }
+window.load = load;
 
 function store() {
 	let d = extract('main');
@@ -797,6 +789,7 @@ function store() {
 		// join('main', d);
 	}
 }
+window.store = store;
 
 function delete_() {
 	let d = extract('main');
@@ -805,6 +798,8 @@ function delete_() {
 	}
 	reset();
 }
+window.delete_ = delete_;
+
 
 function reset() {
 	join('main', {
@@ -816,5 +811,6 @@ function reset() {
 		cases: []
 	});
 }
+window.reset = reset;
 
 })(window,document)
