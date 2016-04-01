@@ -82,18 +82,9 @@ main {
 	background: #FFFFFF;
 	color: #757575;
 }
-main > header > h1 {
-	color: #B3B3B3;
-	height: 51px;
-	font-size: 11.2px;
-	font-weight: 500;
-	text-transform: uppercase;
-	padding-bottom: 19.2px;
-	padding-top: 19.2px;
-	padding-left: 12.8px;
-	margin: 0;
-}
-main > div.dilemmas {
+
+
+div.dilemmas {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -102,9 +93,11 @@ main > div.dilemmas {
 	align-content: stretch;
 	padding: 6.4px;
 }
-main > div.dilemmas > * {
+div.dilemmas > * {
+	display: block;
 	margin: 6.4px;
 	width: 32%;
+	min-height: 12em;
 }
 
 section.dilemma {
@@ -198,17 +191,12 @@ section.dilemma > footer {
 }
 
 button.dilemma {
-	display: block;
-	width: 33.33%;
-	min-height: 166.4px;
 	border: none;
 	border-radius: 2px;
 	background: #CCCCCC;
 	color: #FFFFFF;
 	user-select: none;
 	cursor: pointer;
-	margin-left: 6.4px;
-	margin-bottom: 6.4px;
 }
 button.dilemma > .icon {
 	display: block;
@@ -222,6 +210,76 @@ button.dilemma > .label {
 	font-size: 9.6px;
 	font-weight: 100;
 	text-transform: uppercase;
+}
+
+
+article > section {
+	border-top: solid 1px #B3B3B3;
+	display: block;
+	padding: 0;
+	padding-left: 12.8px;
+	padding-right: 12.8px;
+	padding-bottom: 12.8px;
+}
+article > section:first-child {
+	border-top: none;
+}
+article > section > * {
+	display: block;
+}
+article > section > header > h1 {
+	color: #B3B3B3;
+	height: 51px;
+	padding-bottom: 19.2px;
+	padding-top: 19.2px;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+article > section > p {
+	color: #757575;
+	font-size: 18px;
+	hyphens: auto;
+	text-align: justify;
+	column-count: 2;
+	-ms-hyphens: auto;
+	-webkit-column-count: 2;
+	-moz-column-count: 2;
+}
+article > section > ul {
+	padding: 0;
+	list-style: none;
+}
+
+article > section.collapsable {
+	position: relative;
+	background-color: #F9F9F9;
+}
+article > section.collapsable > button.collapse {
+	position: absolute;
+	left: 50%;
+	margin-left: -25px;
+	width: 50px;
+	height: 50px;
+	color: #FFFFFF;
+	background: #4A148C;
+	border: none;
+	border-radius: 50%;
+	font-size: 40px;
+	user-select: none;
+	cursor: pointer;
+	transition: box-shadow .25s ease-out;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+article > section.collapsable > button.collapse.top {
+	top: -25px;
+}
+article > section.collapsable > button.collapse.bottom {
+	bottom: -25px;
+}
+article > section.collapsable  > button.collapse:hover {
+	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
 	</style>
@@ -244,24 +302,97 @@ button.dilemma > .label {
 	<p><button>Sign up</button></p>
 </header>
 
+
+
 <main>
-<header>
-	<h1>Featured dilemmas</h1>
-</header>
-<div class="dilemmas">
+
+<article class="dilemma">
+<section>
+<p>
+A doctor has prescribed medication that should
+be taken at a particular time. When the system
+reminds the patient to take the medication, the
+patient says that he wants to take it later. Should
+the system notify the overseer that the patient
+won't take the medication at the prescribed time.
+<p>
+</section>
+
+<section>
+	<header>
+		<h1>Actions</h1>
+	</header>
+	<ul>
+		<li>Notify</li>
+		<li>Do not notify</li>
+	</ul>
+</section>
+
+<section>
+	<header>
+		<h1>Features</h1>
+	</header>
+	<ul>
+		<li>Harm</li>
+		<li>Benefit</li>
+	</ul>
+</section>
+
+<section class="collapsable">
+	<button class="collapse top">ᨈ</button>
+	<header>
+		<h1>Cases</h1>
+	</header>
+	<ul>
+		<li>Harm</li>
+		<li>Benefir</li>
+	</ul>
+	<button class="collapse bottom">ᨈ</button>
+</section>
+
+<section>
+	<header>
+		<h1>Key takeaways / duties</h1>
+	</header>
+	<ul>
+		<li>Harm</li>
+		<li>Benefit</li>
+	</ul>
+</section>
+
+<section>
+	<header>
+		<h1>Rules</h1>
+	</header>
+	<ul>
+		<li>Harm</li>
+		<li>Benefit</li>
+	</ul>
+</section>
+
+
+
+</article>
+
+<!--
+
+<article class="dilemmas">
+<section>
+	<header>
+		<h1>Featured dilemmas</h1>
+	</header>
+	<div class="dilemmas">
 
 <section class="dilemma">
 	<header>
 		<h1>Rescue</h1>
 	</header>
-	<main>
-		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
-		<ul>
-			<li>Benefit</li>
-			<li>Harm</li>
-			<li>Respect for autonomy</li>
-		</ul>
-	</main>
+	<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
+	<ul>
+		<li>Benefit</li>
+		<li>Harm</li>
+		<li>Respect for autonomy</li>
+	</ul>
 	<footer>
 		<span>CC<span>
 		<span>Cases added</span>
@@ -330,6 +461,10 @@ button.dilemma > .label {
 </button>
 
 </div>
+
+</section>
+</article>
+-->
 
 </main>
 
