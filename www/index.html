@@ -7,61 +7,333 @@
 	<meta name="description" content="Community-driven ethical explication system.">
 	<meta name="author" content="SitePoint">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-	<link rel="stylesheet" type="text/css" href="/min.css">
+	<style>
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,100);
+/* Thin: 100, Light: 300, Normal: 400, Medium: 500 */
+
+* {
+	box-sizing: border-box;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	margin: 0;
+}
+body > header {
+	background: #5D5D5D;
+	color: #F2F2F2;
+}
+body > header > nav {
+	max-width: 1200px;
+	margin: auto;
+	height: 51px;
+	font-size: 14px;
+	font-weight: 400;
+	text-transform: uppercase;
+}
+body > header > nav > a {
+	display: inline-block;
+	width: 8vw;
+	height: 51px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+body > header > nav > ul {
+	display: inline-block;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+body > header > nav > ul > li {
+	display: inline-block;
+}
+body > header > nav > ul > li > a {
+	display: inline-block;
+	width: 16.667vw;
+	height: 51px;
+	padding-top: 16px;
+}
+body > header > p {
+	max-width: 1200px;
+	margin: auto;
+	padding-top: 19.2px;
+	padding-bottom: 19.2px;
+	padding-left: 6.4px;
+}
+body > header > p > button {
+	min-width: 16vw;
+	background: #FFFFFF;
+	color: #5D5D5D;
+	font-size: 9.6px;
+	font-weight: 400;
+	text-transform: uppercase;
+	padding: 19.2px;
+	border: none;
+}
+
+main {
+	max-width: 1200px;
+	margin: auto;
+	background: #FFFFFF;
+	color: #757575;
+}
+main > header > h1 {
+	color: #B3B3B3;
+	height: 51px;
+	font-size: 11.2px;
+	font-weight: 500;
+	text-transform: uppercase;
+	padding-bottom: 19.2px;
+	padding-top: 19.2px;
+	padding-left: 12.8px;
+	margin: 0;
+}
+main > div.dilemmas {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+	padding: 6.4px;
+}
+main > div.dilemmas > * {
+	margin: 6.4px;
+	width: 32%;
+}
+
+section.dilemma {
+	border-radius: 2px;
+	user-select: none;
+	cursor: pointer;
+	transition: box-shadow .25s ease-out;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+section.dilemma:hover {
+	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+section.dilemma > header {
+	margin: 0;
+	border-radius: 2px 2px 0 0;
+	padding-top: 19.2px;
+	padding-bottom: 12.8px;
+	padding-left: 19.2px;
+	padding-right: 19.2px;
+	background: #1B1862;
+	color: #FFFFFF;
+}
+
+section.dilemma > header > h1 {
+	display: block;
+	margin: 0;
+	padding: 0;
+	font-size: 19.2px;
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+section.dilemma > main {
+	margin: 0;
+	padding-top: 19.2px;
+	padding-left: 19.2px;
+	padding-right: 19.2px;
+	padding-bottom: 0;
+}
+
+section.dilemma > main > p {
+	min-height: 3em;
+	font-size: 14.4px;
+	font-weight: 500;
+	margin: 0;
+	margin-bottom: 12.8px;
+}
+
+section.dilemma > main > ul {
+	font-size: 11.2px;
+	font-weight: 300;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 12.8px;
+	list-style-type: none;
+}
+section.dilemma > main > ul:after {
+	content: "•";
+	font-size: 0;
+	clear: both;
+}
+section.dilemma > main > ul > li {
+	float: left;
+	height: 1em;
+	padding: 0;
+	margin: 0;
+}
+section.dilemma > main > ul > li:before {
+	content: "•";
+	margin-left: .4em;
+	margin-right: .4em;
+}
+section.dilemma > main > ul > li:first-child:before {
+	content: "";
+	margin: 0;
+}
+
+section.dilemma > footer {
+	background: #F9F9F9;
+	margin: 0;
+	border-radius: 0 0 2px 2px;
+	padding-top: 19.2px;
+	padding-bottom: 19.2px;
+	padding-left: 19.2px;
+	padding-right: 19.2px;
+	font-size: 11.2px;
+	font-weight: 300;
+}
+
+button.dilemma {
+	display: block;
+	width: 33.33%;
+	min-height: 166.4px;
+	border: none;
+	border-radius: 2px;
+	background: #CCCCCC;
+	color: #FFFFFF;
+	user-select: none;
+	cursor: pointer;
+	margin-left: 6.4px;
+	margin-bottom: 6.4px;
+}
+button.dilemma > .icon {
+	display: block;
+	font-size: 90px;
+	margin-top: -.3em;
+	margin-bottom: .12em;
+	height: 1em;
+}
+button.dilemma > .label {
+	display: block;
+	font-size: 9.6px;
+	font-weight: 100;
+	text-transform: uppercase;
+}
+
+	</style>
 </head>
 <body>
+
 <header>
-<nav>
-	OpenEth
-</nav>
+	<nav>
+		<a href="#">OpenEth</a>
+		<ul>
+			<li><a href="#">Featured Dilemmas</a></li>
+			<li><a href="#">Play with Ethics</a></li>
+			<li><a href="#">Guidance</a></li>
+			<li><a href="#">Sign up</a></li>
+		</ul>
+	</nav>
+	<p>OpenEth is a project designed to enable a crowd-sourced analysis of ethical
+	dilemmas, to enable better decisions based upon available information, and its 
+	relative likelihood.</p>
+	<p><button>Sign up</button></p>
 </header>
+
 <main>
+<header>
+	<h1>Featured dilemmas</h1>
+</header>
+<div class="dilemmas">
+
+<section class="dilemma">
+	<header>
+		<h1>Rescue</h1>
+	</header>
+	<main>
+		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
+		<ul>
+			<li>Benefit</li>
+			<li>Harm</li>
+			<li>Respect for autonomy</li>
+		</ul>
+	</main>
+	<footer>
+		<span>CC<span>
+		<span>Cases added</span>
+	</footer>
+</section>
 
 
-<p>OpenEth is a project designed to enable a crowd-sourced analysis of ethical dilemmas, to enable better decisions based upon available information, and its relative likelihood.</p>
+<section class="dilemma">
+	<header>
+		<h1>Rescue very long title right here what should the layout do.</h1>
+	</header>
+	<main>
+		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
+		<ul>
+			<li>Benefit</li>
+			<li>Harm</li>
+			<li>Respect for autonomy</li>
+		</ul>
+	</main>
+	<footer>
+		<span>CC<span>
+		<span>Cases added</span>
+	</footer>
+</section>
 
-<p>The project is developed under the following design assumptions:</p>
+<section class="dilemma">
+	<header>
+		<h1>Rescue very long title right here what should the layout do.</h1>
+	</header>
+	<main>
+		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
+		<ul>
+			<li>Benefit</li>
+			<li>Harm</li>
+			<li>Respect for autonomy</li>
+		</ul>
+	</main>
+	<footer>
+		<span>CC<span>
+		<span>Cases added</span>
+	</footer>
+</section>
 
-<ul>
-<li><p>To facilitate everyday interactions as well as to help discover paths through ethical quandaries.</p></li>
-
-<li><p>Not to prescribe a specific moral frame, or to elevate one specific principle over all others, rather to find safe zones within which to operate that reasonable people would find it difficult to object to.</p></li>
-
-<li><p>A focus on Kindergarten Ethics (theft, lying, violence, etc) and simple pro-social behaviour over complexities that even humans find challenging, such as trolley problems.</p></li>
-
-</ul>
-
-<p>The overall goal of this project is to help enable a wide variety of autonomous systems to participate safely within society, through known-good behavioural heuristics that may be supported where necessary by human oversight.</p>
-
-<p>It is also hoped that this project may guide distributed human networks such as peer-to-peer arbitrage systems, or trust and validation networks.</p>
-
-<p>OpenEth is free and open source. We encourage the community to contribute to the codebase, along with sharing insights on ethical analysis.</p>
-
-
-<!-- The ethical dilemma of self-driving cars - Patrick Lin -->
-<iframe width="560" height="315" frameborder="0" allowfullscreen
-	src="https://www.youtube.com/embed/ixIoDYVfKA0"></iframe>
+<section class="dilemma">
+	<header>
+		<h1>Rescue very long title right here what should the layout do.</h1>
+	</header>
+	<main>
+		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
+		<ul>
+			<li>Benefit</li>
+			<li>Harm</li>
+			<li>Respect for autonomy</li>
+		</ul>
+	</main>
+	<footer>
+		<span>CC<span>
+		<span>Cases added</span>
+	</footer>
+</section>
 
 
-<div class="align-center">
-	<div class="display:inline-block">
-		<a class="center-align waves-effect waves-light btn-large" href="demo.html">
-			<i class="large material-icons left">play_circle_filled</i>
-			Launch Demo
-		</a>
-	</div>
+<button class="dilemma">
+	<span class="icon">⊕</span>
+	<span class="label">Add a dilemma</span>
+</button>
+
 </div>
 
-
-	</div>
 </main>
-<footer class="page-footer">
-	<div class="footer-copyright">
-		<div class="container">
-			© 2014—2016 The Dex Ethics Team.
-		</div>
-	</div>
+
+<footer>
 </footer>
-<script type="text/javascript" src="/min.js"></script>
 </body>
 </html>
