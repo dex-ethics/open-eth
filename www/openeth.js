@@ -217,7 +217,14 @@ function dilemma_map_actions(dilemma) {
 		dilemma.cases[i].action = dilemma.actions[dilemma.cases[i].action];
 }
 
-function dilemma_unmap_actions(dilemma) {
-	for(var i in dilemma.cases)
-		dilemma.cases[i].action = dilemma.actions.indexOf(dilemma.cases[i].action);
+function case_map_features(case_) {
+	case_.features = flesh_out(case_.features);
+	let features = [];
+	for(var i = 0; i < case_.dilemma.features.length; ++i) {
+		features.push({
+			feature: case_.dilemma.features[i],
+			values: [case_.features[0][i], case_.features[1][i]],
+		});
+	}
+	case_.features = features;
 }

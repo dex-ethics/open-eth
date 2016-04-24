@@ -28,6 +28,9 @@
 	<div id="head_dilemma" style="display: none;">
 		<p class="one-column" data-content="name"></p>
 	</div>
+	<div id="head_cases" style="display: none;">
+		<p class="one-column" data-content="name"></p>
+	</div>
 </header>
 
 <main id="start" style="display: none;">
@@ -96,7 +99,8 @@
 			</header>
 			<div class="flex-4">
 				<template data-array="cases">
-					<section class="case vertical">
+					<section class="case button vertical" onclick="open_case(this)">
+						<input type="hidden" data-value="id">
 						<h2 data-content="name"></h2>
 						<p>Author: <span data-conten="author">Homer</span></p>
 						<p class="description adjust" data-content="description"></p>
@@ -138,7 +142,43 @@
 </main>
 
 <main id="case" style="display: none;">
-	
+	<input type="hidden" data-value="id">
+	<article class="dilemma">
+		<section>
+			<p class="two-column" data-content="description"></p>
+		</section>
+		<section>
+			<header>
+				<h1>Correct Action</h1>
+			</header>
+			<p data-content="action"></p>
+		</section>
+		<section>
+			<header>
+				<h1>Features</h1>
+			</header>
+			<table>
+				<thead>
+					<tr>
+						<th>Feature</th>
+						<template data-array="actions">
+							<th data-content=""></th>
+						</template>
+					</tr>
+				</thead>
+				<tbody>
+					<template data-array="features">
+						<tr>
+							<td data-content="feature"></td>
+							<template data-array="values">
+								<td data-content=""></td>
+							</template>
+						</tr>
+					</template>
+				</tbody>
+			</table>
+		</section>
+	</article>
 </main>
 
 <main id="not_found" style="display: none;">
@@ -160,6 +200,11 @@ function open_dilemma(node) {
 	go_to("/dilemmas/" + id);
 }
 
+function open_case(node) {
+	var id = node.getElementsByTagName('input')[0].value;
+	go_to("/cases/" + id);
+}
+
 
 // TODO: Handle request errors.
 function load_state(url, callback) {
@@ -175,6 +220,12 @@ function load_state(url, callback) {
 		.eq('id', url.slice(10))
 		.single()
 		.then(callback);
+	} else if(url.startsWith('/cases/')) {
+		api.get('cases')
+		.select('*,dilemma{*}')
+		.eq('id', url.slice(7))
+		.single()
+		.then(callback);
 	} else {
 		callback({});
 	}
@@ -182,6 +233,7 @@ function load_state(url, callback) {
 
 function load_page(url, state) {
 	console.log("Constructing page for " + url + "...", state);
+	state = JSON.parse(JSON.stringify(state)); // Clone the state
 	for(var el of document.querySelectorAll('main, header > div'))
 		el.style.display = 'none';
 	if(url == '/') {
@@ -189,10 +241,15 @@ function load_page(url, state) {
 		join('start', { dilemmas: state }).style.display = '';
 	} else if(url.startsWith('/dilemmas/')) {
 		solve_dilemma(state);
-		var clone = JSON.parse(JSON.stringify(state));
-		dilemma_map_actions(clone);
-		join('head_dilemma', clone).style.display = '';
-		join('dilemma', clone).style.display = '';
+		dilemma_map_actions(state);
+		join('head_dilemma', state).style.display = '';
+		join('dilemma', state).style.display = '';
+	} else if(url.startsWith('/cases/')) {
+		state.actions = state.dilemma.actions;
+		state.action = state.actions[state.action];
+		case_map_features(state);
+		join('head_cases', state).style.display = '';
+		join('case', state).style.display = '';
 	} else {
 		document.getElementById('not_found').style.display = '';
 	}

@@ -592,8 +592,7 @@ principles.update = function() {
 	let negative = [];
 	let data = extract(cases);
 	for(let c of data.cases) {
-		let mat = flesh_out(c.features);
-		
+		let mat = c.features;
 		let correct = c.action;
 		let incorrect = 1 - c.action;
 		
