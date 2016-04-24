@@ -1,0 +1,495 @@
+
+/* Fonts: Roboto and FontAwesome */
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 100;
+	src:
+		local('Roboto Thin'),
+		local('Roboto-Thin'),
+		url('/fonts/Roboto-Thin.eot') format('embedded-opentype'),
+		url('/fonts/Roboto-Thin.woff2') format('woff2'),
+		url('/fonts/Roboto-Thin.woff') format('woff'),
+		url('/fonts/Roboto-Thin.ttf') format('truetype'),
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 300;
+	src:
+		local('Roboto Light'),
+		local('Roboto-Light'),
+		url('/fonts/Roboto-Light.eot') format('embedded-opentype'),
+		url('/fonts/Roboto-Light.woff2') format('woff2'),
+		url('/fonts/Roboto-Light.woff') format('woff'),
+		url('/fonts/Roboto-Light.ttf') format('truetype'),
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src:
+		local('Roboto Normal'),
+		local('Roboto-Normal'),
+		url('/fonts/Roboto-Normal.eot') format('embedded-opentype'),
+		url('/fonts/Roboto-Normal.woff2') format('woff2'),
+		url('/fonts/Roboto-Normal.woff') format('woff'),
+		url('/fonts/Roboto-Normal.ttf') format('truetype'),
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 500;
+	src:
+		local('Roboto Medium'),
+		local('Roboto-Medium'),
+		url('/fonts/Roboto-Medium.eot') format('embedded-opentype'),
+		url('/fonts/Roboto-Medium.woff2') format('woff2'),
+		url('/fonts/Roboto-Medium.woff') format('woff'),
+		url('/fonts/Roboto-Medium.ttf') format('truetype'),
+}
+
+@font-face {
+	font-family: 'FontAwesome';
+	font-weight: normal;
+	font-style: normal;
+	src:
+		local('FontAwesome'),
+		url('/fonts/fontawesome-webfont.eot') format('embedded-opentype'),
+		url('/fonts/fontawesome-webfont.woff2') format('woff2'),
+		url('/fonts/fontawesome-webfont.woff') format('woff'),
+		url('/fonts/fontawesome-webfont.ttf') format('truetype'),
+		url('/fonts/fontawesome-webfont.svg#fontawesomeregular') format('svg');
+}
+
+
+/* Clean up defaults */
+* {
+	box-sizing: border-box;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+}
+template {
+	display: none !important;
+}
+
+html {
+	height: 100%;
+}
+body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+	min-height: 100%;
+}
+body > header, 
+body > main,
+body > footer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+body > main {
+	flex-grow: 1;
+}
+body > * > * {
+	width: 1200px;
+	max-width: 100%;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+body > header {
+	background: #5D5D5D;
+	color: #F2F2F2;
+}
+body > header > nav {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: baseline;
+	
+	font-size: 14px;
+	font-weight: 400;
+	text-transform: uppercase;
+	padding-left: 0px;
+	padding-right: 0;
+}
+body > header > nav > * {
+	display: block;
+	flex-grow: 1;
+	text-decoration: none;
+	padding: 15px; /* TODO: Absorb this padding on the left and right */
+}
+body > header > nav > a {
+	background-color: rgba(0,0,0,0);
+	transition: background-color 0.5s;
+}
+body > header > nav > a:hover {
+	background-color: rgba(0,0,0,1);
+}
+body > header p {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+body > header button {
+	min-width: 16vw;
+	background: #FFFFFF;
+	color: #5D5D5D;
+	font-weight: 400;
+	text-transform: uppercase;
+	padding: 19.2px;
+	border: none;
+}
+
+
+body > main {
+	background: #FFFFFF;
+	color: #757575;
+}
+body > main > article {
+	padding: 0;
+}
+body > main > article > section {
+	padding: 0;
+}
+body > main > article > section > * {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+div.dilemmas {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-center;
+	align-items: stretch;
+	align-content: stretch;
+	padding: 0;
+}
+div.dilemmas > * {
+	display: block;
+	margin: 5px;
+	width: 350px;
+	height: 263px;
+	max-width: 100%;
+}
+
+section.dilemma > * {
+	margin: 0;
+	padding-top: 19.2px;
+	padding-left: 19.2px;
+	padding-right: 19.2px;
+	padding-bottom: 0;
+}
+section.dilemma > header {
+	margin: 0;
+	border-radius: 2px 2px 0 0;
+	padding-top: 19.2px;
+	padding-bottom: 12.8px;
+	padding-left: 19.2px;
+	padding-right: 19.2px;
+	background: #1B1862;
+	color: #FFFFFF;
+}
+section.dilemma > header > h1 {
+	display: block;
+	margin: 0;
+	padding: 0;
+	font-size: 19.2px;
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+section.dilemma > header > h1:before {
+	font-family: 'FontAwesome';
+	content: "\f0e3";
+	padding-right: .5em;
+}
+section.dilemma > p {
+	min-height: 3em;
+	font-size: 14.4px;
+	font-weight: 500;
+	margin: 0;
+	margin-bottom: 12.8px;
+	height: 100px;
+}
+section.dilemma > ul {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	list-style-type: none;
+
+	font-size: 11.2px;
+	font-weight: 300;
+	margin: 0;
+	padding-top: 0;
+	height: 40px;
+}
+section.dilemma > ul > li {
+	height: 1em;
+	padding: 0;
+	margin: 0;
+}
+section.dilemma > ul > li:before {
+	content: "•";
+	margin-left: .4em;
+	margin-right: .4em;
+}
+section.dilemma > ul > li:first-child:before {
+	content: "";
+	margin: 0;
+}
+
+section.dilemma > footer {
+	background: #F9F9F9;
+	margin: 0;
+	border-radius: 0 0 2px 2px;
+	padding-top: 19.2px;
+	padding-bottom: 19.2px;
+	padding-left: 19.2px;
+	padding-right: 19.2px;
+	font-size: 11.2px;
+	font-weight: 300;
+}
+section.dilemma > footer > :first-child:before {
+	font-family: 'FontAwesome';
+	content: "\f249";
+	padding-right: .5em;
+}
+
+button.dilemma {
+	border: none;
+	border-radius: 2px;
+	background: #CCCCCC;
+	color: #FFFFFF;
+	user-select: none;
+	cursor: pointer;
+}
+button.dilemma > .icon {
+	display: block;
+	font-size: 90px;
+	margin-top: -.3em;
+	margin-bottom: .12em;
+	height: 1em;
+}
+button.dilemma > .label {
+	display: block;
+	font-size: 9.6px;
+	font-weight: 100;
+	text-transform: uppercase;
+}
+
+
+article > section {
+	border-top: solid 1px #B3B3B3;
+	display: block;
+	padding: 0;
+	padding-left: 12.8px;
+	padding-right: 12.8px;
+	padding-bottom: 12.8px;
+}
+article > section:first-child {
+	border-top: none;
+}
+article > section > * {
+	display: block;
+}
+article > section > header > h1 {
+	color: #B3B3B3;
+	height: 51px;
+	padding-bottom: 19.2px;
+	padding-top: 19.2px;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+article > section > ul {
+	padding: 0;
+	list-style: none;
+}
+
+article > section.collapsable {
+	position: relative;
+	background-color: #F9F9F9;
+}
+article > section.collapsable > button.collapse {
+	position: absolute;
+	left: 50%;
+	margin-left: -25px;
+	width: 50px;
+	height: 50px;
+	color: #FFFFFF;
+	background: #4A148C;
+	border: none;
+	border-radius: 50%;
+	font-size: 40px;
+	user-select: none;
+	cursor: pointer;
+	transition: box-shadow .25s ease-out;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+article > section.collapsable > button.collapse.top {
+	top: -25px;
+}
+article > section.collapsable > button.collapse.bottom {
+	bottom: -25px;
+}
+article > section.collapsable  > button.collapse:hover {
+	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+section.case {
+	background-color: #FFFFFF;
+	height: 200px;
+}
+section.case > * {
+	margin: 0;
+	overflow: hidden;
+}
+section.case > h2 {
+	font-size: 15px;
+}
+section.case > h3 {
+	font-size: 15px;
+}
+
+body > footer {
+	background: #5D5D5D;
+	color: #F2F2F2;
+	font-size: 15px;
+	margin-top: 2em;
+}
+
+/*
+figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+*/
+
+
+.button {
+	border-radius: 2px;
+	user-select: none;
+	cursor: pointer;
+	transition: box-shadow .25s ease-out;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+}
+.button:hover {
+	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+
+/* Vertical full-width layout  with some elements absorbing the size */
+.vertical {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: stretch;
+	overflow: hidden;
+}
+.vertical > * {
+	flex-grow: 0;
+	flex-shrink: 0;
+	overflow: hidden;
+}
+.vertical > .adjust {
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+
+/* Four column flex layout */
+.flex-4 {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: stretch;
+	align-content: stretch;
+	padding: 2.5px;
+}
+.flex-4 > * {
+	margin: 2.5px; /* gives 5px spacing */
+	max-width: 100%;
+	width: 100%;
+}
+@media all and (min-width: 350px) {
+	.flex-4 > * {
+		width: 45.5vw;
+	}
+}
+@media all and (min-width: 600px) {
+	.flex-4 > * {
+		width: 31vw;
+	}
+}
+@media all and (min-width: 900px) {
+	.flex-4 > * {
+		width: 23.7vw; /* - 5px! */
+	}
+}
+@media all and (min-width: 1215px) {
+	.flex-4 > * {
+		width: 293.75px; /* (1200 - 5 * 5 ) / 4 */
+	}
+}
+
+/* Responsive font size */
+.one-column {
+	font-size: 15px;
+}
+.two-column {
+	font-size: 15px;
+	column-count: 1;
+	-webkit-column-count: 1;
+	-moz-column-count: 1;
+}
+@media all and (min-width: 429px) {
+	.one-column {
+		font-size: 3.5vw;
+	}
+	.two-column {
+		font-size: 3.5vw;
+	}
+}
+/*
+@media all and (min-width: 600px) {
+	.two-column {
+		font-size: 15px;
+		column-count: 2;
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+	}
+}
+*/
+@media all and (min-width: 857px) {
+	.two-column {
+		font-size: 1.75vw;
+		column-count: 2;
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+	}
+}
+@media all and (min-width: 1200px) {
+	.one-column {
+		font-size: 42px;
+	}
+	.two-column {
+		font-size: 21px;
+	}
+}

@@ -2,473 +2,232 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<base href="https://openeth.com/">
+	<!--<base href="https://openeth.com/">-->
 	<title>OpenEth</title>
 	<meta name="description" content="Community-driven ethical explication system.">
 	<meta name="author" content="SitePoint">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-	<style>
-
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,100);
-/* Thin: 100, Light: 300, Normal: 400, Medium: 500 */
-
-* {
-	box-sizing: border-box;
-}
-a {
-	color: inherit;
-	text-decoration: none;
-}
-
-body {
-	font-family: 'Roboto', sans-serif;
-	margin: 0;
-}
-body > header {
-	background: #5D5D5D;
-	color: #F2F2F2;
-}
-body > header > nav {
-	max-width: 1200px;
-	margin: auto;
-	height: 51px;
-	font-size: 14px;
-	font-weight: 400;
-	text-transform: uppercase;
-}
-body > header > nav > a {
-	display: inline-block;
-	width: 8vw;
-	height: 51px;
-	color: #FFFFFF;
-	text-decoration: none;
-}
-body > header > nav > ul {
-	display: inline-block;
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-}
-body > header > nav > ul > li {
-	display: inline-block;
-}
-body > header > nav > ul > li > a {
-	display: inline-block;
-	width: 16.667vw;
-	height: 51px;
-	padding-top: 16px;
-}
-body > header > p {
-	max-width: 1200px;
-	margin: auto;
-	padding-top: 19.2px;
-	padding-bottom: 19.2px;
-	padding-left: 6.4px;
-}
-body > header > p > button {
-	min-width: 16vw;
-	background: #FFFFFF;
-	color: #5D5D5D;
-	font-size: 9.6px;
-	font-weight: 400;
-	text-transform: uppercase;
-	padding: 19.2px;
-	border: none;
-}
-
-main {
-	max-width: 1200px;
-	margin: auto;
-	background: #FFFFFF;
-	color: #757575;
-}
-
-
-div.dilemmas {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: stretch;
-	align-content: stretch;
-	padding: 6.4px;
-}
-div.dilemmas > * {
-	display: block;
-	margin: 6.4px;
-	width: 32%;
-	min-height: 12em;
-}
-
-section.dilemma {
-	border-radius: 2px;
-	user-select: none;
-	cursor: pointer;
-	transition: box-shadow .25s ease-out;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-}
-section.dilemma:hover {
-	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-}
-
-section.dilemma > header {
-	margin: 0;
-	border-radius: 2px 2px 0 0;
-	padding-top: 19.2px;
-	padding-bottom: 12.8px;
-	padding-left: 19.2px;
-	padding-right: 19.2px;
-	background: #1B1862;
-	color: #FFFFFF;
-}
-
-section.dilemma > header > h1 {
-	display: block;
-	margin: 0;
-	padding: 0;
-	font-size: 19.2px;
-	font-weight: 500;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-section.dilemma > main {
-	margin: 0;
-	padding-top: 19.2px;
-	padding-left: 19.2px;
-	padding-right: 19.2px;
-	padding-bottom: 0;
-}
-
-section.dilemma > main > p {
-	min-height: 3em;
-	font-size: 14.4px;
-	font-weight: 500;
-	margin: 0;
-	margin-bottom: 12.8px;
-}
-
-section.dilemma > main > ul {
-	font-size: 11.2px;
-	font-weight: 300;
-	padding: 0;
-	margin: 0;
-	margin-bottom: 12.8px;
-	list-style-type: none;
-}
-section.dilemma > main > ul:after {
-	content: "•";
-	font-size: 0;
-	clear: both;
-}
-section.dilemma > main > ul > li {
-	float: left;
-	height: 1em;
-	padding: 0;
-	margin: 0;
-}
-section.dilemma > main > ul > li:before {
-	content: "•";
-	margin-left: .4em;
-	margin-right: .4em;
-}
-section.dilemma > main > ul > li:first-child:before {
-	content: "";
-	margin: 0;
-}
-
-section.dilemma > footer {
-	background: #F9F9F9;
-	margin: 0;
-	border-radius: 0 0 2px 2px;
-	padding-top: 19.2px;
-	padding-bottom: 19.2px;
-	padding-left: 19.2px;
-	padding-right: 19.2px;
-	font-size: 11.2px;
-	font-weight: 300;
-}
-
-button.dilemma {
-	border: none;
-	border-radius: 2px;
-	background: #CCCCCC;
-	color: #FFFFFF;
-	user-select: none;
-	cursor: pointer;
-}
-button.dilemma > .icon {
-	display: block;
-	font-size: 90px;
-	margin-top: -.3em;
-	margin-bottom: .12em;
-	height: 1em;
-}
-button.dilemma > .label {
-	display: block;
-	font-size: 9.6px;
-	font-weight: 100;
-	text-transform: uppercase;
-}
-
-
-article > section {
-	border-top: solid 1px #B3B3B3;
-	display: block;
-	padding: 0;
-	padding-left: 12.8px;
-	padding-right: 12.8px;
-	padding-bottom: 12.8px;
-}
-article > section:first-child {
-	border-top: none;
-}
-article > section > * {
-	display: block;
-}
-article > section > header > h1 {
-	color: #B3B3B3;
-	height: 51px;
-	padding-bottom: 19.2px;
-	padding-top: 19.2px;
-	margin: 0;
-	font-size: 14px;
-	font-weight: 500;
-	text-transform: uppercase;
-}
-article > section > p {
-	color: #757575;
-	font-size: 18px;
-	hyphens: auto;
-	text-align: justify;
-	column-count: 2;
-	-ms-hyphens: auto;
-	-webkit-column-count: 2;
-	-moz-column-count: 2;
-}
-article > section > ul {
-	padding: 0;
-	list-style: none;
-}
-
-article > section.collapsable {
-	position: relative;
-	background-color: #F9F9F9;
-}
-article > section.collapsable > button.collapse {
-	position: absolute;
-	left: 50%;
-	margin-left: -25px;
-	width: 50px;
-	height: 50px;
-	color: #FFFFFF;
-	background: #4A148C;
-	border: none;
-	border-radius: 50%;
-	font-size: 40px;
-	user-select: none;
-	cursor: pointer;
-	transition: box-shadow .25s ease-out;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-}
-article > section.collapsable > button.collapse.top {
-	top: -25px;
-}
-article > section.collapsable > button.collapse.bottom {
-	bottom: -25px;
-}
-article > section.collapsable  > button.collapse:hover {
-	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-}
-
-	</style>
+	<link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
 
 <header>
 	<nav>
 		<a href="#">OpenEth</a>
-		<ul>
-			<li><a href="#">Featured Dilemmas</a></li>
-			<li><a href="#">Play with Ethics</a></li>
-			<li><a href="#">Guidance</a></li>
-			<li><a href="#">Sign up</a></li>
-		</ul>
+		<a href="#">Featured Dilemmas</a>
+		<a href="#">Play with Ethics</a>
+		<a href="#">Guidance</a>
+		<a href="#">Sign up</a>
 	</nav>
-	<p>OpenEth is a project designed to enable a crowd-sourced analysis of ethical
-	dilemmas, to enable better decisions based upon available information, and its 
-	relative likelihood.</p>
-	<p><button>Sign up</button></p>
+	<div id="head_start" style="display: none;">
+		<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
+		dilemmas, to enable better decisions based upon available information, and its 
+		relative likelihood.</p>
+		<p><button class="button">Sign up</button></p>
+	</div>
+	<div id="head_dilemma" style="display: none;">
+		<p class="one-column" data-content="name"></p>
+	</div>
 </header>
 
-
-
-<main>
-
-<article class="dilemma">
-<section>
-<p>
-A doctor has prescribed medication that should
-be taken at a particular time. When the system
-reminds the patient to take the medication, the
-patient says that he wants to take it later. Should
-the system notify the overseer that the patient
-won't take the medication at the prescribed time.
-<p>
-</section>
-
-<section>
-	<header>
-		<h1>Actions</h1>
-	</header>
-	<ul>
-		<li>Notify</li>
-		<li>Do not notify</li>
-	</ul>
-</section>
-
-<section>
-	<header>
-		<h1>Features</h1>
-	</header>
-	<ul>
-		<li>Harm</li>
-		<li>Benefit</li>
-	</ul>
-</section>
-
-<section class="collapsable">
-	<button class="collapse top">ᨈ</button>
-	<header>
-		<h1>Cases</h1>
-	</header>
-	<ul>
-		<li>Harm</li>
-		<li>Benefir</li>
-	</ul>
-	<button class="collapse bottom">ᨈ</button>
-</section>
-
-<section>
-	<header>
-		<h1>Key takeaways / duties</h1>
-	</header>
-	<ul>
-		<li>Harm</li>
-		<li>Benefit</li>
-	</ul>
-</section>
-
-<section>
-	<header>
-		<h1>Rules</h1>
-	</header>
-	<ul>
-		<li>Harm</li>
-		<li>Benefit</li>
-	</ul>
-</section>
-
-
-
-</article>
-
-<!--
-
+<main id="start" style="display: none;">
 <article class="dilemmas">
-<section>
-	<header>
-		<h1>Featured dilemmas</h1>
-	</header>
-	<div class="dilemmas">
-
-<section class="dilemma">
-	<header>
-		<h1>Rescue</h1>
-	</header>
-	<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
-	<ul>
-		<li>Benefit</li>
-		<li>Harm</li>
-		<li>Respect for autonomy</li>
-	</ul>
-	<footer>
-		<span>CC<span>
-		<span>Cases added</span>
-	</footer>
-</section>
-
-
-<section class="dilemma">
-	<header>
-		<h1>Rescue very long title right here what should the layout do.</h1>
-	</header>
-	<main>
-		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
-		<ul>
-			<li>Benefit</li>
-			<li>Harm</li>
-			<li>Respect for autonomy</li>
-		</ul>
-	</main>
-	<footer>
-		<span>CC<span>
-		<span>Cases added</span>
-	</footer>
-</section>
-
-<section class="dilemma">
-	<header>
-		<h1>Rescue very long title right here what should the layout do.</h1>
-	</header>
-	<main>
-		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
-		<ul>
-			<li>Benefit</li>
-			<li>Harm</li>
-			<li>Respect for autonomy</li>
-		</ul>
-	</main>
-	<footer>
-		<span>CC<span>
-		<span>Cases added</span>
-	</footer>
-</section>
-
-<section class="dilemma">
-	<header>
-		<h1>Rescue very long title right here what should the layout do.</h1>
-	</header>
-	<main>
-		<p>A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped</p>
-		<ul>
-			<li>Benefit</li>
-			<li>Harm</li>
-			<li>Respect for autonomy</li>
-		</ul>
-	</main>
-	<footer>
-		<span>CC<span>
-		<span>Cases added</span>
-	</footer>
-</section>
-
-
-<button class="dilemma">
-	<span class="icon">⊕</span>
-	<span class="label">Add a dilemma</span>
-</button>
-
-</div>
-
-</section>
+	<section>
+		<header>
+			<h1>Featured dilemmas</h1>
+		</header>
+		<div class="dilemmas">
+			<template data-array="dilemmas">
+				<section class="dilemma button vertical" onclick="open_dilemma(this)">
+					<input type="hidden" data-value="id">
+					<header>
+						<h1 data-content="name"></h1>
+					</header>
+					<p class="adjust" data-content="description"></p>
+					<ul>
+						<template data-array="features">
+							<li data-content=""></li>
+						</template>
+					</ul>
+					<footer>
+						<span>CC<span>
+						<span>Cases added</span>
+					</footer>
+				</section>
+			</template>
+			<button class="dilemma" onclick="add_dilemma()">
+				<span class="icon">⊕</span>
+				<span class="label">Add a dilemma</span>
+			</button>
+		</div>
+	</section>
 </article>
--->
+</main>
 
+<main id="dilemma" style="display: none;">
+	<input type="hidden" data-value="id">
+	<article class="dilemma">
+		<section>
+			<p class="two-column" data-content="description"></p>
+		</section>
+		<section>
+			<header>
+				<h1>Actions</h1>
+			</header>
+			<ul>
+				<template data-array="actions">
+					<li data-content=""></li>
+				</template>
+			</ul>
+		</section>
+		<section>
+			<header>
+				<h1>Features</h1>
+			</header>
+			<ul>
+				<template data-array="features">
+					<li data-content=""></li>
+				</template>
+			</ul>
+		</section>
+		<section class="collapsable">
+			<header>
+				<h1>Cases</h1>
+			</header>
+			<div class="flex-4">
+				<template data-array="cases">
+					<section class="case vertical">
+						<h2 data-content="name"></h2>
+						<p>Author: <span data-conten="author">Homer</span></p>
+						<p class="description adjust" data-content="description"></p>
+						<h3>Correct Action</h3>
+						<p class="action" data-content="action"></p>
+					</section>
+				</template>
+			</div>
+		</section>
+		<section>
+			<header>
+				<h1>Key Takeaway / Duties</h1>
+			</header>
+			<p>It can be inferred that there are (prima facie) duties to:</p>
+			<ul>
+				<template data-array="duties">
+					<li data-content=""></li>
+				</template>
+			</ul>
+		</section>
+		<section>
+			<header>
+				<h1>Rules</h1>
+			</header>
+			<div class="principles">
+				<template data-array="principles">
+					<section class="principle">
+						<p>An action is ethically preferable to another if it</p>
+						<ul>
+							<template data-array="clauses">
+								<li data-content=""></li>
+							</template>
+						</ul>
+					</section>
+				</template>
+			</div>
+		</section>
+	</article>
+</main>
+
+<main id="case" style="display: none;">
+	
+</main>
+
+<main id="not_found" style="display: none;">
+	<p>Page not found!</p>
 </main>
 
 <footer>
+	<p>
+		Brought to you by the Dex Ethics team.
+	</p>
 </footer>
+<script type="text/javascript" src="/script.js"></script>
+<script type="text/javascript" src="/openeth.js"></script>
+<script type="text/javascript">
+
+
+function open_dilemma(node) {
+	var id = node.getElementsByTagName('input')[0].value;
+	go_to("/dilemmas/" + id);
+}
+
+
+// TODO: Handle request errors.
+function load_state(url, callback) {
+	console.log("Loading state for " + url + "...");
+	if(url == '/') {
+		api.get('dilemmas')
+		.order('id', true)
+		.range(0, 10)
+		.then(callback);
+	} else if(url.startsWith('/dilemmas/')) {
+		api.get('dilemmas')
+		.select('*,cases{*}')
+		.eq('id', url.slice(10))
+		.single()
+		.then(callback);
+	} else {
+		callback({});
+	}
+}
+
+function load_page(url, state) {
+	console.log("Constructing page for " + url + "...", state);
+	for(var el of document.querySelectorAll('main, header > div'))
+		el.style.display = 'none';
+	if(url == '/') {
+		join('head_start', { dilemmas: state }).style.display = '';
+		join('start', { dilemmas: state }).style.display = '';
+	} else if(url.startsWith('/dilemmas/')) {
+		solve_dilemma(state);
+		var clone = JSON.parse(JSON.stringify(state));
+		dilemma_map_actions(clone);
+		join('head_dilemma', clone).style.display = '';
+		join('dilemma', clone).style.display = '';
+	} else {
+		document.getElementById('not_found').style.display = '';
+	}
+}
+
+function go_to(url) {
+	var a = document.createElement('a');
+	a.href = url;
+	console.log("Loading " + a.pathname + "...");
+	load_state(a.pathname, function(state) {
+		console.log("Done!");
+		load_page(a.pathname, state);
+		window.history.pushState(state, "", a.href);
+	});
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+	if(window.history.state === null || true) {
+		console.log("Loading " + window.document.location.pathname + "...");
+		load_state(window.document.location.pathname, function(state){
+			console.log("Done!");
+			load_page(window.document.location.pathname, window.history.state);
+			window.history.replaceState(state, "", window.document.location.href);
+		});
+	} else {
+		console.log("Using cached state...");
+		load_page(window.document.location.pathname, window.history.state);
+	}
+});
+
+window.addEventListener('popstate', function(event) {
+	console.log("Using cached state...");
+	load_page(window.document.location.pathname, event.state);
+});
+
+</script>
 </body>
 </html>
