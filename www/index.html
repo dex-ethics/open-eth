@@ -31,6 +31,12 @@
 	<div id="head_cases" style="display: none;">
 		<p class="one-column" data-content="name"></p>
 	</div>
+	<div id="head_edit_dilemma" style="display: none;">
+		<p class="one-column">Edit dilemma</p>
+	</div>
+	<div id="head_edit_case" style="display: none;">
+		<p class="one-column">Edit case</p>
+	</div>
 </header>
 
 <main id="start" style="display: none;">
@@ -58,7 +64,7 @@
 					</footer>
 				</section>
 			</template>
-			<button class="dilemma" onclick="add_dilemma()">
+			<button class="dilemma" onclick="go_to('/dilemmas/new?edit')">
 				<span class="icon">⊕</span>
 				<span class="label">Add a dilemma</span>
 			</button>
@@ -125,17 +131,19 @@
 			<header>
 				<h1>Rules</h1>
 			</header>
-			<div class="principles">
-				<template data-array="principles">
-					<section class="principle">
-						<p>An action is ethically preferable to another if it</p>
-						<ul>
-							<template data-array="clauses">
-								<li data-content=""></li>
-							</template>
-						</ul>
-					</section>
-				</template>
+			<div class="principles two-column">
+				<ul class="principles">
+					<template data-array="principles">
+						<li class="principle">
+							<p>An action is ethically preferable to another if it</p>
+							<ul class="clauses">
+								<template data-array="clauses">
+									<li class="clause" data-content=""></li>
+								</template>
+							</ul>
+						</li>
+					</template>
+				</ul>
 			</div>
 		</section>
 	</article>
@@ -181,9 +189,95 @@
 	</article>
 </main>
 
+
+<main id="edit_dilemma" style="display: none;">
+	<input type="hidden" data-value="id">
+	<article class="dilemma">
+		<section>
+			<header>
+				<h1>Features</h1>
+			</header>
+			<input type="text" class="heading" data-value="name" placeholder="Name">
+		</section>
+		<section>
+			<header>
+				<h1>Description</h1>
+			</header>
+			<textarea data-value="description" placeholder="Description"></textarea>
+		</section>
+		<section>
+			<header>
+				<h1>Actions</h1>
+			</header>
+			<template data-array="actions">
+				<input type="text" data-value="">
+			</template>
+		</section>
+		<section>
+			<header>
+				<h1>Features</h1>
+			</header>
+			<ul>
+				<template data-array="actions">
+					<li>
+						<input type="text" data-value="">
+					</li>
+				</template>
+				<li>
+					<input type="text" placeholder="Add a feature">
+				</li>
+			</ul>
+		</section>
+	</article>
+</main>
+
+<main id="edit_case" style="display: none;">
+	<input type="hidden" data-value="id">
+	<article class="dilemma">
+		<section>
+			<header>
+				<h1>Features</h1>
+			</header>
+			<input type="text" class="heading" data-value="name" placeholder="Name">
+		</section>
+		<section>
+			<header>
+				<h1>Description</h1>
+			</header>
+			<textarea data-value="description" placeholder="Description"></textarea>
+		</section>
+		<section>
+			<header>
+				<h1>Correct action</h1>
+			</header>
+			<template data-array="actions">
+				<label>
+					<input type="radio" name="correct_action" data-value="">
+					<span data-content=""></span>
+				</label>
+			</template>
+		</section>
+		<section>
+			<header>
+				<h1>Features</h1>
+			</header>
+			<template data-array="features">
+				<div class="vertical">
+					<label>
+						<input type="checkbox" data-value="feature">
+						<span data-content="feature"></span>
+					</label>
+					<input type="range" min="-3" max="3">
+				</div>
+			</template>
+		</section>
+	</article>
+</main>
+
 <main id="not_found" style="display: none;">
 	<p>Page not found!</p>
 </main>
+
 
 <footer>
 	<p>
@@ -205,84 +299,130 @@ function open_case(node) {
 	go_to("/cases/" + id);
 }
 
-
 // TODO: Handle request errors.
 function load_state(url, callback) {
 	console.log("Loading state for " + url + "...");
-	if(url == '/') {
+	if(url.path.length == 0) {
 		api.get('dilemmas')
 		.order('id', true)
 		.range(0, 10)
 		.then(callback);
-	} else if(url.startsWith('/dilemmas/')) {
-		api.get('dilemmas')
-		.select('*,cases{*}')
-		.eq('id', url.slice(10))
-		.single()
-		.then(callback);
-	} else if(url.startsWith('/cases/')) {
-		api.get('cases')
-		.select('*,dilemma{*}')
-		.eq('id', url.slice(7))
-		.single()
-		.then(callback);
+	} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
+		if(url.path[1] == 'new') {
+			callback({
+				id: null,
+				name: "New Dilemma",
+				description: "Please edit this dilemma.",
+				actions: ["Action A", "Action B"],
+				features: ["Feature 1"],
+				cases: []
+			});
+		} else {
+			api.get('dilemmas')
+			.select('*,cases{*}')
+			.eq('id', url.path[1])
+			.single()
+			.then(callback);
+		}
+	} else if(url.path.length == 2 && url.path[0] == 'cases') {
+		if(url.path[1] == 'new') {
+			api.get('dilemmas')
+			.select('*')
+			.eq('id', url.query.dilemma)
+			.single()
+			.then(function(dilemma) {
+				callback({
+					id: null,
+					dilemma: dilemma,
+					name: "New Case",
+					description: "",
+					action: undefined,
+					features: [
+							[null].repeat(dilemma.features.length)
+						].repeat(dilemma.actions.length)
+				});
+			});
+		} else {
+			api.get('cases')
+			.select('*,dilemma{*}')
+			.eq('id', url.path[1])
+			.single()
+			.then(callback);
+		}
 	} else {
 		callback({});
 	}
 }
 
 function load_page(url, state) {
-	console.log("Constructing page for " + url + "...", state);
-	state = JSON.parse(JSON.stringify(state)); // Clone the state
+	console.log("Constructing page for " + url + "...");
+	state = deep_copy_object(state);
 	for(var el of document.querySelectorAll('main, header > div'))
 		el.style.display = 'none';
-	if(url == '/') {
-		join('head_start', { dilemmas: state }).style.display = '';
-		join('start', { dilemmas: state }).style.display = '';
-	} else if(url.startsWith('/dilemmas/')) {
-		solve_dilemma(state);
-		dilemma_map_actions(state);
-		join('head_dilemma', state).style.display = '';
-		join('dilemma', state).style.display = '';
-	} else if(url.startsWith('/cases/')) {
-		state.actions = state.dilemma.actions;
-		state.action = state.actions[state.action];
-		case_map_features(state);
-		join('head_cases', state).style.display = '';
-		join('case', state).style.display = '';
-	} else {
-		document.getElementById('not_found').style.display = '';
+	try {
+		if(url.path.length == 0) {
+			join('head_start', { dilemmas: state }).style.display = '';
+			join('start', { dilemmas: state }).style.display = '';
+		} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
+			solve_dilemma(state);
+			dilemma_map_actions(state);
+			if('edit' in url.query) {
+				join('head_edit_dilemma', state).style.display = '';
+				join('edit_dilemma', state).style.display = '';
+				rescale_textareas();
+			} else {
+				join('head_dilemma', state).style.display = '';
+				join('dilemma', state).style.display = '';
+			}
+		} else if(url.path.length == 2 && url.path[0] == 'cases') {
+			state.actions = state.dilemma.actions;
+			state.action = state.actions[state.action];
+			case_map_features(state);
+			if('edit' in url.query) {
+				console.log(state);
+				join('head_edit_case', state).style.display = '';
+				join('edit_case', state).style.display = '';
+				rescale_textareas();
+			} else {
+				join('head_cases', state).style.display = '';
+				join('case', state).style.display = '';
+			}
+		} else {
+			document.getElementById('not_found').style.display = '';
+		}
+	} catch(error) {
+		// TODO: Show error page.
+		console.error(error);
 	}
 }
 
 function go_to(url) {
-	var a = document.createElement('a');
-	a.href = url;
-	console.log("Loading " + a.pathname + "...");
-	load_state(a.pathname, function(state) {
-		console.log("Done!");
-		load_page(a.pathname, state);
-		window.history.pushState(state, "", a.href);
+	url = parse_url(url);
+	console.log("Going to " + url + "...");
+	load_state(url, function(state) {
+		load_page(url, state);
+		window.history.pushState(state, "", url);
 	});
 }
 
 window.addEventListener('DOMContentLoaded', function() {
+	var url = parse_url(window.document.location);
 	if(window.history.state === null || true) {
-		console.log("Loading " + window.document.location.pathname + "...");
-		load_state(window.document.location.pathname, function(state){
-			console.log("Done!");
-			load_page(window.document.location.pathname, window.history.state);
+		console.log("Starting on " + url + "...");
+		load_state(url, function(state){
+			load_page(url, window.history.state);
 			window.history.replaceState(state, "", window.document.location.href);
 		});
 	} else {
 		console.log("Using cached state...");
-		load_page(window.document.location.pathname, window.history.state);
+		load_page(url, window.history.state);
 	}
 });
 
 window.addEventListener('popstate', function(event) {
-	console.log("Using cached state...");
-	load_page(window.document.location.pathname, event.state);
+	var url = parse_url(window.document.location);
+	console.log("Going back to " + url + "...");
+	load_page(url, event.state);
 });
 
 </script>

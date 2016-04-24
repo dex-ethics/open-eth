@@ -21,6 +21,9 @@ function flesh_out(table) {
 }
 
 function findSigns(positive, negative) {
+	if(positive.length == 0)
+		return [];
+	
 	let n = positive[0].length;
 	
 	let possibleSigns = [];

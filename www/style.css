@@ -85,6 +85,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
 	min-height: 100%;
 }
 body > header, 
@@ -365,6 +366,176 @@ section.case > h2 {
 section.case > h3 {
 	font-size: 15px;
 }
+
+
+ul.principles,
+ul.clauses {
+	padding: 0;
+	list-style: none;
+}
+li.clause {
+	font-weight: 500;
+}
+
+
+input,
+textarea {
+	font-family: 'Roboto', sans-serif;
+	font-size: 150%;
+	color: #757575;
+	outline: none;
+}
+input[type=text],
+input[type=range],
+textarea {
+	width: 41.66vw;
+	border: none;
+	border-bottom: solid 2px #F2F2F2;
+	margin-bottom: 1em;
+	resize: none;
+	overflow: auto;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+input[type=text]::selection,
+textarea::selection {
+	color: #FFFFFF;
+	background: #fcc26a;
+}
+input[type=text]:focus,
+textarea:focus {
+	border-bottom-color: #fcc26a;
+}
+input[type=text]::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+}
+input[type=text]::-ms-input-placeholder,
+textarea::-ms-input-placeholder {
+	color: #b3b3b3;
+}
+input[type=text]::-moz-input-placeholder,
+textarea::-moz-input-placeholder {
+	color: #b3b3b3;
+}
+input[type=text]::input-placeholder,
+textarea::input-placeholder {
+	color: #b3b3b3;
+}
+
+input[type=radio],
+input[type=checkbox] {
+	opacity: 0;
+	width: 0;
+	padding: 0;
+	margin: 0;
+}
+input[type=radio] + span:before,
+input[type=checkbox] + span:before {
+	display: inline-block;
+	content: " ";
+	height: 11px;
+	width: 11px;
+	border: solid 2px #F2F2F2;
+	border-radius: 50%;
+	background-color: transparent;
+	margin-right: 5px;
+}
+input[type=radio]:focus + span:before,
+input[type=checkbox]:focus + span:before {
+	border-color: #fcc26a;
+}
+input[type=radio]:checked + span:before,
+input[type=checkbox]:checked + span:before {
+	background-color: #fcc26a;
+}
+input[type=checkbox] + span:before {
+	border-radius: 2px;
+}
+/* https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css */
+input[type=range] {
+	-webkit-appearance: none;
+	height: 35px;
+	padding: 0;
+	border-bottom: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+	background: #F2F2F2;
+	margin-top: 5px;
+	height: 5px;
+	margin-bottom: 5px;
+	border-radius: 2px;
+}
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	box-sizing: content-box;
+	margin-top: -5px;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background: #b3b3b3;
+}
+input[type=range]:focus::-webkit-slider-thumb {
+	background: #fcc26a;
+}
+/* TODO:
+* http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #2a6495;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: #3071a9;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #3071a9;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #367ebd;
+}
+*/
 
 body > footer {
 	background: #5D5D5D;
