@@ -1,5 +1,7 @@
 BEGIN;
 
+--------------------------------------------------------------------------------
+
 CREATE TABLE dilemmas (
 	id            bigserial primary key,
 	author        text      not null default current_user_id(),
@@ -10,7 +12,7 @@ CREATE TABLE dilemmas (
 	features      text[]
 );
 
--- TODO: Action constraint that its length is two.
+-- TODO: constrain 'actions' to have two elements
 
 -- Anonymous can read all.
 GRANT SELECT ON TABLE dilemmas TO anonymous;

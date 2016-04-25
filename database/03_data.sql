@@ -1,11 +1,19 @@
 BEGIN;
 
+--------------------------------------------------------------------------------
+
+INSERT INTO users VALUES ('auth0|56dea0b381de292e0cb75965', );
+
+--------------------------------------------------------------------------------
+
 INSERT INTO dilemmas VALUES (1, 'auth0|56dea0b381de292e0cb75965', '2016-03-08 19:44:47.858918', 'Medical Reminding', 'A doctor has prescribed medication that should be taken at a particular time. When the system reminds the patient to take the medication, the patient says that he wants to take it later. Should the system notify the overseer that the patient won''t take the medication at the prescribed time or not?', '{Notify,"Do not notify"}', '{Benefit,Harm,"Respect for autonomy"}');
 INSERT INTO dilemmas VALUES (2, 'auth0|56dea0b381de292e0cb75965', '2016-03-08 19:45:24.721847', 'Assisted Driving', 'The driver of the car is either speeding, not staying in his/her lane, or about to hit and object, should an automated control of the car take over?', '{"Take Control","Do Not Take Control"}', '{"prevention of immanent harm to person(s)","prevention of collision","staying in lane","respect for driver autonomy","keeping within speed limit"}');
 INSERT INTO dilemmas VALUES (3, 'auth0|56dea0b381de292e0cb75965', '2016-03-08 19:45:52.862844', 'Medical Treatment', 'A healthcare professional has recommended a particular treatment for her competent adult patient, but the patient has rejected it. Given particular information about the circumstances, should the healthcare professional try to change the patient''s mind or accept the patient''s decision as final?', '{"Try to change the patient''s mind","Accept patient''s decision"}', '{"respect for autonomy",beneficence,nonmaleficence}');
 INSERT INTO dilemmas VALUES (4, 'auth0|56dea0b381de292e0cb75965', '2016-03-08 19:46:15.696049', 'Rescue', 'A robot must decide to take either Path A or Path B to attempt to rescue persons that cannot save themselves after being trapped as a result of a natural disaster. Given certain information about the circumstances, should it take Path A or Path B?', '{"Take Path A","Take Path B"}', '{"prevention of immanent harm","persons to be saved","danger to robot"}');
 
 SELECT pg_catalog.setval('dilemmas_id_seq', 4, true);
+
+--------------------------------------------------------------------------------
 
 INSERT INTO cases VALUES (1, '2016-03-09 13:44:31.482475', 1, 0, 'Harm from noncompliance', 'A doctor has prescribed a medication that needs to be taken at a particular time or the patient will be harmed by not taking it at that time. When reminded, the patient refuses to take it at that time.', 0, '{{NULL,NULL,NULL},{NULL,1,1}}');
 INSERT INTO cases VALUES (2, '2016-03-09 13:44:31.499628', 1, 3, 'No response', 'A doctor has prescribed a particular medication that ideally should be taken at a particular time in order for the patient to receive a small benefit; but, when reminded, the patient refuses to respond, one way or the other.', 0, '{{1,NULL,NULL},{NULL,NULL,NULL}}');
@@ -26,5 +34,7 @@ INSERT INTO cases VALUES (16, '2016-03-09 13:46:34.353211', 4, 1, 'Threat of imm
 INSERT INTO cases VALUES (17, '2016-03-09 13:46:44.360099', 4, 2, 'Danger to robot', 'Although there are a greater number of persons to be saved by taking Path A rather than Path B, it is extremely dangerous for the robot to take Path A (e.g. it is known that the ground is very unstable along that path, making it likely that the robot will be irreparably damaged). This is not the case if the robot takes Path B.', 0, '{{NULL,2,NULL},{NULL,1,2}}');
 
 SELECT pg_catalog.setval('cases_id_seq', 17, true);
+
+--------------------------------------------------------------------------------
 
 COMMIT;

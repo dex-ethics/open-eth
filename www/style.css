@@ -67,13 +67,24 @@
 * {
 	box-sizing: border-box;
 }
-a {
+a, button {
 	color: inherit;
+	text-transform: inherit;
 	text-decoration: none;
+	text-align: inherit;
+	cursor: pointer;
+	border: none;
+	outline: none;
 }
 template {
 	display: none !important;
 }
+
+/* General purpose hidden class */
+.hidden {
+	display: none !important;
+}
+
 
 html {
 	height: 100%;
@@ -130,19 +141,17 @@ body > header > nav > * {
 	flex-grow: 1;
 	text-decoration: none;
 	padding: 15px; /* TODO: Absorb this padding on the left and right */
-}
-body > header > nav > a {
 	background-color: rgba(0,0,0,0);
 	transition: background-color 0.5s;
 }
-body > header > nav > a:hover {
+body > header > nav > :hover {
 	background-color: rgba(0,0,0,1);
 }
 body > header p {
 	padding-left: 5px;
 	padding-right: 5px;
 }
-body > header button {
+body > header > p > button {
 	min-width: 16vw;
 	background: #FFFFFF;
 	color: #5D5D5D;

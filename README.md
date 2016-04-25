@@ -33,16 +33,16 @@ To recompile the javascript you need [Google Closure](https://github.com/google/
 
 To start with a clean build
 
+	docker-compose stop
 	sudo rm -rf data/data
 	docker-compose rm -f
-
 
 ## Raw database access
 
 	docker exec -ti -u postgres dex_db_1 psql -d openeth -P pager=off
 
 
-## Dump database
+## Dump database for backups
 
 	docker exec -ti -u postgres dex_db_1 pg_dump -a --insert openeth
 

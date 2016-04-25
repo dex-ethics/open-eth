@@ -13,17 +13,18 @@
 
 <header>
 	<nav>
-		<a href="#">OpenEth</a>
-		<a href="#">Featured Dilemmas</a>
-		<a href="#">Play with Ethics</a>
-		<a href="#">Guidance</a>
-		<a href="#">Sign up</a>
+		<a href="/">OpenEth</a>
+		<a href="/">Featured Dilemmas</a>
+		<a href="/">Play with Ethics</a>
+		<a href="/">Guidance</a>
+		<button class="hidden" id="auth0-login">Log in</button>
+		<button class="hidden" id="auth0-logout">Log out</button>
 	</nav>
 	<div id="head_start" style="display: none;">
 		<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
 		dilemmas, to enable better decisions based upon available information, and its 
 		relative likelihood.</p>
-		<p><button class="button">Sign up</button></p>
+		<p><button class="button" id="auth0-register">Join OpenEth</button></p>
 	</div>
 	<div id="head_dilemma" style="display: none;">
 		<p class="one-column" data-content="name"></p>
@@ -218,7 +219,7 @@
 				<h1>Features</h1>
 			</header>
 			<ul>
-				<template data-array="actions">
+				<template data-array="features">
 					<li>
 						<input type="text" data-value="">
 					</li>
@@ -236,7 +237,7 @@
 	<article class="dilemma">
 		<section>
 			<header>
-				<h1>Features</h1>
+				<h1>Name</h1>
 			</header>
 			<input type="text" class="heading" data-value="name" placeholder="Name">
 		</section>
@@ -262,7 +263,7 @@
 				<h1>Features</h1>
 			</header>
 			<template data-array="features">
-				<div class="vertical">
+				<div class="vertical feature_slider">
 					<label>
 						<input type="checkbox" data-value="feature">
 						<span data-content="feature"></span>
@@ -297,6 +298,12 @@ function open_dilemma(node) {
 function open_case(node) {
 	var id = node.getElementsByTagName('input')[0].value;
 	go_to("/cases/" + id);
+}
+
+function init_feature_sliders() {
+	for(var el of document.querySelectorAll(".feature_slider")) {
+		console.log(el);
+	}
 }
 
 // TODO: Handle request errors.
@@ -359,11 +366,12 @@ function load_page(url, state) {
 	state = deep_copy_object(state);
 	for(var el of document.querySelectorAll('main, header > div'))
 		el.style.display = 'none';
-	try {
+	//try {
 		if(url.path.length == 0) {
 			join('head_start', { dilemmas: state }).style.display = '';
 			join('start', { dilemmas: state }).style.display = '';
 		} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
+			console.log(state);
 			solve_dilemma(state);
 			dilemma_map_actions(state);
 			if('edit' in url.query) {
@@ -379,10 +387,10 @@ function load_page(url, state) {
 			state.action = state.actions[state.action];
 			case_map_features(state);
 			if('edit' in url.query) {
-				console.log(state);
 				join('head_edit_case', state).style.display = '';
 				join('edit_case', state).style.display = '';
 				rescale_textareas();
+				init_feature_sliders();
 			} else {
 				join('head_cases', state).style.display = '';
 				join('case', state).style.display = '';
@@ -390,10 +398,10 @@ function load_page(url, state) {
 		} else {
 			document.getElementById('not_found').style.display = '';
 		}
-	} catch(error) {
-		// TODO: Show error page.
-		console.error(error);
-	}
+	//} catch(error) {
+	//	// TODO: Show error page.
+	//	console.error(error);
+	//}
 }
 
 function go_to(url) {
@@ -410,7 +418,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	if(window.history.state === null || true) {
 		console.log("Starting on " + url + "...");
 		load_state(url, function(state){
-			load_page(url, window.history.state);
+			load_page(url, state);
 			window.history.replaceState(state, "", window.document.location.href);
 		});
 	} else {

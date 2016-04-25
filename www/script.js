@@ -126,10 +126,6 @@ function HTMLUnescape(str) {
 NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 
-//
-// Small template library
-//
-
 
 function rescale_array(node, size) {
 	let template = node.children[0];
@@ -142,7 +138,65 @@ function rescale_array(node, size) {
 		node.removeChild(node.children[node.children.length - 1]);
 }
 
+//
+// Deep copy object
+//
+
+function deep_copy_object(obj) {
+	return JSON.parse(JSON.stringify(obj));
+}
+
+//
+// Parse URLs
+//
+
+function parse_url(url) {
+	var a = document.createElement('a');
+	a.href = url;
+	var obj = {
+		prot: a.protocol,
+		host: a.hostname,
+		port: a.port,
+		path: a.pathname.split('/').filter(function(e){return e.length > 0;}),
+		hash: a.hash.slice(1),
+		query: {},
+		toString: function(){return a.href},
+	};
+	var q = a.search.slice(1).split('&');
+	for (var i = 0; i < q.length; i++) {
+		var b = q[i].split('=');
+		obj.query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+	}
+	return obj;
+}
+
+//
+// Auto scale textareas
+//
+
+function auto_scale_textarea() {
+	var border = this.offsetHeight - this.clientHeight;
+	var height = this.scrollHeight + border;
+	height = height < 95 ? 95 : height;
+	this.style.height = height + "px";
+}
+
+function rescale_textareas() {
+	for(var el of document.getElementsByTagName('textarea'))
+		auto_scale_textarea.call(el, []);
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+	rescale_textareas();
+	for(var el of document.getElementsByTagName('textarea'))
+		el.addEventListener('input', auto_scale_textarea);
+});
+
+
+//
 // Super simple template engine
+//
+
 function join(node, data) {
 	if(node === undefined || node === null) {
 		console.error('Node undefined or null');
@@ -191,7 +245,7 @@ function join(node, data) {
 			// Create new instances
 			let t = node.content.children[0];
 			for(var i = 0; i < a.length; ++i) {
-				join(t, a[i]);
+				join(t, a[a.length - i - 1]);
 				var clone = document.importNode(t, true);
 				clone.dataset.arrayInstance = true;
 				node.parentNode.insertBefore(clone, node.nextSibling);
@@ -207,6 +261,7 @@ function join(node, data) {
 		join(child, data);
 	return node;
 }
+
 function extract(node) {
 	function objectify(name, value) {
 		if(value === "undefined")
@@ -252,6 +307,124 @@ function extract(node) {
 	}
 	return acc;
 }
+
+//
+// Authentication using Auth0
+//
+// <button id="auth0-login"></button>
+// <button id="auth0-logout"></button>
+// <button id="auth0-register"></button>
+//
+(function(window){
+	
+	var client_id = 'AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo';
+	var lock = null;
+	var lock_queue_action = [];
+	var lock_queue_failed = [];
+	var with_lock = function(action, failed) {
+		
+		// Run immediately if already loaded
+		if(lock !== null) {
+			action(lock);
+			return;
+		}
+		
+		// Queue the callbacks
+		lock_queue_action.push(action);
+		lock_queue_failed.push(failed);
+		
+		// Return if we are already loading
+		if(lock_queue_action.length > 1) {
+			return;
+		}
+		
+		// Load Auth0 script
+		let script = window.document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = '//cdn.auth0.com/js/lock-8.2.min.js';
+		
+		// Then bind the event to the callback function.
+		script.onload = script.onreadystatechange = function(a,b,c,d) {
+			lock = new Auth0Lock(client_id, 'openeth.auth0.com');
+			lock_queue_action.forEach(function(action) {
+				action(lock);
+			});
+			/// TODO: Handle errors
+		}
+		
+		// Start loading the Auth0 scirpt
+		window.document.getElementsByTagName('body')[0].appendChild(script);
+	}
+	
+	// Add onclick handlers to buttons
+	window.addEventListener('DOMContentLoaded', function() {
+		
+		console.log("asd");
+		
+		// Add the click handler
+		var login = window.document.getElementById('auth0-login');
+		if(login instanceof HTMLButtonElement) {
+			console.log(login.classList);
+			login.classList.remove('hidden');
+			login.disabled = false;
+			login.addEventListener('click', ()=>{
+				login.classList.add('hidden');
+				with_lock((lock)=>{
+					let config = {};
+					config['icon'] = 'buddha.png';
+					config['authParams'] = {};
+					config['authParams']['scope'] = 'openid role userid';
+					lock.show(config);
+					logout.classList.remove('hidden');
+				});
+			});
+		}
+		
+		var logout = window.document.getElementById('auth0-logout');
+		if(logout instanceof HTMLButtonElement) {
+			logout.classList.add("hidden");
+			logout.disabled = true;
+			logout.addEventListener('click', function() {
+				logout.classList.add('hidden');
+				login.classList.remove('hidden');
+				window.localStorage.removeItem('id_token');
+				window.location.href = "/";
+			});
+		}
+	});
+	
+	// Login using hash token
+	if(window.location.hash.indexOf('id_token=') != -1
+		|| window.location.hash.indexOf('error=') != -1) {
+		with_lock(function(lock) {
+			var hash = lock.parseHash(window.location.hash);
+			if (hash) {
+				if (hash.error) {
+					console.log("There was an error logging in", hash.error);
+					// TODO alert('There was an error: ' + hash.error + '\n' + hash.error_description);
+					// (Alert is not allowed in our sandbox)
+				} else {
+					// Save the token in the session:
+					window.localStorage.setItem('id_token', hash.id_token);
+					
+					// Remove the hash from the url
+					window.location.hash = '';
+					window.history.replaceState("", document.title,
+						window.location.pathname + window.location.search);
+				}
+			}
+		});
+	}
+	
+	// Check if we are logged in
+	with_lock(function(lock) {
+		var token = windo.localStorage.id_token
+	});
+	
+	// TODO: https://auth0.com/docs/user-profile
+	// https://auth0.com/docs/user-profile/normalized
+})(window);
+
 
 //
 // PostgREST
@@ -392,6 +565,8 @@ function Api(url) {
 		// Set default headers
 		r.headers['Accept'] = 'application/json';
 		r.headers['Prefer'] = path.startsWith('/rpc/') ? 'count=none' : '';
+		
+		// Add the users JWT token
 		r.headers['Authorization'] = localStorage.id_token ? 'Bearer ' + localStorage.id_token : '';
 		
 		// Quickly add all filters

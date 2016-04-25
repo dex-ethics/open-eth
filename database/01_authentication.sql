@@ -1,5 +1,6 @@
 BEGIN;
 
+--------------------------------------------------------------------------------
 -- We use JSON Web Tokens to authenticate API requests. PostgREST
 -- cares specifically about a claim called role. When request
 -- contains a valid JWT with a role claim PostgREST will switch
@@ -15,6 +16,7 @@ GRANT anonymous, author TO authenticator;
 
 GRANT USAGE ON SCHEMA public TO anonymous, author;
 
+--------------------------------------------------------------------------------
 -- The user id is a string stored in postgrest.claims.sub. Let's
 -- wrap this in a nice function.
 
@@ -32,5 +34,24 @@ $$;
 
 GRANT EXECUTE ON FUNCTION current_user_id()
 	TO anonymous, author;
+
+--------------------------------------------------------------------------------
+
+CREATE TABLE users (
+	id            text      primary key,
+	created       timestamp not null default now(),
+	last_login    timestamp not null default now(),
+	name          text      not null,
+	nickname      text      ,
+	avatar        text      ,
+	profile       json
+);
+
+-- TODO: Users add their own profiles
+-- TODO: Users update their own profiles
+-- TODO: Users can not enumerate profiles
+-- TODO: Users can select all except the 'profile' field
+
+--------------------------------------------------------------------------------
 
 COMMIT;
