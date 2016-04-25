@@ -315,127 +315,66 @@ function extract(node) {
 // <button id="auth0-logout"></button>
 // <button id="auth0-register"></button>
 //
-(function(window){
-	
-	var client_id = 'AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo';
-	var lock = null;
-	var lock_queue_action = [];
-	var lock_queue_failed = [];
-	var with_lock = function(action, failed) {
-		
-		// Run immediately if already loaded
-		if(lock !== null) {
-			action(lock);
-			return;
-		}
-		
-		// Queue the callbacks
-		lock_queue_action.push(action);
-		lock_queue_failed.push(failed);
-		
-		// Return if we are already loading
-		if(lock_queue_action.length > 1) {
-			return;
-		}
-		
-		// Load Auth0 script
-		let script = window.document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = '//cdn.auth0.com/js/lock-8.2.min.js';
-		
-		// Then bind the event to the callback function.
-		script.onload = script.onreadystatechange = function(a,b,c,d) {
-			lock = new Auth0Lock(client_id, 'openeth.auth0.com');
-			lock_queue_action.forEach(function(action) {
-				action(lock);
-			});
-			/// TODO: Handle errors
-		}
-		
-		// Start loading the Auth0 scirpt
-		window.document.getElementsByTagName('body')[0].appendChild(script);
+var lock = new Auth0Lock('AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo', 'openeth.auth0.com');
+var lock_options = {
+	icon: 'buddha.png',
+	authParams: {
+		scope: 'openid role userid'
+	}
+};
+function lock_callback(err, profile, token) {
+	console.log(err, profile, token);
+	if(err) {
+		console.error(err);
+		return;
 	}
 	
-	// Add onclick handlers to buttons
-	window.addEventListener('DOMContentLoaded', function() {
-		
-		console.log("asd");
-		
-		// Add the click handler
-		var login = window.document.getElementById('auth0-login');
-		if(login instanceof HTMLButtonElement) {
-			console.log(login.classList);
-			login.classList.remove('hidden');
-			login.disabled = false;
-			login.addEventListener('click', ()=>{
-				login.classList.add('hidden');
-				with_lock((lock)=>{
-					let config = {};
-					config['icon'] = 'buddha.png';
-					config['authParams'] = {};
-					config['authParams']['scope'] = 'openid role userid';
-					lock.show(config);
-					logout.classList.remove('hidden');
-				});
-			});
-		}
-		
-		var logout = window.document.getElementById('auth0-logout');
-		if(logout instanceof HTMLButtonElement) {
-			logout.classList.add("hidden");
-			logout.disabled = true;
-			logout.addEventListener('click', function() {
-				logout.classList.add('hidden');
-				login.classList.remove('hidden');
-				window.localStorage.removeItem('id_token');
-				window.location.href = "/";
-			});
-		}
-	});
-	
-	// Login using hash token
-	if(window.location.hash.indexOf('id_token=') != -1
-		|| window.location.hash.indexOf('error=') != -1) {
-		with_lock(function(lock) {
-			var hash = lock.parseHash(window.location.hash);
-			if (hash) {
-				if (hash.error) {
-					console.log("There was an error logging in", hash.error);
-					// TODO alert('There was an error: ' + hash.error + '\n' + hash.error_description);
-					// (Alert is not allowed in our sandbox)
-				} else {
-					// Save the token in the session:
-					window.localStorage.setItem('id_token', hash.id_token);
-					
-					// Remove the hash from the url
-					window.location.hash = '';
-					window.history.replaceState("", document.title,
-						window.location.pathname + window.location.search);
-				}
-			}
-		});
-	}
-	
-	// Check if we are logged in
-	with_lock(function(lock) {
-		var token = window.localStorage.id_token;
-		console.log("Token: ", token);
-		if(token === undefined)
-			return;
-		lock.getProfile(token, function (err, profile) {
-			if(err) {
-				console.log('There was an error geting the profile: ' + err.message);
-				console.log(err. profile);
-				return;
-			}
-			console.log(profile);
-		});
-	});
-	
-	// TODO: https://auth0.com/docs/user-profile
-	// https://auth0.com/docs/user-profile/normalized
-})(window);
+	// Store the token for re-use
+	localStorage.setItem('id_token', hash.id_token);
+}
 
+// Log in using a token
+function lock_login_token(token) {
+	lock.getProfile(token, function(err, profile) {
+		lock_callback(err, profile, token);
+	});
+});
+
+function register() {
+	lock.showSignup(lock_options, lock_callback);
+}
+function login() {
+	lock.show(lock_options, lock_callback);
+}
+function logout() {
+	window.localStorage.removeItem('id_token');
+	lock.logout();
+}
+
+// Log in using hash token
+function lock_try_hash_token() {
+	var hash = lock.parseHash(window.location.hash);
+	if(hash && hash.id_token) {
+		// Remove the hash from the url
+		window.location.hash = '';
+		window.history.replaceState("", document.title,
+			window.location.pathname + window.location.search);
+		
+		// Log in using token
+		lock_login_token(hash.id_token);
+	}
+}
+
+// Log in using store token
+function lock_try_stored_token() {
+	var token = localStorage.getItem('id_token');
+	if(token) {
+		lock_login_token(token);
+	}
+}
+
+lock_try_hash_token();
+lock_try_stored_token();
 
 //
 // PostgREST
@@ -597,5 +536,4 @@ function Api(url) {
 		this[method.toLowerCase()] = (path => this.request(method, path))
 	)
 }
-
-let api = new Api('/api/');
+var api = new Api('/api/');

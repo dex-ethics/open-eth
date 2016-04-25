@@ -17,14 +17,14 @@
 		<a href="/">Featured Dilemmas</a>
 		<a href="/">Play with Ethics</a>
 		<a href="/">Guidance</a>
-		<button class="hidden" id="auth0-login">Log in</button>
-		<button class="hidden" id="auth0-logout">Log out</button>
+		<button class="hidden" onclick="login()">Log in</button>
+		<button class="hidden" onclick="logout()">Log out</button>
 	</nav>
 	<div id="head_start" style="display: none;">
 		<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
 		dilemmas, to enable better decisions based upon available information, and its 
 		relative likelihood.</p>
-		<p><button class="button" id="auth0-register">Join OpenEth</button></p>
+		<p><button class="button" onclick="register()">Join OpenEth</button></p>
 	</div>
 	<div id="head_dilemma" style="display: none;">
 		<p class="one-column" data-content="name"></p>
@@ -285,6 +285,7 @@
 		Brought to you by the Dex Ethics team.
 	</p>
 </footer>
+<script type="text/javascript" src="//cdn.auth0.com/js/lock-8.2.min.js"></script>
 <script type="text/javascript" src="/script.js"></script>
 <script type="text/javascript" src="/openeth.js"></script>
 <script type="text/javascript">
