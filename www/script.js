@@ -357,8 +357,8 @@ function lock_try_hash_token() {
 		window.location.hash = '';
 		window.history.replaceState("", document.title,
 			window.location.pathname + window.location.search);
-		console.log("Hash token: ", token);
-		lock_try_token(token);
+		console.log("Hash token: ", hash.id_token);
+		lock_try_token(hash.id_token);
 		return true;
 	}
 	return false;
