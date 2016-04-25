@@ -332,6 +332,16 @@ function lock_callback(err, profile, token) {
 	// Store the token for re-use
 	localStorage.setItem('id_token', token);
 }
+function lock_try_token(token) {
+	try {
+		// Fetch the user profile
+		lock.getProfile(token, function(err, profile) {
+			lock_callback(err, profile, token);
+		});
+	} catch(error) {
+		lock_callback(error);
+	}
+}
 
 // Log in using hash token
 function lock_try_hash_token() {
@@ -341,13 +351,11 @@ function lock_try_hash_token() {
 		window.location.hash = '';
 		window.history.replaceState("", document.title,
 			window.location.pathname + window.location.search);
-		
-		// Fetch the user profile
 		console.log("Hash token: ", token);
-		lock.getProfile(token, function(err, profile) {
-			lock_callback(err, profile, token);
-		});
+		lock_try_token(token);
+		return true;
 	}
+	return false;
 }
 
 // Log in using store token
@@ -355,16 +363,14 @@ function lock_try_stored_token() {
 	var token = localStorage.getItem('id_token');
 	if(token) {
 		console.log("LocalStorage token: ", token);
-		
-		// Fetch the user profile
-		lock.getProfile(token, function(err, profile) {
-			lock_callback(err, profile, token);
-		});
+		lock_try_token(token);
+		return true;
 	}
+	return false;
 }
 
-lock_try_hash_token();
-lock_try_stored_token();
+if(!lock_try_hash_token())
+	lock_try_stored_token();
 
 function register() {
 	lock.showSignup(lock_options, lock_callback);
