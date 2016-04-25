@@ -55,6 +55,8 @@ CREATE TABLE hidden.users (
 -- RPC to upsert the current user's profile
 
 CREATE FUNCTION login(user_profile json) RETURNS void
+LANGUAGE SQL
+SECURITY DEFINER
 AS $$
 	INSERT INTO hidden.users (id, last_login, name, nickname, avatar, profile)
 	VALUES (current_user_id(), now(), user_profile::json->>'name',
@@ -64,7 +66,7 @@ AS $$
 		(last_login, name, nickname, avatar, profile) =
 		(EXCLUDED.last_login, EXCLUDED.name, EXCLUDED.nickname, EXCLUDED.avatar,
 		EXCLUDED.profile);
-$$ LANGUAGE SQL;
+$$;
 
 GRANT EXECUTE ON FUNCTION login(json) TO author;
 
