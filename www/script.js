@@ -418,7 +418,18 @@ function extract(node) {
 	
 	// Check if we are logged in
 	with_lock(function(lock) {
-		var token = windo.localStorage.id_token
+		var token = window.localStorage.id_token;
+		console.log("Token: ", token);
+		if(token === undefined)
+			return;
+		lock.getProfile(token, function (err, profile) {
+			if(err) {
+				console.log('There was an error geting the profile: ' + err.message);
+				console.log(err. profile);
+				return;
+			}
+			console.log(profile);
+		});
 	});
 	
 	// TODO: https://auth0.com/docs/user-profile
@@ -492,39 +503,41 @@ function Api(url) {
 				}
 				
 				// Set the readyState handler
-				let x = this.xhr;
-				this.xhr.onreadystatechange = ()=>{
-					if(this.xhr.readyState !== 4)
+				var x = this.xhr;
+				var catch_handler = this.catch_handler;
+				var then_handler = this.then_handler;
+				this.xhr.onreadystatechange = function() {
+					if(x.readyState !== 4)
 						return;
-					if(this.xhr.status >= 200 && this.xhr.status < 300) {
+					if(x.status >= 200 && x.status < 300) {
 						var body = {};
 						try {
-							body = JSON.parse(this.xhr.responseText)
+							body = JSON.parse(x.responseText)
 						} catch(e) {
-							this.catch_handler("Response is not valid JSON.");
+							catch_handler("Response is not valid JSON.");
 							return;
 						}
 						
 						// Add range bounds
-						const range = this.xhr.getResponseHeader('Content-Range');
-						const regexp = /^(\d+)-(\d+)\/(\d+)$/
+						var range = x.getResponseHeader('Content-Range');
+						var regexp = /^(\d+)-(\d+)\/(\d+)$/
 						if(Array.isArray(body) && range && regexp.test(range)) {
-							const match = regexp.exec(range);
+							var match = regexp.exec(range);
 							body.from = parseInt(match[1], 10);
 							body.to = parseInt(match[2], 10);
 							body.fullLength = parseInt(match[3], 10);
 						}
 						
 						// Call the handler
-						this.then_handler(body);
+						then_handler(body);
 					} else {
-						let error = this.xhr.responseText;
+						var error = x.responseText;
 						try {
 							error = JSON.parse(error).message;
 						}
 						catch(e) {
 						}
-						this.catch_handler(error);
+						catch_handler(error);
 					}
 				};
 				

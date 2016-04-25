@@ -4,8 +4,11 @@ BEGIN;
 
 CREATE TABLE dilemmas (
 	id            bigserial primary key,
-	author        text      not null default current_user_id(),
-	created       timestamp not null default now(),
+	author        text      not null
+	                        default current_user_id()
+	                        references users (id),
+	created       timestamp not null
+	                        default now(),
 	name          text      not null,
 	description   text      ,
 	actions       text[2]   ,
@@ -35,9 +38,12 @@ CREATE POLICY author_eigenedit ON dilemmas
 
 CREATE TABLE cases (
 	id            bigserial   primary key,
-	created       timestamp   not null default now(),
-	dilemma       bigint      not null references dilemmas (id)
-                             on delete cascade on update cascade,
+	created       timestamp   not null
+	                          default now(),
+	dilemma       bigint      not null
+	                          references dilemmas (id)
+                             on delete cascade
+                             on update cascade,
 	position      integer     not null,
 	name          text        not null,
 	description   text        ,

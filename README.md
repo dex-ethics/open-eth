@@ -36,6 +36,8 @@ To start with a clean build
 	docker-compose stop
 	sudo rm -rf data/data
 	docker-compose rm -f
+	docker-compose create
+	docker-compose start
 
 ## Raw database access
 
