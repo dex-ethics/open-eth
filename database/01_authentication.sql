@@ -70,6 +70,9 @@ $$;
 
 GRANT EXECUTE ON FUNCTION login(json) TO author;
 
+-- TODO: Investigate implementation without 'SECURITY DEFINER'
+-- TODO: Fail on current_user_id() = ''
+
 --------------------------------------------------------------------------------
 
 -- TODO: Allow user to see a subset of the columns (id, nickname, avatar), but

@@ -194,6 +194,27 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 //
+// Create and trigger custom events
+//
+
+function create_event(name) {
+	return function(data) {
+		var event = document.createEvent('CustomEvent');
+		event.initCustomEvent(name, true, true, data);
+		return document.dispatchEvent(event);
+	}
+}
+//
+// document.addEventListener('test', function(e) {
+// 	console.log(e);
+// });
+//
+// var test_event = create_event('test');
+//
+// test_event('haha');
+//
+
+//
 // Super simple template engine
 //
 
@@ -315,6 +336,7 @@ function extract(node) {
 // <button id="auth0-logout"></button>
 // <button id="auth0-register"></button>
 //
+var user_login_event = create_event('login');
 var user_token = null;
 var user_profile = null;
 var lock = new Auth0Lock('AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo', 'openeth.auth0.com');
@@ -342,6 +364,9 @@ function lock_callback(err, profile, token) {
 	api.post('/rpc/login')
 	.body({user_profile: user_profile})
 	.send();
+	
+	// Trigger user event
+	user_login_event(profile);
 }
 function lock_try_token(token) {
 	try {

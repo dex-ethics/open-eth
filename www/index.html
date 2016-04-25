@@ -434,6 +434,10 @@ window.addEventListener('popstate', function(event) {
 	load_page(url, event.state);
 });
 
+document.addEventListener('login', function(event) {
+	console.log(event.detail);
+});
+
 </script>
 </body>
 </html>
