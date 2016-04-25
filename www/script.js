@@ -347,7 +347,6 @@ var lock_options = {
 	}
 };
 function lock_callback(err, profile, token) {
-	console.log(err, profile, token);
 	if(err) {
 		console.error(err);
 		return;
@@ -363,6 +362,7 @@ function lock_callback(err, profile, token) {
 	// Upsert user profile in database
 	api.post('/rpc/login')
 	.body({user_profile: user_profile})
+	.then(function(){})
 	.send();
 	
 	// Trigger user event

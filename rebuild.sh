@@ -1,4 +1,7 @@
 #!/bin/sh
+
+docker network create openeth_default
+
 docker-compose stop
 sudo rm -rf data/data
 docker-compose rm -f
