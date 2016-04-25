@@ -379,10 +379,10 @@ if(!lock_try_hash_token())
 	lock_try_stored_token();
 
 function register() {
-	lock.showSignup(lock_options, lock_callback);
+	lock.showSignup(lock_options);
 }
 function login() {
-	lock.show(lock_options, lock_callback);
+	lock.show(lock_options);
 }
 function logout() {
 	window.localStorage.removeItem('id_token');
