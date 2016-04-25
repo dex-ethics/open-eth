@@ -388,7 +388,7 @@ function logout() {
 	window.localStorage.removeItem('id_token');
 	user_profile = null;
 	user_token = null;
-	lock.logout();
+	lock.logout({ returnTo: window.location.href });
 }
 
 //
