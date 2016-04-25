@@ -315,6 +315,8 @@ function extract(node) {
 // <button id="auth0-logout"></button>
 // <button id="auth0-register"></button>
 //
+var user_token = null;
+var user_profile = null;
 var lock = new Auth0Lock('AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo', 'openeth.auth0.com');
 var lock_options = {
 	icon: 'buddha.png',
@@ -328,6 +330,10 @@ function lock_callback(err, profile, token) {
 		console.error(err);
 		return;
 	}
+	
+	// Store in global variables
+	user_token = token;
+	user_profile = profile;
 	
 	// Store the token for re-use
 	localStorage.setItem('id_token', token);
@@ -380,6 +386,8 @@ function login() {
 }
 function logout() {
 	window.localStorage.removeItem('id_token');
+	user_profile = null;
+	user_token = null;
 	lock.logout();
 }
 
@@ -525,8 +533,9 @@ function Api(url) {
 		r.headers['Accept'] = 'application/json';
 		r.headers['Prefer'] = path.startsWith('/rpc/') ? 'count=none' : '';
 		
-		// Add the users JWT token
-		r.headers['Authorization'] = localStorage.id_token ? 'Bearer ' + localStorage.id_token : '';
+		// Add the user's JWT token if set
+		if(user_token !== null)
+			r.headers['Authorization'] = 'Bearer ' + user_token;
 		
 		// Quickly add all filters
 		'eq gt lt gte lte like ilike is in not'.split(' ').map(filter =>
