@@ -338,7 +338,7 @@ function lock_login_token(token) {
 	lock.getProfile(token, function(err, profile) {
 		lock_callback(err, profile, token);
 	});
-});
+}
 
 function register() {
 	lock.showSignup(lock_options, lock_callback);
