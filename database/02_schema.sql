@@ -6,7 +6,7 @@ CREATE TABLE dilemmas (
 	id            bigserial primary key,
 	author        text      not null
 	                        default current_user_id()
-	                        references users (id),
+	                        references hidden.users (id),
 	created       timestamp not null
 	                        default now(),
 	name          text      not null,

@@ -20,7 +20,7 @@ GRANT USAGE ON SCHEMA public TO anonymous, author;
 -- The user id is a string stored in postgrest.claims.sub. Let's
 -- wrap this in a nice function.
 
-CREATE or replace FUNCTION current_user_id() RETURNS text
+CREATE FUNCTION current_user_id() RETURNS text
 STABLE
 LANGUAGE plpgsql
 AS $$
@@ -32,12 +32,16 @@ EXCEPTION
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION current_user_id()
-	TO anonymous, author;
+GRANT EXECUTE ON FUNCTION current_user_id() TO anonymous, author;
 
 --------------------------------------------------------------------------------
+-- We put things inside the hidden schema to hide
+-- them from public view. Certain public procs/views will
+-- refer to helpers and tables inside.
 
-CREATE TABLE users (
+CREATE SCHEMA hidden;
+
+CREATE TABLE hidden.users (
 	id            text      primary key,
 	created       timestamp not null default now(),
 	last_login    timestamp not null default now(),
@@ -47,10 +51,22 @@ CREATE TABLE users (
 	profile       json
 );
 
--- TODO: Users add their own profiles
--- TODO: Users update their own profiles
--- TODO: Users can not enumerate profiles
--- TODO: Users can select all except the 'profile' field
+--------------------------------------------------------------------------------
+-- RPC to upsert the current user's profile
+
+CREATE FUNCTION login(user_profile json) RETURNS void
+AS $$
+	INSERT INTO hidden.users (id, last_login, name, nickname, avatar, profile)
+	VALUES (current_user_id(), now(), user_profile::json->>'name',
+		user_profile::json->>'nickname', user_profile::json->>'picture',
+		user_profile)
+	ON CONFLICT (id) DO UPDATE SET
+		(last_login, name, nickname, avatar, profile) =
+		(EXCLUDED.last_login, EXCLUDED.name, EXCLUDED.nickname, EXCLUDED.avatar,
+		EXCLUDED.profile);
+$$ LANGUAGE SQL;
+
+GRANT EXECUTE ON FUNCTION login(json) TO author;
 
 --------------------------------------------------------------------------------
 
