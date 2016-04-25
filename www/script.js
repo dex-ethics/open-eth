@@ -387,7 +387,7 @@ function lock_try_hash_token() {
 		window.location.hash = '';
 		window.history.replaceState("", document.title,
 			window.location.pathname + window.location.search);
-		console.log("Hash token: ", hash.id_token);
+		console.log("Trying authentication token from hash...");
 		lock_try_token(hash.id_token);
 		return true;
 	}
@@ -398,7 +398,7 @@ function lock_try_hash_token() {
 function lock_try_stored_token() {
 	var token = localStorage.getItem('id_token');
 	if(token) {
-		console.log("LocalStorage token: ", token);
+		console.log("Trying authentication token from local storage...");
 		lock_try_token(token);
 		return true;
 	}
@@ -419,6 +419,7 @@ function logout() {
 	user_profile = null;
 	user_token = null;
 	lock.logout({ returnTo: window.location.href });
+	// Log out always refreshes, so no need to trigger events
 }
 
 //
