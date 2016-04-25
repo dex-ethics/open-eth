@@ -41,12 +41,11 @@ To start with a clean build
 
 ## Raw database access
 
-	docker exec -ti -u postgres dex_db_1 psql -d openeth -P pager=off
-
+	docker exec -ti -u postgres openeth_dbm_1 psql -d openeth -P pager=off
 
 ## Dump database for backups
 
-	docker exec -ti -u postgres dex_db_1 pg_dump -a --insert openeth
+	docker exec -ti -u postgres openeth_dbm_1 pg_dump -a --insert openeth
 
 ## JWT token:
 

@@ -72,4 +72,8 @@ GRANT EXECUTE ON FUNCTION login(json) TO author;
 
 --------------------------------------------------------------------------------
 
+-- TODO: Allow user to see a subset of the columns (id, nickname, avatar), but
+--       disallow enumerating all existing users .(so you would have to know a
+--       user.id, for example trough a JOIN).
+
 COMMIT;

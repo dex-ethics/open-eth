@@ -338,9 +338,9 @@ function lock_callback(err, profile, token) {
 	// Store the token for re-use
 	localStorage.setItem('id_token', token);
 	
-	// Create/update user profile in database
+	// Upsert user profile in database
 	api.post('/rpc/login')
-	.body({profile: user_profile})
+	.body({user_profile: user_profile})
 	.send();
 }
 function lock_try_token(token) {
