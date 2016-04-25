@@ -330,25 +330,7 @@ function lock_callback(err, profile, token) {
 	}
 	
 	// Store the token for re-use
-	localStorage.setItem('id_token', hash.id_token);
-}
-
-// Log in using a token
-function lock_login_token(token) {
-	lock.getProfile(token, function(err, profile) {
-		lock_callback(err, profile, token);
-	});
-}
-
-function register() {
-	lock.showSignup(lock_options, lock_callback);
-}
-function login() {
-	lock.show(lock_options, lock_callback);
-}
-function logout() {
-	window.localStorage.removeItem('id_token');
-	lock.logout();
+	localStorage.setItem('id_token', token);
 }
 
 // Log in using hash token
@@ -360,8 +342,11 @@ function lock_try_hash_token() {
 		window.history.replaceState("", document.title,
 			window.location.pathname + window.location.search);
 		
-		// Log in using token
-		lock_login_token(hash.id_token);
+		// Fetch the user profile
+		console.log("Hash token: ", token);
+		lock.getProfile(token, function(err, profile) {
+			lock_callback(err, profile, token);
+		});
 	}
 }
 
@@ -369,12 +354,28 @@ function lock_try_hash_token() {
 function lock_try_stored_token() {
 	var token = localStorage.getItem('id_token');
 	if(token) {
-		lock_login_token(token);
+		console.log("LocalStorage token: ", token);
+		
+		// Fetch the user profile
+		lock.getProfile(token, function(err, profile) {
+			lock_callback(err, profile, token);
+		});
 	}
 }
 
 lock_try_hash_token();
 lock_try_stored_token();
+
+function register() {
+	lock.showSignup(lock_options, lock_callback);
+}
+function login() {
+	lock.show(lock_options, lock_callback);
+}
+function logout() {
+	window.localStorage.removeItem('id_token');
+	lock.logout();
+}
 
 //
 // PostgREST
