@@ -498,6 +498,7 @@ function store_case() {
 	
 	if(data.id) {
 		// Update
+		delete body.dilemma;
 		api.patch('cases')
 		.eq('id', data.id)
 		.body(body)
