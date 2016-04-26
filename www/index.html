@@ -431,9 +431,12 @@ function set_correct_action(index) {
 }
 
 function get_correct_action() {
-	return 0 | document.querySelectorAll(
-		'#edit_case input[name="correct_action"]:checked'
-	)[0].parentNode.dataset.arrayIndex;
+	var selected = document.querySelectorAll(
+		'#edit_case input[name="correct_action"]:checked');
+	if(selected.length == 0)
+		return null;
+	else
+		return selected[0].parentNode.dataset.arrayIndex
 }
 
 function set_feature_sliders(features) {
