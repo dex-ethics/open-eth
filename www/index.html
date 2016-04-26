@@ -373,7 +373,8 @@ function store_dilemma(callback) {
 function add_case() {
 	// Store the change to the dilemma first, then move to the new case
 	// (This also ensures that the dilemma has an id assigned)
-	store_dilemma(function(){
+	store_dilemma(function() {
+		var dilemma = extract('edit_dilemma');
 		go_to("/cases/new?edit&dilemma=" + dilemma.id);
 	});
 }
