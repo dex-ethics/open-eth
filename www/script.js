@@ -47,12 +47,16 @@ Array.range = function(a, b, s) {
 }
 
 Array.prototype.permutations = function() {
+	if(this.length == 0)
+		return [];
+	if(this.length == 1)
+		return [this];
 	return this.reduce(function permute(res, item, key, arr) {
 		return res.concat(arr.length > 1
 			&& arr.slice(0, key)
 				.concat(arr.slice(key + 1))
 				.reduce(permute, [])
-				.map(perm => [item].concat(perm))
+				.map(function(perm){return [item].concat(perm)})
 			|| item);
 	}, []);
 }
