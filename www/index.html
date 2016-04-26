@@ -351,12 +351,12 @@ function store_dilemma() {
 		.representation()
 		.select('id')
 		.body(body)
-		.then(function(id) {
-			console.log(id);
-			join('edit_dilemma', {id: id});
+		.then(function(result) {
+			console.log(result);
+			join('edit_dilemma', {id: result.id});
 			
 			// Update URL
-			window.history.replaceState(null, "", "/dilemmas/" + id + "?edit");
+			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
 		});
 	}
 }
