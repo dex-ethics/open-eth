@@ -516,11 +516,13 @@ function Api(url) {
 						return;
 					if(x.status >= 200 && x.status < 300) {
 						var body = {};
-						try {
-							body = JSON.parse(x.responseText)
-						} catch(e) {
-							catch_handler("Response is not valid JSON.");
-							return;
+						if(x.responseText.length > 0){
+							try {
+								body = JSON.parse(x.responseText)
+							} catch(e) {
+								catch_handler("Response is not valid JSON.");
+								return;
+							}
 						}
 						
 						// Add range bounds
