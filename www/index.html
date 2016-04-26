@@ -34,10 +34,12 @@
 	<div id="head_edit_dilemma" class="hidden">
 		<p class="one-column">Edit dilemma</p>
 		<p><button class="button" onclick="store_dilemma()">Save</button></p>
+		<p><button class="button" onclick="delete_dilemma()">Delete</button></p>
 	</div>
 	<div id="head_edit_case" class="hidden">
 		<p class="one-column">Edit case</p>
 		<p><button class="button" onclick="store_case()">Save</button></p>
+		<p><button class="button" onclick="delete_case()">Delete</button></p>
 	</div>
 </header>
 
@@ -199,7 +201,6 @@
 		</section>
 	</article>
 </main>
-
 
 <main id="edit_dilemma" class="hidden">
 	<input type="hidden" data-value="id">
@@ -400,6 +401,19 @@ function store_dilemma(callback) {
 	}
 }
 
+function delete_dilemma() {
+	var dilemma = extract('edit_dilemma');
+	if(dilemma.id) {
+		api.delete('dilemmas')
+		.eq('id', dilemma.id)
+		.then(function(){
+			go_to('/');
+		});
+	} else {
+		go_to('/');
+	}
+}
+
 function add_case() {
 	// Store the change to the dilemma first, then move to the new case
 	// (This also ensures that the dilemma has an id assigned)
@@ -485,7 +499,6 @@ function get_feature_sliders() {
 
 function store_case() {
 	var data = extract('edit_case');
-	console.log(data);
 	var body = {
 		dilemma: data.dilemma_id,
 		position: data.position,
@@ -494,7 +507,6 @@ function store_case() {
 		action: get_correct_action(),
 		features: get_feature_sliders()
 	};
-	console.log(body);
 	
 	if(data.id) {
 		// Update
@@ -517,6 +529,19 @@ function store_case() {
 			// Update URL
 			window.history.replaceState(null, "", "/cases/" + result.id + "?edit");
 		});
+	}
+}
+
+function delete_case() {
+	var data = extract('edit_case');
+	if(data.id) {
+		api.delete('cases')
+		.eq('id', data.id)
+		.then(function(){
+			go_to('/dilemmas/' + data.dilemma_id + '?edit');
+		});
+	} else {
+		go_to('/dilemmas/' + data.dilemma_id + '?edit');
 	}
 }
 
