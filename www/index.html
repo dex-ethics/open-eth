@@ -490,10 +490,10 @@ function store_case() {
 		features: get_feature_sliders()
 	};
 	
-	if(dilemma.id) {
+	if(data.id) {
 		// Update
 		api.patch('cases')
-		.eq('id', dilemma.id)
+		.eq('id', data.id)
 		.body(body)
 		
 	} else {
@@ -507,7 +507,7 @@ function store_case() {
 			join('edit_case', {id: result.id});
 			
 			// Update URL
-			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
+			window.history.replaceState(null, "", "/cases/" + result.id + "?edit");
 		});
 	}
 }
