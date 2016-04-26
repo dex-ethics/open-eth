@@ -60,8 +60,8 @@
 						</template>
 					</ul>
 					<footer>
-						<span>CC<span>
-						<span>Cases added</span>
+						<span data-content="num_cases"></span>
+						<span>Cases</span>
 					</footer>
 				</section>
 			</template>
@@ -307,11 +307,20 @@ function init_feature_sliders() {
 	}
 }
 
+
+function dilemmas_add_cases_count(state)
+{
+	state.dilemmas.forEach(function(dilemma) {
+		dilemma.num_cases = dilemma.cases.length;
+	});
+}
+
 // TODO: Handle request errors.
 function load_state(url, callback) {
 	console.log("Loading state for " + url + "...");
 	if(url.path.length == 0) {
 		api.get('dilemmas')
+		.select('*,cases{id}')
 		.order('id', true)
 		.range(0, 10)
 		.then(callback);
@@ -369,10 +378,11 @@ function load_page(url, state) {
 		el.style.display = 'none';
 	//try {
 		if(url.path.length == 0) {
-			join('head_start', { dilemmas: state }).style.display = '';
-			join('start', { dilemmas: state }).style.display = '';
+			state = { dilemmas: state };
+			dilemmas_add_cases_count(state);
+			join('head_start', state).style.display = '';
+			join('start', state).style.display = '';
 		} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
-			console.log(state);
 			solve_dilemma(state);
 			dilemma_map_actions(state);
 			if('edit' in url.query) {
