@@ -27,9 +27,11 @@
 	</div>
 	<div id="head_dilemma" class="hidden">
 		<p class="one-column" data-content="name"></p>
+		<p><button onclick="edit_current_dilemma()">Edit</button></p>
 	</div>
 	<div id="head_cases" class="hidden">
 		<p class="one-column" data-content="name"></p>
+		<p><button onclick="edit_current_case()">Edit</button></p>
 	</div>
 	<div id="head_edit_dilemma" class="hidden">
 		<p class="one-column">Edit dilemma</p>
@@ -163,7 +165,8 @@
 
 <main id="case" class="hidden">
 	<input type="hidden" data-value="id">
-	<input type="hidden" data-value="dilemma">
+	<input type="hidden" data-value="dilemma_id">
+	<input type="hidden" data-value="author">
 	<article class="dilemma">
 		<section>
 			<p class="two-column" data-content="description"></p>
@@ -205,6 +208,7 @@
 <main id="edit_dilemma" class="hidden">
 	<input type="hidden" data-value="id">
 	<input type="hidden" data-value="dilemma_id">
+	<input type="hidden" data-value="author">
 	<article class="dilemma">
 		<section>
 			<header>
@@ -362,6 +366,36 @@ function add_feature(node) {
 function remove_feature(node) {
 	node.parentNode.remove();
 	// TODO: Update cases
+}
+
+function set_edit_current_dilemma_visibility() {
+	var data = extract('dilemma');
+	var button = document.querySelectorAll('#head_dilemma button')[0];
+	if(data.author == user_id) {
+		button.classList.remove('hidden');
+	} else {
+		button.classList.add('hidden');
+	}
+}
+
+function edit_current_dilemma() {
+	var data = extract('dilemma');
+	go_to('/dilemmas/' + data.id + '?edit');
+}
+
+function set_edit_current_case_visibility() {
+	var data = extract('case');
+	var button = document.querySelectorAll('#head_case button')[0];
+	if(data.author == user_id) {
+		button.classList.remove('hidden');
+	} else {
+		button.classList.add('hidden');
+	}
+}
+
+function edit_current_case() {
+	var data = extract('case');
+	go_to('/cases/' + data.id + '?edit');
 }
 
 function store_dilemma(callback) {
@@ -663,6 +697,7 @@ function load_page(url, state) {
 			}
 		} else if(url.path.length == 2 && url.path[0] == 'cases') {
 			state.dilemma_id = state.dilemma.id;
+			state.author = state.dilemma.author;
 			state.actions = state.dilemma.actions;
 			state.feature_labels= state.dilemma.features;
 			state.action_label = state.actions[state.action];
