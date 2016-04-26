@@ -384,7 +384,7 @@ function edit_case(node) {
 	// Store the change to the dilemma first, then move to the new case
 	// (This also ensures that the dilemma has an id assigned)
 	store_dilemma(function(){
-		go_to("/cases/" + id + "?edit);
+		go_to("/cases/" + id + "?edit");
 	});
 }
 
