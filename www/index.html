@@ -520,6 +520,7 @@ window.addEventListener('popstate', function(event) {
 });
 
 document.addEventListener('login', function(event) {
+	console.log("Logged in as " + user_profile.nickname + " (" + user_id + ")");
 	document.getElementById('add_dilemma').classList.remove('hidden');
 	show_users_edit_buttons();	
 });

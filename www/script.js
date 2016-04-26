@@ -363,6 +363,11 @@ var lock_options = {
 function lock_callback(err, profile, token) {
 	if(err) {
 		console.error(err);
+		
+		// Make sure the user is logged out
+		window.localStorage.removeItem('id_token');
+		user_profile = null;
+		user_token = null;
 		return;
 	}
 	
