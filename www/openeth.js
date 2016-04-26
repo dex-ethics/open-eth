@@ -108,6 +108,11 @@ function solve_dilemma(dilemma) {
 	let positive = [];
 	let negative = [];
 	for(let c of dilemma.cases) {
+		
+		// Skip cases without a correct action
+		if(c.action === null)
+			continue;
+		
 		let mat = c.features;
 		let correct = c.action;
 		let incorrect = 1 - c.action;
