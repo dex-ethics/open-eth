@@ -423,9 +423,11 @@ function open_case(node) {
 }
 
 function set_correct_action(index) {
-	document.querySelectorAll(
-		'#edit_case input[name="correct_action"]'
-	)[index].checked = true;
+	if(index == 0 || index == 1) {
+		document.querySelectorAll(
+			'#edit_case input[name="correct_action"]'
+		)[index].checked = true;
+	}
 }
 
 function get_correct_action() {
