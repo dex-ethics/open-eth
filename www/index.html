@@ -514,7 +514,9 @@ function store_case() {
 		api.patch('cases')
 		.eq('id', data.id)
 		.body(body)
-		.send();
+		.then(function(){
+			go_to('/dilemmas/' + data.dilemma_id + '?edit');
+		});
 		
 	} else {
 		// Insert
@@ -528,6 +530,9 @@ function store_case() {
 			
 			// Update URL
 			window.history.replaceState(null, "", "/cases/" + result.id + "?edit");
+			
+			// Go to dilemma
+			go_to('/dilemmas/' + data.dilemma_id + '?edit');
 		});
 	}
 }
