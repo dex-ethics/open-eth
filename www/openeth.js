@@ -47,6 +47,7 @@ function findSigns(positive, negative) {
 	}
 	if(possibleSigns.length == 0) {
 		console.log("Inconsistent signs!");
+		return [0].repeat(n);
 	}
 	
 	// The result is zero if there there is ambiguity
@@ -129,6 +130,7 @@ function solve_dilemma(dilemma) {
 	
 	// Find the signs, the prima facie duties
 	let signs = findSigns(positive, negative);
+	console.log(signs);
 	
 	// Store the duties
 	dilemma.duties = signs.map(function(sign, i) {
@@ -161,6 +163,9 @@ function solve_dilemma(dilemma) {
 			return [[]];
 		}
 		let current = remaining[0];
+		if(current === undefined) {
+			return [[]];
+		}
 		let recurse = findSolutions(remaining.slice(1));
 		let result = [];
 		for(let clause of current) {
