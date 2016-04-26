@@ -491,7 +491,7 @@ function get_correct_action() {
 }
 
 function set_feature_sliders(features) {
-	for(var el of document.querySelectorAll(".feature_slider")) {
+	for_each(document.querySelectorAll(".feature_slider"), function(el) {
 		var action = el.dataset.action;
 		var index = el.dataset.arrayIndex;
 		var check = el.querySelectorAll("input[type=checkbox]")[0];
@@ -517,18 +517,18 @@ function set_feature_sliders(features) {
 			slider.disabled = false;
 			slider.value = value;
 		}
-	}
+	});
 }
 
 function get_feature_sliders() {
 	var values = [[],[]];
-	for(var el of document.querySelectorAll(".feature_slider")) {
+	for_each(document.querySelectorAll(".feature_slider"), function(el) {
 		var action = el.dataset.action;
 		var index = el.dataset.arrayIndex;
 		var check = el.querySelectorAll("input[type=checkbox]")[0];
 		var slider = el.querySelectorAll("input[type=range]")[0];
 		values[action].push(check.checked ? slider.value : null);
-	}
+	});
 	return values;
 }
 
@@ -586,14 +586,14 @@ function delete_case() {
 }
 
 function show_users_edit_buttons() {
-	for(var el of document.querySelectorAll("#start section.dilemma")) {
+	for_each(document.querySelectorAll("#start section.dilemma"), function(el) {
 		var author = el.getElementsByTagName('input')[1].value;
 		if(author == user_id) {
 			el.classList.add('editable');
 		} else {
 			el.classList.remove('editable');
 		}
-	}
+	});
 }
 
 function dilemmas_add_cases_count(state) {
@@ -674,8 +674,9 @@ function load_state(url, callback) {
 function load_page(url, state) {
 	console.log("Constructing page for " + url + "...");
 	state = deep_copy_object(state);
-	for(var el of document.querySelectorAll('main, header > div'))
+	for_each(document.querySelectorAll('main, header > div'), function(el) {
 		el.classList.add('hidden');
+	});
 	//try {
 		if(url.path.length == 0) {
 			state = { dilemmas: state };

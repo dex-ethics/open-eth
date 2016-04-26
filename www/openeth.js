@@ -1,14 +1,14 @@
 "use strict";
 
 function flesh_out(table) {
-	let rows = table.length;
+	var rows = table.length;
 	if(rows === 0)
 		return table;
-	let cols = table[0].length;
+	var cols = table[0].length;
 	if(cols === 0)
 		return table;
-	for(let i = 0; i < rows; ++i) {
-		for(let j = 0; j < cols; ++j) {
+	for(var i = 0; i < rows; ++i) {
+		for(var j = 0; j < cols; ++j) {
 			if(table[i][j] === null) {
 				table[i][j] = -table[rows - i - 1][j];
 			}
@@ -24,24 +24,24 @@ function findSigns(positive, negative) {
 	if(positive.length == 0)
 		return [];
 	
-	let n = positive[0].length;
+	var n = positive[0].length;
 	
-	let possibleSigns = [];
-	for(let i = 0; i < Math.pow(2, n); ++i) {
+	var possibleSigns = [];
+	for(var i = 0; i < Math.pow(2, n); ++i) {
 		
 		// Create a signing
-		let sign = [];
-		for(let j = 0; j < n; ++j) {
+		var sign = [];
+		for(var j = 0; j < n; ++j) {
 			sign.push(((i & (1 << j)) != 0) ? -1 : 1);
 		}
 		
 		// Apply the sign
-		let pos = positive.map(function(e) {
+		var pos = positive.map(function(e) {
 			return e.map(function(e, i) {
 				return e * sign[i];
 			});
 		});
-		let neg = negative.map(function(e) {
+		var neg = negative.map(function(e) {
 			return e.map(function(e, i) {
 				return e * sign[i];
 			});
@@ -65,14 +65,14 @@ function findSigns(positive, negative) {
 	}
 	
 	// The result is zero if there there is ambiguity
-	let result = possibleSigns[0];
-	for(let signs of possibleSigns) {
-		for(let i = 0; i < n; ++i) {
+	var result = possibleSigns[0];
+	for_each(possibleSigns, function(signs) {
+		for(var i = 0; i < n; ++i) {
 			if(result[i] !== signs[i]) {
 				result[i] = 0;
 			}
 		}
-	}
+	});
 	return result;
 }
 
@@ -91,12 +91,12 @@ function maximizeVolume(clause, forbidden)
 	}
 	
 	// For every permutation of the dimensions
-	let options = Array.range(clause.length).permutations().map(function(order) {
+	var options = Array.range(clause.length).permutations().map(function(order) {
 		// Maximize the volume greedy one dimension at a time
 		return order.reduce(function (option, dimension) {
 			// Set the dimension to the minimal dimension of
 			// the forbidden vectors that would fall inside the volume
-			let bound = Math.max.apply(null,
+			var bound = Math.max.apply(null,
 				forbidden.filter(function(e) {
 					return e.every(function(x, i) {
 						return i === dimension || x >= option[i];
@@ -121,7 +121,7 @@ function maximizeVolume(clause, forbidden)
 	});
 	
 	// Prefer solutions with the least number of variables
-	let variables = Math.min.apply(null, options.map(function(e) {
+	var variables = Math.min.apply(null, options.map(function(e) {
 		return e.length - e.filter(function(f) {
 			return f === -Infinity;
 		}).length;
@@ -140,17 +140,17 @@ function solve_dilemma(dilemma) {
 	var n = f.length;
 	
 	// Compute the positive and negative vectors
-	let positive = [];
-	let negative = [];
-	for(let c of dilemma.cases) {
+	var positive = [];
+	var negative = [];
+	for_each(dilemma.cases, function(c) {
 		
 		// Skip cases without a correct action
 		if(c.action === null)
 			continue;
 		
-		let mat = c.features;
-		let correct = c.action;
-		let incorrect = 1 - c.action;
+		var mat = c.features;
+		var correct = c.action;
+		var incorrect = 1 - c.action;
 		
 		// Δ = a₁ - a₂
 		var delta = [];
@@ -162,10 +162,10 @@ function solve_dilemma(dilemma) {
 		// Negative: prefer(incorrect, correct) = -Δ
 		positive.push(delta);
 		negative.push(delta.map(function(e) {return -e;}));
-	}
+	});
 	
 	// Find the signs, the prima facie duties
-	let signs = findSigns(positive, negative);
+	var signs = findSigns(positive, negative);
 	
 	// Store the duties
 	dilemma.duties = signs.map(function(sign, i) {
@@ -198,7 +198,7 @@ function solve_dilemma(dilemma) {
 	});
 	
 	// Find different maximal volumes of positive clauses
-	let clauses = positive.map(function(e) {
+	var clauses = positive.map(function(e) {
 		return maximizeVolume(e, negative);
 	});
 	
@@ -207,20 +207,20 @@ function solve_dilemma(dilemma) {
 		if(remaining.length === 0) {
 			return [[]];
 		}
-		let current = remaining[0];
+		var current = remaining[0];
 		if(current === undefined) {
 			return [[]];
 		}
-		let recurse = findSolutions(remaining.slice(1));
-		let result = [];
-		for(let clause of current) {
-			for(let r of recurse) {
+		var recurse = findSolutions(remaining.slice(1));
+		var result = [];
+		for_each(current, function(clause) {
+			for_each(recurse, function(r) {
 				result.push([clause].concat(r));
-			}
-		}
+			});
+		});
 		return result;
 	}
-	let solutions = findSolutions(clauses);
+	var solutions = findSolutions(clauses);
 	
 	// Minimize the solutions by removing duplicate clauses
 	solutions = solutions.map(function(s) {
@@ -230,7 +230,7 @@ function solve_dilemma(dilemma) {
 	});
 	
 	// Find the solutions with the smallest number of clauses
-	let num_clauses = Math.min.apply(null, solutions.map(function(s) {
+	var num_clauses = Math.min.apply(null, solutions.map(function(s) {
 		return s.length;
 	}));
 	solutions = solutions.filter(function(s) {
@@ -239,14 +239,14 @@ function solve_dilemma(dilemma) {
 	if(solutions.length > 1) {
 		console.log("TODO: Still some ambiguity remaining.");
 	}
-	let solution = solutions[0];
+	var solution = solutions[0];
 	
 	// Print the clauses
 	dilemma.principles = [];
-	for(let clause of solution) {
+	for_each(solution, function(clause) {
 		var principle = [];
-		let i = 0;
-		for(let constraint of clause) {
+		var i = 0;
+		for_each(clause, function(constraint) {
 			var clausestr = "";
 			if(constraint === -Infinity) {
 				++i;
@@ -273,20 +273,20 @@ function solve_dilemma(dilemma) {
 			clausestr += " more"
 			++i;
 			principle.push(clausestr);
-		}
+		});
 		dilemma.principles.push({clauses: principle});
-	}
+	});
 }
 
 function dilemma_map_actions(dilemma) {
-	for(var i in dilemma.cases)
+	for(var i = 0; i != dilemma.cases.length; ++i)
 		dilemma.cases[i].action = dilemma.actions[dilemma.cases[i].action];
 }
 
 function case_map_features(case_) {
 	case_.features = flesh_out(case_.features);
-	let features = [];
-	for(var i = 0; i < case_.dilemma.features.length; ++i) {
+	var features = [];
+	for(var i = 0; i != case_.dilemma.features.length; ++i) {
 		features.push({
 			feature: case_.dilemma.features[i],
 			values: [case_.features[0][i], case_.features[1][i]],

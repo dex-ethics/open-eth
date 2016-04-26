@@ -21,29 +21,43 @@ Array.prototype.insert = function(x, v) {
 }
 
 Array.prototype.swap = function (x,y) {
-	let b = this[x];
+	var b = this[x];
 	this[x] = this[y];
 	this[y] = b;
 	return this;
 }
 
 Array.prototype.repeat = function(times) {
-	let arrays = [];
-	for(let i =0; i < times; ++i) {
+	var arrays = [];
+	for(var i =0; i < times; ++i) {
 		arrays.push(this);
 	}
 	return Function.prototype.call.apply(Array.prototype.concat, arrays);
 }
 
 Array.range = function(a, b, s) {
-	let start = b === undefined ? 0 : a;
-	let end = b === undefined ? a : b;
-	let step = s === undefined ? 1 : s;
-	let result = [];
-	for(let n = start; n < end; n += step) {
+	var start = b === undefined ? 0 : a;
+	var end = b === undefined ? a : b;
+	var step = s === undefined ? 1 : s;
+	var result = [];
+	for(var n = start; n < end; n += step) {
 		result.push(n);
 	}
 	return result;
+}
+
+function to_array(obj) {
+	var array = [];
+	for(var i = 0; i != obj.length; i++) { 
+		array.push(obj[i]);
+	}
+	return array;
+}
+
+function for_each(obj, func) {
+	for(var i = 0; i != obj.length; i++) { 
+		func(obj[i], i, obj.length);
+	}
 }
 
 Array.prototype.permutations = function() {
@@ -89,8 +103,8 @@ Array.prototype.join = function(interjection, final_interjection) {
 		return undefined;
 	if(this.length == 1)
 		return this[0];
-	let result = this[0] !== undefined ? this[0] : '';
-	for(let i = 1; i < this.length; ++i) {
+	var result = this[0] !== undefined ? this[0] : '';
+	for(var i = 1; i < this.length; ++i) {
 		if(interjection !== undefined) {
 			if(i < this.length - 1) {
 				result += interjection;
@@ -124,7 +138,7 @@ Array.prototype.reorder = function(from, to) {
 	this.insert(to, this.remove(from));
 }
 
-let HTMLEscapeElement = document.createElement('div');
+var HTMLEscapeElement = document.createElement('div');
 function HTMLEscape(str) {
 	HTMLEscapeElement.textContent = str;
 	return HTMLEscapeElement.innerHTML;
@@ -141,9 +155,9 @@ HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 
 
 function rescale_array(node, size) {
-	let template = node.children[0];
+	var template = node.children[0];
 	for(var i = node.children.length; i < size + 1; ++i) {
-		let inst = template.cloneNode(true);
+		var inst = template.cloneNode(true);
 		inst.removeAttribute('hidden');
 		node.appendChild(inst);
 	}
@@ -195,14 +209,16 @@ function auto_scale_textarea() {
 }
 
 function rescale_textareas() {
-	for(var el of document.getElementsByTagName('textarea'))
+	for_each(document.getElementsByTagName('textarea'), function(el) {
 		auto_scale_textarea.call(el, []);
+	});
 }
 
 window.addEventListener('DOMContentLoaded', function() {
 	rescale_textareas();
-	for(var el of document.getElementsByTagName('textarea'))
+	for_each(document.getElementsByTagName('textarea'), function(el) {
 		el.addEventListener('input', auto_scale_textarea);
+	});
 });
 
 
@@ -265,7 +281,7 @@ function join(node, data) {
 				console.error('data-array must be used on a <template> element', node);
 				return node;
 			}
-			let a = node.dataset.array === '' ? data : data[node.dataset.array];
+			var a = node.dataset.array === '' ? data : data[node.dataset.array];
 			if(!(a instanceof Array)) {
 				console.error('Data is not an array', node, a);
 				return node;
@@ -277,7 +293,7 @@ function join(node, data) {
 				node.parentNode.removeChild(node.nextElementSibling);
 			
 			// Create new instances
-			let t = node.content.children[0];
+			var t = node.content.children[0];
 			for(var i = a.length - 1; i >= 0 ; --i) {
 				var clone = document.importNode(t, true);
 				join(clone, a[i]);
@@ -291,8 +307,9 @@ function join(node, data) {
 		node.join(data);
 		return node;
 	}
-	for(let child of node.children)
+	for_each(node.children, function(child) {
 		join(child, data);
+	});
 	return node;
 }
 
@@ -305,7 +322,7 @@ function extract(node) {
 			value = null;
 		if(name === '')
 			return value;
-		let r = {};
+		var r = {};
 		r[name] = value;
 		return r;
 	}
@@ -326,7 +343,7 @@ function extract(node) {
 			var name = node.dataset.array;
 			
 			// Collect instances
-			let a = [];
+			var a = [];
 			while(node.nextElementSibling
 				&& 'arrayIndex' in node.nextElementSibling.dataset) {
 				node = node.nextElementSibling;
@@ -337,11 +354,11 @@ function extract(node) {
 	}
 	if(node.extract && node.extract !== Node.prototype.extract)
 		return node.extract();
-	let acc = undefined;
-	for(let child of node.children) {
+	var acc = undefined;
+	for_each(node.children, function(child) {
 		if(child.dataset && 'arrayIndex' in child.dataset)
 			continue; // These are handled by a preceding data-array
-		let data = extract(child);
+		var data = extract(child);
 		if(data === undefined)
 			continue;
 		if(data instanceof Array)
@@ -351,7 +368,7 @@ function extract(node) {
 		if(acc === undefined)
 			acc = {};
 		acc = Object.assign(acc, data);
-	}
+	});
 	return acc;
 }
 
@@ -463,7 +480,7 @@ function logout() {
 function Api(url) {
 	this.url = url;
 	this.request = function(method, path) {
-		let r = {
+		var r = {
 			method: method,
 			path: this.url + path,
 			headers: {},
@@ -510,7 +527,7 @@ function Api(url) {
 				
 				// Construct the path
 				this.path += '?';
-				for(let key in this.query) {
+				for(var key in this.query) {
 					this.path += key + '=' + encodeURIComponent(this.query[key]) +'&';
 				}
 				
@@ -519,7 +536,7 @@ function Api(url) {
 				this.xhr.open(this.method, this.path, true);
 				
 				// Add the headers
-				for(let key in this.headers) {
+				for(var key in this.headers) {
 					this.xhr.setRequestHeader(key, this.headers[key]);
 				}
 				
@@ -571,7 +588,7 @@ function Api(url) {
 					this.xhr.setRequestHeader('Content-Type', 'application/json');
 					
 					// Work around https://github.com/begriffs/postgrest/issues/501
-					function arrayConvert(object) {
+					var arrayConvert = function(object) {
 						'use strict';
 						if(Array.isArray(object)) {
 							return '{' + object.map(arrayConvert).join(',') + '}';
@@ -579,7 +596,7 @@ function Api(url) {
 							return JSON.stringify(object);
 						}
 					}
-					for(let key in this.payload) {
+					for(var key in this.payload) {
 						if(Array.isArray(this.payload[key])) {
 							this.payload[key] = arrayConvert(this.payload[key]);
 						}
