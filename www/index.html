@@ -203,7 +203,6 @@
 
 <main id="edit_dilemma" class="hidden">
 	<input type="hidden" data-value="id">
-	<input type="hidden" data-value="position">
 	<input type="hidden" data-value="dilemma_id">
 	<article class="dilemma">
 		<section>
@@ -268,6 +267,7 @@
 
 <main id="edit_case" class="hidden">
 	<input type="hidden" data-value="id">
+	<input type="hidden" data-value="position">
 	<input type="hidden" data-value="dilemma_id">
 	<article class="dilemma">
 		<section>
@@ -405,7 +405,7 @@ function add_case() {
 	// (This also ensures that the dilemma has an id assigned)
 	store_dilemma(function() {
 		var dilemma = extract('edit_dilemma');
-		go_to("/cases/new?edit&dilemma=" + dilemma.id + "&position=" + dillema.cases.length);
+		go_to("/cases/new?edit&dilemma=" + dilemma.id + "&position=" + dilemma.cases.length);
 	});
 }
 
@@ -485,6 +485,7 @@ function get_feature_sliders() {
 
 function store_case() {
 	var data = extract('edit_case');
+	console.log(data);
 	var body = {
 		dilemma: data.dilemma_id,
 		position: data.position,
@@ -493,6 +494,7 @@ function store_case() {
 		action: get_correct_action(),
 		features: get_feature_sliders()
 	};
+	console.log(body);
 	
 	if(data.id) {
 		// Update
