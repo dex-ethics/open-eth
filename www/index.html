@@ -329,6 +329,36 @@ function edit_dilemma(event, node) {
 function store_dilemma() {
 	var dilemma = extract('edit_dilemma');
 	console.log(dilemma);
+	var body = {
+		name: dilemma.name,
+		description: dilemma.description,
+		actions: dilemma.actions,
+		features: dilemma.features
+	};
+	
+	if(dilemma.id) {
+		// Update
+		api.patch('dilemmas')
+		.eq('id', dilemma.id)
+		.body(body)
+		.send();
+		
+		// TODO: Cases
+		
+	} else {
+		// Insert
+		api.post('dilemmas')
+		.representation()
+		.select('id')
+		.body(body)
+		.then(function(id) {
+			console.log(id);
+			join('edit_dilemma', {id: id});
+			
+			// Update URL
+			window.history.replaceState(null, "", "/dilemmas/" + id + "?edit");
+		});
+	}
 }
 
 function open_case(node) {
