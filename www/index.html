@@ -203,7 +203,8 @@
 
 <main id="edit_dilemma" class="hidden">
 	<input type="hidden" data-value="id">
-	<input type="hidden" data-value="dilemma">
+	<input type="hidden" data-value="position">
+	<input type="hidden" data-value="dilemma_id">
 	<article class="dilemma">
 		<section>
 			<header>
@@ -267,6 +268,7 @@
 
 <main id="edit_case" class="hidden">
 	<input type="hidden" data-value="id">
+	<input type="hidden" data-value="dilemma_id">
 	<article class="dilemma">
 		<section>
 			<header>
@@ -403,7 +405,7 @@ function add_case() {
 	// (This also ensures that the dilemma has an id assigned)
 	store_dilemma(function() {
 		var dilemma = extract('edit_dilemma');
-		go_to("/cases/new?edit&dilemma=" + dilemma.id);
+		go_to("/cases/new?edit&dilemma=" + dilemma.id + "&position=" + dillema.cases.length);
 	});
 }
 
@@ -484,8 +486,9 @@ function get_feature_sliders() {
 function store_case() {
 	var data = extract('edit_case');
 	var body = {
+		dilemma: data.dilemma_id,
+		position: data.position,
 		name: data.name,
-		dilemma: data.dilemma,
 		description: data.description,
 		action: get_correct_action(),
 		features: get_feature_sliders()
@@ -512,7 +515,6 @@ function store_case() {
 		});
 	}
 }
-
 
 function show_users_edit_buttons() {
 	for(var el of document.querySelectorAll("#start section.dilemma")) {
@@ -566,6 +568,7 @@ function load_state(url, callback) {
 			.then(function(dilemma) {
 				callback({
 					id: null,
+					position: url.query.position,
 					dilemma: dilemma,
 					name: "New Case",
 					description: "",
@@ -611,6 +614,7 @@ function load_page(url, state) {
 				join('dilemma', state).classList.remove('hidden');
 			}
 		} else if(url.path.length == 2 && url.path[0] == 'cases') {
+			state.dilemma_id = state.dilemma.id;
 			state.actions = state.dilemma.actions;
 			state.feature_labels= state.dilemma.features;
 			state.action_label = state.actions[state.action];
