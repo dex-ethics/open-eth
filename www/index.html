@@ -34,6 +34,7 @@
 	</div>
 	<div id="head_edit_dilemma" class="hidden">
 		<p class="one-column">Edit dilemma</p>
+		<p><button id="store_dilemma" onclick="store_dilemma()">Save</button></p>
 	</div>
 	<div id="head_edit_case" class="hidden">
 		<p class="one-column">Edit case</p>
@@ -237,6 +238,21 @@
 				</li>
 			</ul>
 		</section>
+		<section>
+			<header>
+				<h1>Cases</h1>
+			</header>
+			<ul>
+				<template data-array="features">
+					<li>
+						<input type="text" data-value="">
+					</li>
+				</template>
+				<li>
+					<input type="text" placeholder="Add a feature">
+				</li>
+			</ul>
+		</section>
 	</article>
 </main>
 
@@ -308,6 +324,11 @@ function edit_dilemma(event, node) {
 	event.stopPropagation();
 	var id = node.getElementsByTagName('input')[0].value;
 	go_to("/dilemmas/" + id + "?edit");
+}
+
+function store_dilemma() {
+	var dilemma = extract('edit_dilemma');
+	console.log(dilemma);
 }
 
 function open_case(node) {

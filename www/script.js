@@ -259,9 +259,9 @@ function join(node, data) {
 			}
 			
 			// Remove previous instances
-			while(node.nextElementSibling && node.nextElementSibling.dataset.arrayInstance) {
+			while(node.nextElementSibling
+				&& node.nextElementSibling.dataset.arrayInstance)
 				node.parentNode.removeChild(node.nextElementSibling);
-			}
 			
 			// Create new instances
 			let t = node.content.children[0];
@@ -284,6 +284,7 @@ function join(node, data) {
 }
 
 function extract(node) {
+	// console.log("Extract: ", node);
 	function objectify(name, value) {
 		if(value === "undefined")
 			value = undefined;
@@ -305,16 +306,28 @@ function extract(node) {
 		if(node.dataset.extract !== undefined)
 			return eval('(function(){'+node.dataset.extract+'})').apply(node, []);
 		if(node.dataset.array !== undefined) {
+			if(!('content' in node)) {
+				console.error('data-array must be used on a <template> element', node);
+				return node;
+			}
+			var name = node.dataset.array;
+			
+			// Collect instances
 			let a = [];
-			for(var i = 1; i < node.children.length; ++i)
-				a.push(extract(node.children[i]));
-			return objectify(node.dataset.array, a);
+			while(node.nextElementSibling
+				&& node.nextElementSibling.dataset.arrayInstance) {
+				node = node.nextElementSibling;
+				a.push(extract(node));
+			}
+			return objectify(name, a);
 		}
 	}
 	if(node.extract && node.extract !== Node.prototype.extract)
 		return node.extract();
 	let acc = undefined;
 	for(let child of node.children) {
+		if(child.dataset && child.dataset.arrayInstance)
+			continue; // These are handled by a preceding data-array
 		let data = extract(child);
 		if(data === undefined)
 			continue;
