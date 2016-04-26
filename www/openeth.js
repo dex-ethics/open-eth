@@ -130,7 +130,6 @@ function solve_dilemma(dilemma) {
 	
 	// Find the signs, the prima facie duties
 	let signs = findSigns(positive, negative);
-	console.log(signs);
 	
 	// Store the duties
 	dilemma.duties = signs.map(function(sign, i) {

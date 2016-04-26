@@ -537,6 +537,18 @@ function dilemmas_add_cases_count(state) {
 	});
 }
 
+function dilemma_sort_cases(state) {
+	state.cases.sort(function(a, b) {
+		if(a.position < b.position) {
+			return -1;
+		}
+		if(a.position > b.position) {
+			return 1;
+		}
+		return 0;
+	});
+}
+
 // TODO: Handle request errors.
 function load_state(url, callback) {
 	console.log("Loading state for " + url + "...");
@@ -607,6 +619,7 @@ function load_page(url, state) {
 			join('start', state).classList.remove('hidden');
 			show_users_edit_buttons();
 		} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
+			dilemma_sort_cases(state);
 			solve_dilemma(state);
 			dilemma_map_actions(state);
 			if('edit' in url.query) {
