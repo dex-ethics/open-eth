@@ -485,6 +485,7 @@ function store_case() {
 	var data = extract('edit_case');
 	var body = {
 		name: data.name,
+		dilemma: data.dilemma,
 		description: data.description,
 		action: get_correct_action(),
 		features: get_feature_sliders()
