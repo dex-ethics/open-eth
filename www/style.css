@@ -308,7 +308,7 @@ section.dilemma > footer > :first-child:before {
 	padding-right: .5em;
 }
 
-#add_dilemma {
+button.add {
 	border: none;
 	border-radius: 2px;
 	background: #CCCCCC;
@@ -316,7 +316,7 @@ section.dilemma > footer > :first-child:before {
 	user-select: none;
 	cursor: pointer;
 }
-#add_dilemma > .icon {
+button.add > .icon {
 	display: block;
 	font-size: 90px;
 	margin-top: -.3em;
@@ -391,19 +391,21 @@ article > section.collapsable  > button.collapse:hover {
 	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
-section.case {
+.case {
 	background-color: #FFFFFF;
 	height: 200px;
 }
-section.case > * {
+.case > * {
 	margin: 0;
 	overflow: hidden;
 }
-section.case > h2 {
+.case > h2 {
 	font-size: 15px;
 }
-section.case > h3 {
+.case > h3 {
 	font-size: 15px;
+}
+button.case {
 }
 
 

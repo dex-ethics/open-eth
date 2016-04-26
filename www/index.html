@@ -5,7 +5,6 @@
 	<!--<base href="https://openeth.com/">-->
 	<title>OpenEth</title>
 	<meta name="description" content="Community-driven ethical explication system.">
-	<meta name="author" content="SitePoint">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<link rel="stylesheet" type="text/css" href="/style.css">
 </head>
@@ -74,7 +73,7 @@
 					</footer>
 				</section>
 			</template>
-			<button id="add_dilemma" class="dilemma hidden" onclick="go_to('/dilemmas/new?edit')">
+			<button id="add_dilemma" class="add dilemma hidden" onclick="go_to('/dilemmas/new?edit')">
 				<span class="icon">⊕</span>
 				<span class="label">Add a dilemma</span>
 			</button>
@@ -161,6 +160,7 @@
 
 <main id="case" class="hidden">
 	<input type="hidden" data-value="id">
+	<input type="hidden" data-value="dilemma">
 	<article class="dilemma">
 		<section>
 			<p class="two-column" data-content="description"></p>
@@ -202,6 +202,7 @@
 
 <main id="edit_dilemma" class="hidden">
 	<input type="hidden" data-value="id">
+	<input type="hidden" data-value="dilemma">
 	<article class="dilemma">
 		<section>
 			<header>
@@ -238,20 +239,26 @@
 				</li>
 			</ul>
 		</section>
-		<section>
+		<section class="collapsable">
 			<header>
 				<h1>Cases</h1>
 			</header>
-			<ul>
-				<template data-array="features">
-					<li>
-						<input type="text" data-value="">
-					</li>
+			<div class="flex-4">
+				<template data-array="cases">
+					<section class="case button vertical" onclick="edit_case(this)">
+						<input type="hidden" data-value="id">
+						<h2 data-content="name"></h2>
+						<p>Author: <span data-conten="author">Homer</span></p>
+						<p class="description adjust" data-content="description"></p>
+						<h3>Correct Action</h3>
+						<p class="action" data-content="action"></p>
+					</section>
 				</template>
-				<li>
-					<input type="text" placeholder="Add a feature">
-				</li>
-			</ul>
+				<button class="case add" onclick="add_case(this)">
+					<span class="icon">⊕</span>
+					<span class="label">Add a case</span>
+				</button>
+			</div>
 		</section>
 	</article>
 </main>
@@ -326,7 +333,7 @@ function edit_dilemma(event, node) {
 	go_to("/dilemmas/" + id + "?edit");
 }
 
-function store_dilemma() {
+function store_dilemma(callback) {
 	var dilemma = extract('edit_dilemma');
 	console.log(dilemma);
 	var body = {
@@ -341,7 +348,7 @@ function store_dilemma() {
 		api.patch('dilemmas')
 		.eq('id', dilemma.id)
 		.body(body)
-		.send();
+		.then(callback);
 		
 		// TODO: Cases
 		
@@ -349,16 +356,36 @@ function store_dilemma() {
 		// Insert
 		api.post('dilemmas')
 		.representation()
-		.select('id')
+		.select('id, author')
 		.body(body)
 		.then(function(result) {
 			console.log(result);
-			join('edit_dilemma', {id: result.id});
+			join('edit_dilemma', {id: result.id, author: result.author});
 			
 			// Update URL
 			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
+			
+			callback();
 		});
 	}
+}
+
+function add_case() {
+	// Store the change to the dilemma first, then move to the new case
+	// (This also ensures that the dilemma has an id assigned)
+	store_dilemma(function(){
+		go_to("/cases/new?edit&dilemma=" + dilemma.id);
+	});
+}
+
+function edit_case(node) {
+	var id = node.getElementsByTagName('input')[0].value;
+	
+	// Store the change to the dilemma first, then move to the new case
+	// (This also ensures that the dilemma has an id assigned)
+	store_dilemma(function(){
+		go_to("/cases/" + id + "?edit);
+	});
 }
 
 function open_case(node) {
