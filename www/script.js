@@ -63,16 +63,23 @@ Array.prototype.permutations = function() {
 
 Array.prototype.equals = function(other, equality) {
 	if(equality === undefined) {
-		equality = (a, b) => a === b;
+		equality = function(a, b){return a === b;}
 	}
-	return this.length === other.length && this.every((e, i) => equality(e, other[i]));
+	return this.length === other.length
+		&& this.every(function(e, i) {
+			return equality(e, other[i])
+	});
 }
 
 Array.prototype.unique = function(equality) {
 	if(equality === undefined) {
-		equality = (a, b) => a === b;
+		equality = function(a, b){return a === b;}
 	}
-	return this.filter((e,i,a) => i == a.findIndex(f => equality(e, f)));
+	return this.filter(function(e,i,a) {
+		return i == a.findIndex(function(f) {
+			return equality(e, f)
+		});
+	});
 }
 
 // An improved join that understands a final_interjection to
@@ -103,7 +110,9 @@ Array.prototype.join = function(interjection, final_interjection) {
 }
 
 Array.prototype.equals = function(other) {
-	return this.every((e,i) => e == other[i]);
+	return this.every(function(e,i) {
+		return e == other[i];
+	});
 }
 
 // Take element at position x and move it to position y, shifting
@@ -463,7 +472,10 @@ function Api(url) {
 			catch_handler: function(error) {console.log(error)},
 			payload: null,
 			match: function(query) {
-				Object.keys(query).forEach(key => this.eq(key, query[key]));
+				var self = this;
+				Object.keys(query).forEach(function(key) {
+					return self.eq(key, query[key]);
+				});
 				return this
 			},
 			select: function(select) {
@@ -597,18 +609,21 @@ function Api(url) {
 			r.headers['Authorization'] = 'Bearer ' + user_token;
 		
 		// Quickly add all filters
-		'eq gt lt gte lte like ilike is in not'.split(' ').map(filter =>
-			r[filter] = (name, value) => {
+		'eq gt lt gte lte like ilike is in not'.split(' ').map(function(filter) {
+			r[filter] = function(name, value) {
 				r.query[name] = `${filter}.${Array.isArray(value) ? value.join(',') : value}`
 				return r;
 			}
-		)
+		});
 		return r;
 	};
 	
 	// Quickly add all methods
-	'POST GET PATCH DELETE OPTIONS'.split(' ').map(method =>
-		this[method.toLowerCase()] = (path => this.request(method, path))
-	)
+	var self = this;
+	'POST GET PATCH DELETE OPTIONS'.split(' ').map(function(method) {
+		self[method.toLowerCase()] = function(path) {
+			return self.request(method, path);
+		};
+	});
 }
 var api = new Api('/api/');

@@ -36,12 +36,26 @@ function findSigns(positive, negative) {
 		}
 		
 		// Apply the sign
-		let pos = positive.map(e => e.map((e, i) => e * sign[i]));
-		let neg = negative.map(e => e.map((e, i) => e * sign[i]));
+		let pos = positive.map(function(e) {
+			return e.map(function(e, i) {
+				return e * sign[i];
+			});
+		});
+		let neg = negative.map(function(e) {
+			return e.map(function(e, i) {
+				return e * sign[i];
+			});
+		});
 		
 		// Check the consistency
 		// ∀ p ∊ pos ∀ n ∊ neg ∃ i nᵢ < pᵢ
-		if(pos.every(p => neg.every(n => n.some((e, i) => e < p[i])))) {
+		if(pos.every(function(p) {
+			return neg.every(function(n) {
+				return n.some(function(e, i) {
+					return e < p[i];
+				});
+			});
+		})) {
 			possibleSigns.push(sign);
 		}
 	}
@@ -67,34 +81,56 @@ function maximizeVolume(clause, forbidden)
 {
 	// Check consistency
 	// ∀ n ∊ forbidden ∃ i nᵢ < clauseᵢ
-	if(!forbidden.every(n => n.some((e, i) => e < clause[i]))) {
+	if(!forbidden.every(function(n) {
+		return n.some(function(e, i) {
+			return e < clause[i];
+		});
+	})) {
 		console.log("Inconsistent clause!");
 		return undefined;
 	}
 	
 	// For every permutation of the dimensions
-	let options = Array.range(clause.length).permutations().map(order => 
+	let options = Array.range(clause.length).permutations().map(function(order) {
 		// Maximize the volume greedy one dimension at a time
-		order.reduce(function (option, dimension) {
+		return order.reduce(function (option, dimension) {
 			// Set the dimension to the minimal dimension of
 			// the forbidden vectors that would fall inside the volume
 			let bound = Math.max.apply(null,
-				forbidden.filter(e =>
-					e.every((x, i) => i === dimension || x >= option[i])
-				).map(e => 1 + e[dimension]));
+				forbidden.filter(function(e) {
+					return e.every(function(x, i) {
+						return i === dimension || x >= option[i];
+					})
+				}).map(function(e) {
+					return 1 + e[dimension];
+				}));
 			if(bound > option[dimension]) {
 				console.log("Illegal bound in maximizeVolume");
 			}
 			option[dimension] = bound;
 			return option;
-		}, clause.clone())
+		}, clause.clone());
 		
 	// Unique the solutions
-	).filter((e,i,a) => i == a.findIndex(f => f.every((g, j) => g == e[j])));
+	}).filter(function(e,i,a) {
+		return i == a.findIndex(function(f) {
+			return f.every(function(g, j) {
+				return g == e[j];
+			});
+		});
+	});
 	
 	// Prefer solutions with the least number of variables
-	let variables = Math.min.apply(null, options.map(e => e.length - e.filter(f => f === -Infinity).length));
-	options = options.filter(e => e.length - e.filter(f => f === -Infinity).length == variables);
+	let variables = Math.min.apply(null, options.map(function(e) {
+		return e.length - e.filter(function(f) {
+			return f === -Infinity;
+		}).length;
+	}));
+	options = options.filter(function(e) {
+		return e.length - e.filter(function(f) {
+			return f === -Infinity;
+		}).length == variables;
+	});
 	return options;
 }
 
@@ -125,7 +161,7 @@ function solve_dilemma(dilemma) {
 		// Positive: prefer(correct, incorrect) =  Δ
 		// Negative: prefer(incorrect, correct) = -Δ
 		positive.push(delta);
-		negative.push(delta.map(e => -e));
+		negative.push(delta.map(function(e) {return -e;}));
 	}
 	
 	// Find the signs, the prima facie duties
@@ -150,11 +186,21 @@ function solve_dilemma(dilemma) {
 	}).filter(function(e){return e !== undefined});
 	
 	// Apply signs
-	positive = positive.map(e => e.map((e, i) => e * signs[i]));
-	negative = negative.map(e => e.map((e, i) => e * signs[i]));
+	positive = positive.map(function(e) {
+		return e.map(function(e, i) {
+			return e * signs[i];
+		});
+	});
+	negative = negative.map(function (e) {
+		return e.map(function(e, i) {
+			return e * signs[i];
+		});
+	});
 	
 	// Find different maximal volumes of positive clauses
-	let clauses = positive.map(e => maximizeVolume(e, negative));
+	let clauses = positive.map(function(e) {
+		return maximizeVolume(e, negative);
+	});
 	
 	// If there are multiple solutions, find the simplest one
 	function findSolutions(remaining) {
@@ -177,11 +223,19 @@ function solve_dilemma(dilemma) {
 	let solutions = findSolutions(clauses);
 	
 	// Minimize the solutions by removing duplicate clauses
-	solutions = solutions.map(s => s.unique((a,b) => a.equals(b)));
+	solutions = solutions.map(function(s) {
+		return s.unique(function(a,b) {
+			return a.equals(b);
+		});
+	});
 	
 	// Find the solutions with the smallest number of clauses
-	let num_clauses = Math.min.apply(null, solutions.map(s => s.length));
-	solutions = solutions.filter(s => s.length === num_clauses);
+	let num_clauses = Math.min.apply(null, solutions.map(function(s) {
+		return s.length;
+	}));
+	solutions = solutions.filter(function(s) {
+		return s.length === num_clauses;
+	});
 	if(solutions.length > 1) {
 		console.log("TODO: Still some ambiguity remaining.");
 	}
