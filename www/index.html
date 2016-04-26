@@ -501,6 +501,7 @@ function store_case() {
 		api.patch('cases')
 		.eq('id', data.id)
 		.body(body)
+		.send();
 		
 	} else {
 		// Insert
