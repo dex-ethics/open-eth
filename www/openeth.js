@@ -102,6 +102,8 @@ function solve_dilemma(dilemma) {
 	var f = dilemma.features;
 	var n = f.length;
 	
+	console.log(dilemma);
+	
 	// Compute the positive and negative vectors
 	let positive = [];
 	let negative = [];
