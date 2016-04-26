@@ -372,6 +372,9 @@ function store_dilemma(callback) {
 		actions: dilemma.actions,
 		features: dilemma.features
 	};
+	if(typeof(callback) != 'function') {
+		callback = go_to.bind(null, ['/']);
+	}
 	
 	if(dilemma.id) {
 		// Update
@@ -394,9 +397,7 @@ function store_dilemma(callback) {
 			
 			// Update URL
 			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
-			
-			if(typeof(callback) == 'function')
-				callback();
+			callback();
 		});
 	}
 }
