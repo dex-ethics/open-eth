@@ -69,12 +69,17 @@
 }
 a, button {
 	color: inherit;
+	background-color: transparent;
+	font-size: inherit;
 	text-transform: inherit;
 	text-decoration: none;
-	text-align: inherit;
+	text-shadow: inherit;
 	cursor: pointer;
 	border: none;
 	outline: none;
+}
+button {
+	text-align: center;
 }
 template {
 	display: none !important;
@@ -139,6 +144,7 @@ body > header > nav {
 body > header > nav > * {
 	display: block;
 	flex-grow: 1;
+	text-align: left;
 	text-decoration: none;
 	padding: 15px; /* TODO: Absorb this padding on the left and right */
 	background-color: rgba(0,0,0,0);
@@ -151,7 +157,7 @@ body > header p {
 	padding-left: 5px;
 	padding-right: 5px;
 }
-body > header > p > button {
+#register {
 	min-width: 16vw;
 	background: #FFFFFF;
 	color: #5D5D5D;
@@ -204,19 +210,26 @@ section.dilemma > * {
 section.dilemma > header {
 	margin: 0;
 	border-radius: 2px 2px 0 0;
-	padding-top: 19.2px;
-	padding-bottom: 12.8px;
-	padding-left: 19.2px;
-	padding-right: 19.2px;
 	background: #1B1862;
 	color: #FFFFFF;
-}
-section.dilemma > header > h1 {
-	display: block;
-	margin: 0;
+	height: 50px;
 	padding: 0;
 	font-size: 19.2px;
 	font-weight: 500;
+}
+section.dilemma > header > h1 {
+	display: flex;
+	align-items: center;
+	
+	margin: 0;
+	padding: 0;
+	padding-left: 1em;
+	
+	font-size: inherit;
+	font-weight: 500;
+}
+section.dilemma > header > h1 > span {
+	display: block;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -224,6 +237,23 @@ section.dilemma > header > h1 {
 section.dilemma > header > h1:before {
 	font-family: 'FontAwesome';
 	content: "\f0e3";
+	padding-right: .5em;
+}
+section.dilemma > header > button.edit {
+	display: none;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+section.dilemma.editable > header > button.edit {
+	display: block;
+}
+section.dilemma > header > button.edit:hover {
+	background-color: #2F2AAA;
+}
+section.dilemma > header > button.edit:before {
+	font-family: 'FontAwesome';
+	font-size: 19.2px;
+	content: "\F044";
 	padding-right: .5em;
 }
 section.dilemma > p {
@@ -278,7 +308,7 @@ section.dilemma > footer > :first-child:before {
 	padding-right: .5em;
 }
 
-button.dilemma {
+#add_dilemma {
 	border: none;
 	border-radius: 2px;
 	background: #CCCCCC;
@@ -286,7 +316,7 @@ button.dilemma {
 	user-select: none;
 	cursor: pointer;
 }
-button.dilemma > .icon {
+#add_dilemma > .icon {
 	display: block;
 	font-size: 90px;
 	margin-top: -.3em;
@@ -574,24 +604,33 @@ figure {
 }
 
 
-/* Vertical full-width layout  with some elements absorbing the size */
-.vertical {
+/* Vertical/horizontal full-width layout
+ * with some elements absorbing the size */
+.vertical, .horizontal {
 	display: flex;
-	flex-direction: column;
 	justify-content: space-between;
 	align-items: stretch;
 	overflow: hidden;
 }
-.vertical > * {
+.vertical {
+	flex-direction: column;
+}
+.horizontal {
+	flex-direction: row;
+}
+.vertical > *,
+.horizontal > * {
 	flex-grow: 0;
 	flex-shrink: 0;
 	overflow: hidden;
 }
-.vertical > .adjust {
+.vertical > .adjust,
+.horizontal > .adjust {
 	flex-grow: 1;
 	flex-shrink: 1;
 }
 
+/* Horizontal full-width
 
 /* Four column flex layout */
 .flex-4 {

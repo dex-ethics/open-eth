@@ -20,27 +20,27 @@
 		<button onclick="login()">Log in</button>
 		<button onclick="logout()">Log out</button>
 	</nav>
-	<div id="head_start" style="display: none;">
+	<div id="head_start" class="hidden">
 		<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
 		dilemmas, to enable better decisions based upon available information, and its 
 		relative likelihood.</p>
-		<p><button class="button" onclick="register()">Join OpenEth</button></p>
+		<p><button id="register" onclick="register()">Join OpenEth</button></p>
 	</div>
-	<div id="head_dilemma" style="display: none;">
+	<div id="head_dilemma" class="hidden">
 		<p class="one-column" data-content="name"></p>
 	</div>
-	<div id="head_cases" style="display: none;">
+	<div id="head_cases" class="hidden">
 		<p class="one-column" data-content="name"></p>
 	</div>
-	<div id="head_edit_dilemma" style="display: none;">
+	<div id="head_edit_dilemma" class="hidden">
 		<p class="one-column">Edit dilemma</p>
 	</div>
-	<div id="head_edit_case" style="display: none;">
+	<div id="head_edit_case" class="hidden">
 		<p class="one-column">Edit case</p>
 	</div>
 </header>
 
-<main id="start" style="display: none;">
+<main id="start" class="hidden">
 <article class="dilemmas">
 	<section>
 		<header>
@@ -50,8 +50,15 @@
 			<template data-array="dilemmas">
 				<section class="dilemma button vertical" onclick="open_dilemma(this)">
 					<input type="hidden" data-value="id">
-					<header>
-						<h1 data-content="name"></h1>
+					<input type="hidden" data-value="author">
+					<header class="horizontal">
+						<h1 class="adjust" >
+							<span class="ellipsis" data-content="name"></span>
+						</h1>
+						<button class="edit" onclick="edit_dilemma(event, this)">
+							<input type="hidden" data-value="id">
+							Edit
+						</button>
 					</header>
 					<p class="adjust" data-content="description"></p>
 					<ul>
@@ -62,10 +69,11 @@
 					<footer>
 						<span data-content="num_cases"></span>
 						<span>Cases</span>
+						<!-- TODO: Auther name -->
 					</footer>
 				</section>
 			</template>
-			<button class="dilemma" onclick="go_to('/dilemmas/new?edit')">
+			<button id="add_dilemma" class="dilemma hidden" onclick="go_to('/dilemmas/new?edit')">
 				<span class="icon">⊕</span>
 				<span class="label">Add a dilemma</span>
 			</button>
@@ -74,7 +82,7 @@
 </article>
 </main>
 
-<main id="dilemma" style="display: none;">
+<main id="dilemma" class="hidden">
 	<input type="hidden" data-value="id">
 	<article class="dilemma">
 		<section>
@@ -150,7 +158,7 @@
 	</article>
 </main>
 
-<main id="case" style="display: none;">
+<main id="case" class="hidden">
 	<input type="hidden" data-value="id">
 	<article class="dilemma">
 		<section>
@@ -191,7 +199,7 @@
 </main>
 
 
-<main id="edit_dilemma" style="display: none;">
+<main id="edit_dilemma" class="hidden">
 	<input type="hidden" data-value="id">
 	<article class="dilemma">
 		<section>
@@ -232,7 +240,7 @@
 	</article>
 </main>
 
-<main id="edit_case" style="display: none;">
+<main id="edit_case" class="hidden">
 	<input type="hidden" data-value="id">
 	<article class="dilemma">
 		<section>
@@ -275,7 +283,7 @@
 	</article>
 </main>
 
-<main id="not_found" style="display: none;">
+<main id="not_found" class="hidden">
 	<p>Page not found!</p>
 </main>
 
@@ -296,6 +304,12 @@ function open_dilemma(node) {
 	go_to("/dilemmas/" + id);
 }
 
+function edit_dilemma(event, node) {
+	event.stopPropagation();
+	var id = node.getElementsByTagName('input')[0].value;
+	go_to("/dilemmas/" + id + "?edit");
+}
+
 function open_case(node) {
 	var id = node.getElementsByTagName('input')[0].value;
 	go_to("/cases/" + id);
@@ -307,9 +321,18 @@ function init_feature_sliders() {
 	}
 }
 
+function show_users_edit_buttons() {
+	for(var el of document.querySelectorAll("#start section.dilemma")) {
+		var author = el.getElementsByTagName('input')[1].value;
+		if(author == user_id) {
+			el.classList.add('editable');
+		} else {
+			el.classList.remove('editable');
+		}
+	}
+}
 
-function dilemmas_add_cases_count(state)
-{
+function dilemmas_add_cases_count(state) {
 	state.dilemmas.forEach(function(dilemma) {
 		dilemma.num_cases = dilemma.cases.length;
 	});
@@ -375,39 +398,40 @@ function load_page(url, state) {
 	console.log("Constructing page for " + url + "...");
 	state = deep_copy_object(state);
 	for(var el of document.querySelectorAll('main, header > div'))
-		el.style.display = 'none';
+		el.classList.add('hidden');
 	//try {
 		if(url.path.length == 0) {
 			state = { dilemmas: state };
 			dilemmas_add_cases_count(state);
-			join('head_start', state).style.display = '';
-			join('start', state).style.display = '';
+			join('head_start', state).classList.remove('hidden');
+			join('start', state).classList.remove('hidden');
+			show_users_edit_buttons();
 		} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
 			solve_dilemma(state);
 			dilemma_map_actions(state);
 			if('edit' in url.query) {
-				join('head_edit_dilemma', state).style.display = '';
-				join('edit_dilemma', state).style.display = '';
+				join('head_edit_dilemma', state).classList.remove('hidden');
+				join('edit_dilemma', state).classList.remove('hidden');
 				rescale_textareas();
 			} else {
-				join('head_dilemma', state).style.display = '';
-				join('dilemma', state).style.display = '';
+				join('head_dilemma', state).classList.remove('hidden');
+				join('dilemma', state).classList.remove('hidden');
 			}
 		} else if(url.path.length == 2 && url.path[0] == 'cases') {
 			state.actions = state.dilemma.actions;
 			state.action = state.actions[state.action];
 			case_map_features(state);
 			if('edit' in url.query) {
-				join('head_edit_case', state).style.display = '';
-				join('edit_case', state).style.display = '';
+				join('head_edit_case', state).classList.remove('hidden');
+				join('edit_case', state).classList.remove('hidden');
 				rescale_textareas();
 				init_feature_sliders();
 			} else {
-				join('head_cases', state).style.display = '';
-				join('case', state).style.display = '';
+				join('head_cases', state).classList.remove('hidden');
+				join('case', state).classList.remove('hidden');
 			}
 		} else {
-			document.getElementById('not_found').style.display = '';
+			document.getElementById('not_found').classList.remove('hidden');
 		}
 	//} catch(error) {
 	//	// TODO: Show error page.
@@ -445,7 +469,8 @@ window.addEventListener('popstate', function(event) {
 });
 
 document.addEventListener('login', function(event) {
-	console.log(event.detail);
+	document.getElementById('add_dilemma').classList.remove('hidden');
+	show_users_edit_buttons();	
 });
 
 </script>

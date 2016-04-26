@@ -339,6 +339,7 @@ function extract(node) {
 var user_login_event = create_event('login');
 var user_token = null;
 var user_profile = null;
+var user_id = null;
 var lock = new Auth0Lock('AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo', 'openeth.auth0.com');
 var lock_options = {
 	icon: 'buddha.png',
@@ -355,6 +356,7 @@ function lock_callback(err, profile, token) {
 	// Store in global variables
 	user_token = token;
 	user_profile = profile;
+	user_id = profile.user_id;
 	
 	// Store the token for re-use
 	localStorage.setItem('id_token', token);
