@@ -355,7 +355,8 @@ function extract(node) {
 	if(node.extract && node.extract !== Node.prototype.extract)
 		return node.extract();
 	var acc = undefined;
-	for_each(node.children, function(child) {
+	for(var i = 0; i < node.children.length; ++i) {
+		var child = node.children[i];
 		if(child.dataset && 'arrayIndex' in child.dataset)
 			continue; // These are handled by a preceding data-array
 		var data = extract(child);
@@ -368,7 +369,7 @@ function extract(node) {
 		if(acc === undefined)
 			acc = {};
 		acc = Object.assign(acc, data);
-	});
+	}
 	return acc;
 }
 

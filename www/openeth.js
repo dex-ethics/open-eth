@@ -142,7 +142,8 @@ function solve_dilemma(dilemma) {
 	// Compute the positive and negative vectors
 	var positive = [];
 	var negative = [];
-	for_each(dilemma.cases, function(c) {
+	for(var index = 0; index != dilemma.cases.length; ++index) {
+		var c = dilemma.cases[index];
 		
 		// Skip cases without a correct action
 		if(c.action === null)
@@ -162,7 +163,7 @@ function solve_dilemma(dilemma) {
 		// Negative: prefer(incorrect, correct) = -Δ
 		positive.push(delta);
 		negative.push(delta.map(function(e) {return -e;}));
-	});
+	}
 	
 	// Find the signs, the prima facie duties
 	var signs = findSigns(positive, negative);
@@ -246,7 +247,8 @@ function solve_dilemma(dilemma) {
 	for_each(solution, function(clause) {
 		var principle = [];
 		var i = 0;
-		for_each(clause, function(constraint) {
+		for(var index = 0; index != clause.length; ++index) {
+			var constraint = clause[index];
 			var clausestr = "";
 			if(constraint === -Infinity) {
 				++i;
@@ -273,7 +275,7 @@ function solve_dilemma(dilemma) {
 			clausestr += " more"
 			++i;
 			principle.push(clausestr);
-		});
+		}
 		dilemma.principles.push({clauses: principle});
 	});
 }
