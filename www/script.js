@@ -540,7 +540,8 @@ function Api(url) {
 						}
 						
 						// Call the handler
-						then_handler(body);
+						if(typeof(then_handler) == 'function')
+							then_handler(body);
 					} else {
 						var error = x.responseText;
 						try {
@@ -548,7 +549,8 @@ function Api(url) {
 						}
 						catch(e) {
 						}
-						catch_handler(error);
+						if(typeof(catch_handler) == 'function')
+							catch_handler(error);
 					}
 				};
 				

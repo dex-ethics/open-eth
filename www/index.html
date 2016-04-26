@@ -365,7 +365,6 @@ function remove_feature(node) {
 
 function store_dilemma(callback) {
 	var dilemma = extract('edit_dilemma');
-	console.log(dilemma);
 	var body = {
 		name: dilemma.name,
 		description: dilemma.description,
@@ -395,7 +394,8 @@ function store_dilemma(callback) {
 			// Update URL
 			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
 			
-			callback();
+			if(typeof(callback) == 'function')
+				callback();
 		});
 	}
 }
