@@ -226,7 +226,7 @@ function join(node, data) {
 	if(node.constructor === String)
 		return join(document.getElementById(node), data);
 	if(node.dataset !== undefined) {
-		if(node.dataset.arrayInstance) {
+		if('arrayIndex' in node.dataset) {
 			return node; // These are handled by a preceding data-array
 		}
 		if(node.dataset.value !== undefined) {
@@ -260,15 +260,15 @@ function join(node, data) {
 			
 			// Remove previous instances
 			while(node.nextElementSibling
-				&& node.nextElementSibling.dataset.arrayInstance)
+				&& 'arrayIndex' in node.nextElementSibling.dataset)
 				node.parentNode.removeChild(node.nextElementSibling);
 			
 			// Create new instances
 			let t = node.content.children[0];
-			for(var i = 0; i < a.length; ++i) {
-				join(t, a[a.length - i - 1]);
+			for(var i = a.length - 1; i >= 0 ; --i) {
 				var clone = document.importNode(t, true);
-				clone.dataset.arrayInstance = true;
+				join(clone, a[i]);
+				clone.dataset.arrayIndex = i;
 				node.parentNode.insertBefore(clone, node.nextSibling);
 			}
 			return node;
@@ -315,7 +315,7 @@ function extract(node) {
 			// Collect instances
 			let a = [];
 			while(node.nextElementSibling
-				&& node.nextElementSibling.dataset.arrayInstance) {
+				&& 'arrayIndex' in node.nextElementSibling.dataset) {
 				node = node.nextElementSibling;
 				a.push(extract(node));
 			}
@@ -326,7 +326,7 @@ function extract(node) {
 		return node.extract();
 	let acc = undefined;
 	for(let child of node.children) {
-		if(child.dataset && child.dataset.arrayInstance)
+		if(child.dataset && 'arrayIndex' in child.dataset)
 			continue; // These are handled by a preceding data-array
 		let data = extract(child);
 		if(data === undefined)

@@ -463,6 +463,10 @@ textarea::input-placeholder {
 	color: #b3b3b3;
 }
 
+input:disabled {
+	border: solid thin red;
+}
+
 input[type=radio],
 input[type=checkbox] {
 	opacity: 0;

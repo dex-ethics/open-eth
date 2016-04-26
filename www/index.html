@@ -170,7 +170,7 @@
 			<header>
 				<h1>Correct Action</h1>
 			</header>
-			<p data-content="action"></p>
+			<p data-content="action_label"></p>
 		</section>
 		<section>
 			<header>
@@ -286,24 +286,37 @@
 			</header>
 			<template data-array="actions">
 				<label>
-					<input type="radio" name="correct_action" data-value="">
+					<input type="radio" name="correct_action">
 					<span data-content=""></span>
 				</label>
 			</template>
 		</section>
-		<section>
+		<section data>
 			<header>
 				<h1>Features</h1>
 			</header>
-			<template data-array="features">
-				<div class="vertical feature_slider">
-					<label>
-						<input type="checkbox" data-value="feature">
-						<span data-content="feature"></span>
-					</label>
-					<input type="range" min="-3" max="3">
-				</div>
-			</template>
+			<div>
+				<template data-array="feature_labels">
+					<div class="vertical feature_slider" data-action="0">
+						<label>
+							<input type="checkbox" data-value="">
+							<span data-content=""></span>
+						</label>
+						<input type="range" min="-3" max="3">
+					</div>
+				</template>
+			</div>
+			<div>
+				<template data-array="feature_labels">
+					<div class="vertical feature_slider" data-action="1">
+						<label>
+							<input type="checkbox" data-value="">
+							<span data-content=""></span>
+						</label>
+						<input type="range" min="-3" max="3">
+					</div>
+				</template>
+			</div>
 		</section>
 	</article>
 </main>
@@ -409,14 +422,67 @@ function open_case(node) {
 	go_to("/cases/" + id);
 }
 
+function set_correct_action(index) {
+	document.querySelectorAll(
+		'#edit_case input[name="correct_action"]'
+	)[index].checked = true;
+}
+
+function get_correct_action() {
+	return 0 | document.querySelectorAll(
+		'#edit_case input[name="correct_action"]:checked'
+	)[0].parentNode.dataset.arrayIndex;
+}
+
+function set_feature_sliders(features) {
+	for(var el of document.querySelectorAll(".feature_slider")) {
+		var action = el.dataset.action;
+		var index = el.dataset.arrayIndex;
+		var check = el.querySelectorAll("input[type=checkbox]")[0];
+		var slider = el.querySelectorAll("input[type=range]")[0];
+		
+		// Install behaviour
+		check.addEventListener('change', (function(){
+			var c = check;
+			var s = slider;
+			return function(event) {
+				s.disabled = c.checked ? false : true;
+			};
+		})());
+		
+		// Set state
+		var value = features[action][index];
+		if(value === null) {
+			check.checked = false;
+			slider.disabled = true;
+			slider.value = 0; // TODO: Opposite of other action
+		} else {
+			check.checked = true;
+			slider.disabled = false;
+			slider.value = value;
+		}
+	}
+}
+
+function get_feature_sliders() {
+	var values = [[],[]];
+	for(var el of document.querySelectorAll(".feature_slider")) {
+		var action = el.dataset.action;
+		var index = el.dataset.arrayIndex;
+		var check = el.querySelectorAll("input[type=checkbox]")[0];
+		var slider = el.querySelectorAll("input[type=range]")[0];
+		values[action].push(check.checked ? slider.value : null);
+	}
+	return values;
+}
+
 function store_case() {
 	var data = extract('edit_case');
-	console.log(data);
 	var body = {
 		name: data.name,
 		description: data.description,
-		actions: data.actions,
-		features: data.features
+		action: get_correct_action(),
+		features: get_feature_sliders()
 	};
 	
 	if(dilemma.id) {
@@ -424,9 +490,6 @@ function store_case() {
 		api.patch('cases')
 		.eq('id', dilemma.id)
 		.body(body)
-		.then(callback);
-		
-		// TODO: Cases
 		
 	} else {
 		// Insert
@@ -440,17 +503,10 @@ function store_case() {
 			
 			// Update URL
 			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
-			
-			callback();
 		});
 	}
 }
 
-function init_feature_sliders() {
-	for(var el of document.querySelectorAll(".feature_slider")) {
-		console.log(el);
-	}
-}
 
 function show_users_edit_buttons() {
 	for(var el of document.querySelectorAll("#start section.dilemma")) {
@@ -550,14 +606,16 @@ function load_page(url, state) {
 			}
 		} else if(url.path.length == 2 && url.path[0] == 'cases') {
 			state.actions = state.dilemma.actions;
-			state.action = state.actions[state.action];
-			case_map_features(state);
+			state.feature_labels= state.dilemma.features;
+			state.action_label = state.actions[state.action];
 			if('edit' in url.query) {
 				join('head_edit_case', state).classList.remove('hidden');
 				join('edit_case', state).classList.remove('hidden');
 				rescale_textareas();
-				init_feature_sliders();
+				set_correct_action(state.action);
+				set_feature_sliders(state.features);
 			} else {
+				case_map_features(state);
 				join('head_cases', state).classList.remove('hidden');
 				join('case', state).classList.remove('hidden');
 			}
