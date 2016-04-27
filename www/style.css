@@ -322,10 +322,10 @@ button.dilemma > .label {
 	font-weight: 100;
 	text-transform: uppercase;
 }
-button.edit,
-button.save,
-button.delete,
-#register {
+body > header button.edit,
+body > header button.save,
+body > header button.delete,
+body > header button#register {
 	min-width: 16vw;
 	background: #FFFFFF;
 	color: #5D5D5D;
