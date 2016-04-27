@@ -160,16 +160,6 @@ body > header p {
 	padding-left: 5px;
 	padding-right: 5px;
 }
-#register {
-	min-width: 16vw;
-	background: #FFFFFF;
-	color: #5D5D5D;
-	font-weight: 400;
-	text-transform: uppercase;
-	padding: 19.2px;
-	border: none;
-}
-
 
 body > main {
 	background: #FFFFFF;
@@ -332,7 +322,18 @@ button.dilemma > .label {
 	font-weight: 100;
 	text-transform: uppercase;
 }
-
+button.edit,
+button.save,
+button.delete,
+#register {
+	min-width: 16vw;
+	background: #FFFFFF;
+	color: #5D5D5D;
+	font-weight: 400;
+	text-transform: uppercase;
+	padding: 19.2px;
+	border: none;
+}
 
 article > section {
 	border-top: solid 1px #B3B3B3;
