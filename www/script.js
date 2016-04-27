@@ -390,6 +390,7 @@ var lock = new Auth0Lock('AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo', 'openeth.auth0.com'
 var lock_options = {
 	icon: 'buddha.png',
 	callbackURL: 'https://openeth.com/',
+	responseType: 'token',
 	authParams: {
 		scope: 'openid role userid'
 	}
