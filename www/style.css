@@ -338,6 +338,23 @@ body > header button#register {
 	border: none;
 }
 
+button.remove {
+	display: none;
+	height: 50px;
+	text-transform: uppercase;
+}
+input:focus + button.remove {
+	display: inline-block;
+}
+button.remove:hover {
+	color: #fcc26a;
+}
+button.remove:before {
+	font-family: 'FontAwesome';
+	content: "\f00d";
+	margin-right: .5em;
+}
+
 article > section {
 	border-top: solid 1px #B3B3B3;
 	display: block;
@@ -436,8 +453,26 @@ li.clause {
 }
 
 
+/* TABLE */
+
+th, td {
+	padding: .2em .5em;
+	text-align: right;
+}
+th:first-child, td:first-child {
+	text-align: left;
+	padding-left: 0;
+}
+th:last-child, td:last-child {
+	padding-right: 0;
+}
+
+/* FORMS */
+
+
 input,
-textarea {
+textarea,
+label {
 	font-family: 'Roboto', sans-serif;
 	font-size: 150%;
 	color: #757575;
