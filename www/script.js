@@ -389,6 +389,7 @@ var user_id = null;
 var lock = new Auth0Lock('AZmtkBN5zDGERJesFZGFS8vYJYyZTrDo', 'openeth.auth0.com');
 var lock_options = {
 	icon: 'buddha.png',
+	callbackURL: 'https://openeth.com/',
 	authParams: {
 		scope: 'openid role userid'
 	}
@@ -451,6 +452,7 @@ function lock_try_hash_token() {
 		window.history.replaceState("", document.title,
 			window.location.pathname + window.location.search);
 		console.log("Trying authentication token from hash...");
+		
 		lock_try_token(hash.id_token);
 		return true;
 	}
@@ -474,12 +476,16 @@ window.addEventListener('DOMContentLoaded', function(){
 });
 
 function register() {
-	lock_options['callbackURL'] =
-	lock.showSignup(lock_options);
+	user_log_in_try_event();
+	var clone = JSON.parse(JSON.stringify(lock_options));
+	clone.authParams.state = window.location.href;
+	lock.showSignup(clone);
 }
 function login() {
 	user_log_in_try_event();
-	lock.show(lock_options);
+	var clone = JSON.parse(JSON.stringify(lock_options));
+	clone.authParams.state = window.location.href;
+	lock.show(clone);
 }
 function logout() {
 	window.localStorage.removeItem('id_token');
