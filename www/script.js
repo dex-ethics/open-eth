@@ -380,7 +380,9 @@ function extract(node) {
 // <button id="auth0-logout"></button>
 // <button id="auth0-register"></button>
 //
-var user_login_event = create_event('login');
+var user_log_in_try_event = create_event('log_in_try');
+var user_log_in_event = create_event('log_in');
+var user_log_out_event = create_event('log_out');
 var user_token = null;
 var user_profile = null;
 var user_id = null;
@@ -391,6 +393,15 @@ var lock_options = {
 		scope: 'openid role userid'
 	}
 };
+lock.on('hidden', function() {
+	console.log("lock hidden!")
+	if(user_id != null) {
+		user_log_in_event();
+	} else {
+		user_log_out_event();
+	}
+});
+
 function lock_callback(err, profile, token) {
 	if(err) {
 		console.error(err);
@@ -399,6 +410,7 @@ function lock_callback(err, profile, token) {
 		window.localStorage.removeItem('id_token');
 		user_profile = null;
 		user_token = null;
+		user_log_out_event();
 		return;
 	}
 	
@@ -417,11 +429,12 @@ function lock_callback(err, profile, token) {
 	.send();
 	
 	// Trigger user event
-	user_login_event(profile);
+	user_log_in_event(profile);
 }
 function lock_try_token(token) {
 	try {
 		// Fetch the user profile
+		user_log_in_try_event();
 		lock.getProfile(token, function(err, profile) {
 			lock_callback(err, profile, token);
 		});
@@ -456,13 +469,17 @@ function lock_try_stored_token() {
 	return false;
 }
 
-if(!lock_try_hash_token())
-	lock_try_stored_token();
+window.addEventListener('DOMContentLoaded', function(){
+	if(!lock_try_hash_token())
+		lock_try_stored_token();
+});
 
 function register() {
+	lock_options['callbackURL'] =
 	lock.showSignup(lock_options);
 }
 function login() {
+	user_log_in_try_event();
 	lock.show(lock_options);
 }
 function logout() {
@@ -470,7 +487,7 @@ function logout() {
 	user_profile = null;
 	user_token = null;
 	lock.logout({ returnTo: window.location.href });
-	// Log out always refreshes, so no need to trigger events
+	user_log_out_event();
 }
 
 //

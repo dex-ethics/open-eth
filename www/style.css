@@ -77,6 +77,7 @@ a, button {
 	cursor: pointer;
 	border: none;
 	outline: none;
+	padding: 0;
 }
 button {
 	text-align: center;
@@ -146,9 +147,11 @@ body > header > nav > * {
 	flex-grow: 1;
 	text-align: left;
 	text-decoration: none;
-	padding: 15px; /* TODO: Absorb this padding on the left and right */
+	padding-left: 15px;
+	padding-right: 15px; /* TODO: absorb padding on edges of <nav> */
 	background-color: rgba(0,0,0,0);
 	transition: background-color 0.5s;
+	line-height: 45px;
 }
 body > header > nav > :hover {
 	background-color: rgba(0,0,0,1);
@@ -598,6 +601,19 @@ figure {
 */
 
 
+@keyframes spin {
+	from { transform: rotate(  0deg); }
+	to   { transform: rotate(360deg); }
+}
+.spinner {
+	display: inline-block;
+	animation: spin 2s infinite linear;
+}
+.spinner:before {
+	font-family: 'FontAwesome';
+	content: "\f110";
+}
+
 .button {
 	border-radius: 2px;
 	user-select: none;
@@ -609,6 +625,35 @@ figure {
 	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
+.nopadding {
+	padding: 0;
+}
+.chip {
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: stretch;
+	overflow: hidden;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	
+	height: 32px;
+	line-height: 32px;
+	border-radius: 16px;
+	background-color: #9D9D9D;
+	color: black;
+	padding: 0 12px;
+	margin: 0;
+}
+.chip > * {
+	margin-left: 4px;
+	margin-right: 4px;
+}
+.chip > img {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	margin-left: -12px;
+}
 
 /* Vertical/horizontal full-width layout
  * with some elements absorbing the size */

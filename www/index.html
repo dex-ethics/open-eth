@@ -16,8 +16,9 @@
 		<a href="/">Featured Dilemmas</a>
 		<a href="/">Play with Ethics</a>
 		<a href="/">Guidance</a>
-		<button onclick="login()">Log in</button>
-		<button onclick="logout()">Log out</button>
+		<div id="throbber_login" class="hidden"><span class="spinner"></span></div>
+		<button id="button_login" onclick="login()">Log in</button>
+		<button id="button_logout" class="hidden" onclick="logout()">Log out</button>
 	</nav>
 	<div id="head_start" class="hidden">
 		<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
@@ -748,13 +749,29 @@ window.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('popstate', function(event) {
 	var url = parse_url(window.document.location);
 	console.log("Going back to " + url + "...");
+	
 	load_page(url, event.state);
 });
 
-document.addEventListener('login', function(event) {
+document.addEventListener('log_in_try', function(event) {
+	console.log("Trying to log in...");
+	document.getElementById('throbber_login').classList.remove('hidden');
+	document.getElementById('button_login').classList.add('hidden');
+	document.getElementById('button_logout').classList.add('hidden');
+});
+document.addEventListener('log_in', function(event) {
 	console.log("Logged in as " + user_profile.nickname + " (" + user_id + ")");
+	document.getElementById('throbber_login').classList.add('hidden');
+	document.getElementById('button_login').classList.add('hidden');
+	document.getElementById('button_logout').classList.remove('hidden');
 	document.getElementById('add_dilemma').classList.remove('hidden');
 	show_users_edit_buttons();	
+});
+document.addEventListener('log_out', function(event) {
+	console.log("Not logged in");
+	document.getElementById('throbber_login').classList.add('hidden');
+	document.getElementById('button_login').classList.remove('hidden');
+	document.getElementById('button_logout').classList.add('hidden');
 });
 
 </script>
