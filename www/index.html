@@ -623,9 +623,11 @@ function show_edit_buttons() {
 }
 
 function dilemmas_add_cases_count(state) {
-	state.dilemmas.forEach(function(dilemma) {
-		dilemma.num_cases = dilemma.cases.length;
-	});
+	if('forEach' in state.dilemmas) {
+		state.dilemmas.forEach(function(dilemma) {
+			dilemma.num_cases = dilemma.cases.length;
+		});
+	}
 }
 
 function dilemma_sort_cases(state) {
