@@ -451,7 +451,11 @@ ul.clauses {
 li.clause {
 	font-weight: 500;
 }
-
+li.principle {
+	display: block;
+	margin: 0;
+	padding-right: 1em;
+}
 
 /* TABLE */
 
