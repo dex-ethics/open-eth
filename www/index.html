@@ -291,38 +291,44 @@
 			<header>
 				<h1>Correct action</h1>
 			</header>
-			<template data-array="actions">
-				<label>
-					<input type="radio" name="correct_action">
-					<span data-content=""></span>
-				</label>
-			</template>
+			<label>
+				<input type="radio" name="correct_action">
+				<span data-content="action_0"></span>
+			</label>
+			<label>
+				<input type="radio" name="correct_action">
+				<span data-content="action_1"></span>
+			</label>
 		</section>
 		<section data>
 			<header>
 				<h1>Features</h1>
 			</header>
-			<div>
-				<template data-array="feature_labels">
-					<div class="vertical feature_slider" data-action="0">
-						<label>
-							<input type="checkbox" data-value="">
-							<span data-content=""></span>
-						</label>
-						<input type="range" min="-3" max="3">
-					</div>
-				</template>
-			</div>
-			<div>
-				<template data-array="feature_labels">
-					<div class="vertical feature_slider" data-action="1">
-						<label>
-							<input type="checkbox" data-value="">
-							<span data-content=""></span>
-						</label>
-						<input type="range" min="-3" max="3">
-					</div>
-				</template>
+			<div class="flex-2">
+				<div>
+					<h1 class="ellipsis" data-content="action_0"></h1>
+					<template data-array="feature_labels">
+						<div class="vertical feature_slider" data-action="0">
+							<label>
+								<input type="checkbox" data-value="">
+								<span data-content=""></span>
+							</label>
+							<input type="range" min="-3" max="3">
+						</div>
+					</template>
+				</div>
+				<div>
+					<h1 class="ellipsis" data-content="action_1"></h1>
+					<template data-array="feature_labels">
+						<div class="vertical feature_slider" data-action="1">
+							<label>
+								<input type="checkbox" data-value="">
+								<span data-content=""></span>
+							</label>
+							<input type="range" min="-3" max="3">
+						</div>
+					</template>
+				</div>
 			</div>
 		</section>
 	</article>
@@ -719,6 +725,8 @@ function load_page(url, state) {
 			state.dilemma_id = state.dilemma.id;
 			state.author = state.dilemma.author;
 			state.actions = state.dilemma.actions;
+			state.action_0 = state.dilemma.actions[0];
+			state.action_1 = state.dilemma.actions[1];
 			state.feature_labels= state.dilemma.features;
 			state.action_label = state.actions[state.action];
 			if('edit' in url.query) {

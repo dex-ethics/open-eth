@@ -446,7 +446,6 @@ textarea {
 input[type=text],
 input[type=range],
 textarea {
-	width: 41.66vw;
 	border: none;
 	border-bottom: solid 2px #F2F2F2;
 	margin-bottom: 1em;
@@ -455,6 +454,7 @@ textarea {
 	white-space: pre-wrap;
 	word-wrap: break-word;
 }
+
 input[type=text]::selection,
 textarea::selection {
 	color: #FFFFFF;
@@ -480,10 +480,6 @@ textarea::input-placeholder {
 	color: #b3b3b3;
 }
 
-input:disabled {
-	border: solid thin red;
-}
-
 input[type=radio],
 input[type=checkbox] {
 	opacity: 0;
@@ -497,7 +493,7 @@ input[type=checkbox] + span:before {
 	content: " ";
 	height: 11px;
 	width: 11px;
-	border: solid 2px #F2F2F2;
+	border: solid 2px #b3b3b3;
 	border-radius: 50%;
 	background-color: transparent;
 	margin-right: 5px;
@@ -508,6 +504,10 @@ input[type=checkbox]:focus + span:before {
 }
 input[type=radio]:checked + span:before,
 input[type=checkbox]:checked + span:before {
+	background-color: #b3b3b3;
+}
+input[type=radio]:focus:checked + span:before,
+input[type=checkbox]:focus:checked + span:before {
 	background-color: #fcc26a;
 }
 input[type=checkbox] + span:before {
@@ -538,6 +538,9 @@ input[type=range]::-webkit-slider-thumb {
 }
 input[type=range]:focus::-webkit-slider-thumb {
 	background: #fcc26a;
+}
+input[type=range]:disabled::-webkit-slider-thumb {
+	background: #F2F2F2;
 }
 
 body > footer {
@@ -636,7 +639,31 @@ figure {
 	flex-shrink: 1;
 }
 
-/* Horizontal full-width
+/* Two column flex layout */
+.flex-2 {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: flex-start;
+	padding: 2.5px;
+}
+.flex-2 > * {
+	margin: 2.5px; /* gives 5px spacing */
+	max-width: 100%;
+	width: 100%;
+}
+@media all and (min-width: 600px) {
+	.flex-2 > * {
+		width: 45.5vw;
+	}
+}
+@media all and (min-width: 1215px) {
+	.flex-2 > * {
+		width: 592.5px; /* (1200 - 3 * 5 ) / 2 */
+	}
+}
 
 /* Four column flex layout */
 .flex-4 {
