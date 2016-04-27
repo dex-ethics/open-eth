@@ -394,7 +394,6 @@ var lock_options = {
 	}
 };
 lock.on('hidden', function() {
-	console.log("lock hidden!")
 	if(user_id != null) {
 		user_log_in_event();
 	} else {

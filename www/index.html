@@ -24,25 +24,25 @@
 		<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
 		dilemmas, to enable better decisions based upon available information, and its 
 		relative likelihood.</p>
-		<p><button id="register" onclick="register()">Join OpenEth</button></p>
+		<p><button class="button" id="register" onclick="register()">Join OpenEth</button></p>
 	</div>
 	<div id="head_dilemma" class="hidden">
 		<p class="one-column" data-content="name"></p>
-		<p><button onclick="edit_current_dilemma()">Edit</button></p>
+		<p><button class="button edit" onclick="edit_current_dilemma()">Edit</button></p>
 	</div>
-	<div id="head_cases" class="hidden">
+	<div id="head_case" class="hidden">
 		<p class="one-column" data-content="name"></p>
-		<p><button onclick="edit_current_case()">Edit</button></p>
+		<p><button class="button edit" onclick="edit_current_case()">Edit</button></p>
 	</div>
 	<div id="head_edit_dilemma" class="hidden">
 		<p class="one-column">Edit dilemma</p>
-		<p><button class="button" onclick="store_dilemma()">Save</button></p>
-		<p><button class="button" onclick="delete_dilemma()">Delete</button></p>
+		<p><button class="button save" onclick="store_dilemma()">Save</button></p>
+		<p><button class="button delete" onclick="delete_dilemma()">Delete</button></p>
 	</div>
 	<div id="head_edit_case" class="hidden">
 		<p class="one-column">Edit case</p>
-		<p><button class="button" onclick="store_case()">Save</button></p>
-		<p><button class="button" onclick="delete_case()">Delete</button></p>
+		<p><button class="button save" onclick="store_case()">Save</button></p>
+		<p><button class="button delete" onclick="delete_case()">Delete</button></p>
 	</div>
 </header>
 
@@ -90,6 +90,7 @@
 
 <main id="dilemma" class="hidden">
 	<input type="hidden" data-value="id">
+	<input type="hidden" data-value="author">
 	<article class="dilemma">
 		<section>
 			<p class="two-column" data-content="description"></p>
@@ -586,7 +587,8 @@ function delete_case() {
 	}
 }
 
-function show_users_edit_buttons() {
+function show_edit_buttons() {
+	// Dilemmas overview
 	for_each(document.querySelectorAll("#start section.dilemma"), function(el) {
 		var author = el.getElementsByTagName('input')[1].value;
 		if(author == user_id) {
@@ -595,6 +597,25 @@ function show_users_edit_buttons() {
 			el.classList.remove('editable');
 		}
 	});
+	
+	
+	// Dilemma
+	var data = extract(document.getElementById('dilemma'));
+	var button = document.querySelectorAll('#head_dilemma button.edit')[0];
+	if(data.author == user_id) {
+		button.classList.remove('hidden');
+	} else {
+		button.classList.add('hidden');
+	}
+	
+	// Case
+	var data = extract(document.getElementById('case'));
+	var button = document.querySelectorAll('#head_case button.edit')[0];
+	if(data.author == user_id) {
+		button.classList.remove('hidden');
+	} else {
+		button.classList.add('hidden');
+	}
 }
 
 function dilemmas_add_cases_count(state) {
@@ -684,7 +705,6 @@ function load_page(url, state) {
 			dilemmas_add_cases_count(state);
 			join('head_start', state).classList.remove('hidden');
 			join('start', state).classList.remove('hidden');
-			show_users_edit_buttons();
 		} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
 			dilemma_sort_cases(state);
 			solve_dilemma(state);
@@ -711,12 +731,13 @@ function load_page(url, state) {
 				set_feature_sliders(state.features);
 			} else {
 				case_map_features(state);
-				join('head_cases', state).classList.remove('hidden');
+				join('head_case', state).classList.remove('hidden');
 				join('case', state).classList.remove('hidden');
 			}
 		} else {
 			document.getElementById('not_found').classList.remove('hidden');
 		}
+		show_edit_buttons();
 	//} catch(error) {
 	//	// TODO: Show error page.
 	//	console.error(error);
@@ -765,13 +786,14 @@ document.addEventListener('log_in', function(event) {
 	document.getElementById('button_login').classList.add('hidden');
 	document.getElementById('button_logout').classList.remove('hidden');
 	document.getElementById('add_dilemma').classList.remove('hidden');
-	show_users_edit_buttons();	
+	show_edit_buttons();
 });
 document.addEventListener('log_out', function(event) {
 	console.log("Not logged in");
 	document.getElementById('throbber_login').classList.add('hidden');
 	document.getElementById('button_login').classList.remove('hidden');
 	document.getElementById('button_logout').classList.add('hidden');
+	show_edit_buttons();
 });
 
 </script>
