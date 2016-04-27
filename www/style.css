@@ -186,13 +186,12 @@ div.dilemmas {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: flex-center;
+	justify-content: flex-start;
 	align-items: stretch;
 	align-content: stretch;
 	padding: 0;
 }
 div.dilemmas > * {
-	display: block;
 	margin: 5px;
 	width: 350px;
 	height: 263px;
@@ -264,6 +263,7 @@ section.dilemma > ul {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	align-content: flex-start;
 	list-style-type: none;
 
 	font-size: 11.2px;
