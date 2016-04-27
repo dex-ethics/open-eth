@@ -453,6 +453,8 @@ function lock_try_hash_token() {
 			window.location.pathname + window.location.search);
 		console.log("Trying authentication token from hash...");
 		
+		// TODO: We arrived back at /, but have the original url
+		// stored in hash.state. We should move there.
 		lock_try_token(hash.id_token);
 		return true;
 	}
