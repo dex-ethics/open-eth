@@ -265,7 +265,7 @@ section.dilemma > ul {
 	flex-wrap: wrap;
 	align-content: flex-start;
 	list-style-type: none;
-
+	
 	font-size: 11.2px;
 	font-weight: 300;
 	margin: 0;
@@ -446,6 +446,8 @@ textarea {
 input[type=text],
 input[type=range],
 textarea {
+	width: 600px;
+	max-width: 100%;
 	border: none;
 	border-bottom: solid 2px #F2F2F2;
 	margin-bottom: 1em;
