@@ -1,0 +1,5 @@
+#!/bin/bash
+
+BACKUP=/srv/openeth/backup-`date -I`.sql
+docker exec -ti -u postgres openeth_dbm_1 pg_dump -a --insert openeth > $BACKUP
+chmod -w $BACKUP
