@@ -1,0 +1,41 @@
+#!/bin/bash
+set -e
+source /srv/live.git/site.conf
+export DOMAIN CERT_EMAIL JWT_SECRET POSTGRES_PASSWORD AUTHENTICATOR_PASSWORD
+
+# Get the pushed commit and branch
+read -a ref
+IFS='/' read -ra REF <<< "${ref[2]}"
+cur_branch="${REF[2]}"
+
+# Check if the push was to the deploy branch
+if [ "$cur_branch" != "$BRANCH" ] ; then
+	echo "Not pushed to master, not deploying"
+	exit 0
+else
+	echo "Deploying $BRANCH to $DOMAIN..."
+fi
+
+# Reset permissions
+sudo chown -R :adm /srv/live
+sudo chmod -R g+rwX /srv/live
+
+# Update checkout
+GIT_WORK_TREE=/srv/live git checkout -f $BRANCH
+cd /srv/live
+
+# Update post-receive
+cp /srv/live/post-receive /srv/live.git/hooks/post-receive
+
+# Rebuild docker
+docker network create live_default || true
+dc="docker-compose -f docker-compose.yml -f live.yml"
+$dc create
+$dc start
+
+# Reload nginx
+$dc kill -s SIGHUP web
+
+# Reset permissions
+sudo chown -R :adm /srv/live
+sudo chmod -R g+rwX /srv/live

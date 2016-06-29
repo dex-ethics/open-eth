@@ -1,4 +1,4 @@
-.*
-log
-data
-certificates/*/privkey.pem
+data/*
+log/*
+certificates/*
+acme-challenge/*
