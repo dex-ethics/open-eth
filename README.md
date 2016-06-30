@@ -1,5 +1,7 @@
 # OpenEth
 
+[![Join the chat at https://gitter.im/dex-ethics/open-eth](https://badges.gitter.im/dex-ethics/open-eth.svg)](https://gitter.im/dex-ethics/open-eth?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Stack:
 
 * [Auth0](https://auth0.com/) as authentication provider.
