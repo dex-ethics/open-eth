@@ -16,7 +16,7 @@
 	display: block;
 	width: auto;
 	max-width: 100%;
-	max-height: 4em;
+	max-height: 10em;
 	padding: 0.5em;
 	padding-left: 0.8em;
 	margin-bottom: 1em;
@@ -64,6 +64,7 @@
 
 
 #notifications > div > button.close {
+	float: right;
 	font-size: 0;
 	margin-left: 8px;
 }

@@ -21,7 +21,7 @@ function notify(message, timeout, msg_class, callback) {
 	notification.textContent = message;
 	close_button.textContent = "close";
 	close_button.classList.add('close');
-	notification.appendChild(close_button);
+	notification.insertBefore(close_button, notification.firstChild);
 	notifications.appendChild(notification);
 	
 	var closed = false;
