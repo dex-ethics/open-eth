@@ -17,23 +17,28 @@ IFS='' read -r -d '' CSP <<-'EOD' || true
 	default-src
 		'none';
 	img-src
-		'self' ;
+		'self'
+		data:;
 	style-src
 		'self'
+		'unsafe-inline'
 		cdnjs.cloudflare.com;
 	font-src
 		'self'
+		data:
 		cdn.auth0.com
 		cdnjs.cloudflare.com;
 	script-src
 		'self'
-		example.auth0.com
+		'unsafe-inline'
+		'unsafe-eval'
+		openeth.auth0.com
 		cdn.auth0.com
 		code.jquery.com
 		cdnjs.cloudflare.com;
 	connect-src
 		'self'
-		example.auth0.com;
+		openeth.auth0.com;
 EOD
 
 # Remove newlines
