@@ -1,0 +1,75 @@
+
+#notifications {
+	display: flex;
+	position: fixed;
+	top: 10%;
+	right: 7%;
+	z-index: 10000;
+	max-width: 86%;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-end;
+}
+
+#notifications > div {
+	display: block;
+	width: auto;
+	max-width: 100%;
+	max-height: 4em;
+	padding: 0.5em;
+	padding-left: 0.8em;
+	margin-bottom: 1em;
+	border-radius: 2px;
+	color: #3b4647;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+	position: relative;
+	animation-duration: 0.4s;
+	animation-name: notifications_show;
+	transition-property: max-height, padding, margin, opacity;
+	transition-duration: 0.4s;
+	transition-function: ease;
+}
+
+#notifications > div.hide {
+	max-height: 0em;
+	padding-top: 0em;
+	padding-bottom: 0em;
+	margin-bottom: 0em;
+	opacity: 0;
+}
+
+@keyframes notifications_show {
+	0% {
+		left: 100%;
+		opacity: 0;
+	}
+	100% {
+		left: 0%;
+		opacity: 1;
+	}
+}
+
+#notifications > div.info {
+	background-color: #a1fca6;
+}
+
+#notifications > div.warning {
+	background-color: #fcfaa1;
+}
+
+#notifications > div.error {
+	background-color: #fca1a3;
+}
+
+
+#notifications > div > button.close {
+	font-size: 0;
+	margin-left: 8px;
+}
+
+#notifications > div > button.close:before {
+	font-size: 16px;
+	font-family: 'FontAwesome';
+	content: "\f00d";
+}
