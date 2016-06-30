@@ -21,29 +21,31 @@
 		<button id="button_login" onclick="login()">Log in</button>
 		<button id="button_logout" class="hidden" onclick="logout()">Log out</button>
 	</nav>
-	<div id="head_start" class="hidden">
-		<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
-		dilemmas, to enable better decisions based upon available information, and its 
-		relative likelihood.</p>
-		<p><button class="button" id="register" onclick="register()">Join OpenEth</button></p>
-	</div>
-	<div id="head_dilemma" class="hidden">
-		<p class="one-column" data-content="name"></p>
-		<p><button class="button edit" onclick="edit_current_dilemma()">Edit</button></p>
-	</div>
-	<div id="head_case" class="hidden">
-		<p class="one-column" data-content="name"></p>
-		<p><button class="button edit" onclick="edit_current_case()">Edit</button></p>
-	</div>
-	<div id="head_edit_dilemma" class="hidden">
-		<p class="one-column">Edit dilemma</p>
-		<p><button class="button save" onclick="store_dilemma()">Save</button></p>
-		<p><button class="button delete" onclick="delete_dilemma()">Delete</button></p>
-	</div>
-	<div id="head_edit_case" class="hidden">
-		<p class="one-column">Edit case</p>
-		<p><button class="button save" onclick="store_case()">Save</button></p>
-		<p><button class="button delete" onclick="delete_case()">Delete</button></p>
+	<div id="head">
+		<div id="head_start" class="hidden">
+			<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
+			dilemmas, to enable better decisions based upon available information, and its 
+			relative likelihood.</p>
+			<p><button class="button" id="register" onclick="register()">Join OpenEth</button></p>
+		</div>
+		<div id="head_dilemma" class="hidden">
+			<p class="one-column" data-content="name"></p>
+			<p><button class="button edit" onclick="edit_current_dilemma()">Edit</button></p>
+		</div>
+		<div id="head_case" class="hidden">
+			<p class="one-column" data-content="name"></p>
+			<p><button class="button edit" onclick="edit_current_case()">Edit</button></p>
+		</div>
+		<div id="head_edit_dilemma" class="hidden">
+			<p class="one-column">Edit dilemma</p>
+			<p><button class="button save" onclick="store_dilemma()">Save</button></p>
+			<p><button class="button delete" onclick="delete_dilemma()">Delete</button></p>
+		</div>
+		<div id="head_edit_case" class="hidden">
+			<p class="one-column">Edit case</p>
+			<p><button class="button save" onclick="store_case()">Save</button></p>
+			<p><button class="button delete" onclick="delete_case()">Delete</button></p>
+		</div>
 	</div>
 </header>
 
@@ -704,7 +706,7 @@ function load_state(url, callback) {
 function load_page(url, state) {
 	console.log("Constructing page for " + url + "...");
 	state = deep_copy_object(state);
-	for_each(document.querySelectorAll('main, header > div'), function(el) {
+	for_each(document.querySelectorAll('main, header > #head > div'), function(el) {
 		el.classList.add('hidden');
 	});
 	//try {
