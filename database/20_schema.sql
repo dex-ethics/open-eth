@@ -30,9 +30,19 @@ GRANT USAGE, SELECT ON SEQUENCE dilemmas_id_seq TO author;
 
 -- …but only of rows that he/she himself created.
 ALTER TABLE dilemmas ENABLE ROW LEVEL SECURITY;
-CREATE POLICY author_eigenedit ON dilemmas
-	USING (TRUE)
+
+CREATE POLICY select_unsecure ON dilemmas FOR SELECT
+	USING (TRUE);
+
+CREATE POLICY author_eigencreate ON dilemmas FOR INSERT
 	WITH CHECK (author = current_user_id());
+
+CREATE POLICY author_eigenupdate ON dilemmas FOR UPDATE
+	USING (author = current_user_id())
+	WITH CHECK (author = current_user_id());
+
+CREATE POLICY author_eigendelete ON dilemmas FOR DELETE
+	USING (author = current_user_id());
 
 --------------------------------------------------------------------------------
 
@@ -68,8 +78,19 @@ GRANT USAGE, SELECT ON SEQUENCE cases_id_seq TO author;
 
 -- …but only of cases belonging to dilemma's that he/she himself created.
 ALTER TABLE cases ENABLE ROW LEVEL SECURITY;
-CREATE POLICY author_eigenedit ON cases
-	USING (TRUE)
+
+CREATE POLICY select_unsecure ON cases FOR SELECT
+	USING (TRUE);
+
+CREATE POLICY author_eigencreate ON cases FOR INSERT
 	WITH CHECK ((SELECT author FROM dilemmas WHERE dilemmas.id = dilemma) = current_user_id());
+
+CREATE POLICY author_eigenupdate ON cases FOR UPDATE
+	USING ((SELECT author FROM dilemmas WHERE dilemmas.id = dilemma) = current_user_id())
+	WITH CHECK ((SELECT author FROM dilemmas WHERE dilemmas.id = dilemma) = current_user_id());
+
+CREATE POLICY author_eigendelete ON cases FOR DELETE
+	USING ((SELECT author FROM dilemmas WHERE dilemmas.id = dilemma) = current_user_id());
+
 
 COMMIT;
