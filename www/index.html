@@ -671,14 +671,12 @@ function dilemma_sort_cases(state) {
 	});
 }
 
-// TODO: Handle request errors.
 function load_state(url, callback) {
 	notify("Loading state for " + url + "...", 5);
 	if(url.path.length == 0) {
 		api.get('dilemmas')
 		.select('*,cases{id}')
 		.order('id', true)
-		.range(0, 10)
 		.then(callback);
 	} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
 		if(url.path[1] == 'new') {
