@@ -515,7 +515,7 @@ function Api(url) {
 			headers: {},
 			query: {},
 			then_handler: function(data) {console.log(data)},
-			catch_handler: function(error) {console.log(error)},
+			catch_handler: function(error) {notify("Error: "+error, 10, "error")},
 			payload: null,
 			match: function(query) {
 				var self = this;
@@ -562,6 +562,7 @@ function Api(url) {
 				
 				// Construct the XHR
 				this.xhr = new XMLHttpRequest();
+				this.xhr.timeout = 3000; // 3 seconds
 				this.xhr.open(this.method, this.path, true);
 				
 				// Add the headers
@@ -570,17 +571,15 @@ function Api(url) {
 				}
 				
 				// Set the readyState handler
-				var x = this.xhr;
-				var catch_handler = this.catch_handler;
-				var then_handler = this.then_handler;
+				var self = this;
 				this.xhr.onreadystatechange = function() {
-					if(x.readyState !== 4)
+					if(self.xhr.readyState !== 4)
 						return;
-					if(x.status >= 200 && x.status < 300) {
+					if(self.xhr.status >= 200 && self.xhr.status < 300) {
 						var body = {};
-						if(x.responseText.length > 0){
+						if(self.xhr.responseText.length > 0){
 							try {
-								body = JSON.parse(x.responseText)
+								body = JSON.parse(self.xhr.responseText)
 							} catch(e) {
 								catch_handler("Response is not valid JSON.");
 								return;
@@ -588,7 +587,7 @@ function Api(url) {
 						}
 						
 						// Add range bounds
-						var range = x.getResponseHeader('Content-Range');
+						var range = self.xhr.getResponseHeader('Content-Range');
 						var regexp = /^(\d+)-(\d+)\/(\d+)$/
 						if(Array.isArray(body) && range && regexp.test(range)) {
 							var match = regexp.exec(range);
@@ -598,17 +597,19 @@ function Api(url) {
 						}
 						
 						// Call the handler
-						if(typeof(then_handler) == 'function')
-							then_handler(body);
+						if(typeof(self.then_handler) == 'function')
+							self.then_handler(body);
 					} else {
-						var error = x.responseText;
+						var error = self.xhr.responseText;
 						try {
 							error = JSON.parse(error).message;
 						}
 						catch(e) {
+							// Continue with unparsed error
 						}
-						if(typeof(catch_handler) == 'function')
-							catch_handler(error);
+						if(typeof(self.catch_handler) == 'function') {
+							self.catch_handler(error);
+						}
 					}
 				};
 				

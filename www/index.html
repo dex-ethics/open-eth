@@ -425,8 +425,11 @@ function store_dilemma(callback) {
 		api.patch('dilemmas')
 		.eq('id', dilemma.id)
 		.body(body)
-		.then(callback);
-		
+		.then(callback)
+		.catch(function(error) {
+			notify("Error: " + error, 30, "error");
+		});
+
 		// TODO: Cases
 		
 	} else {
@@ -442,6 +445,9 @@ function store_dilemma(callback) {
 			// Update URL
 			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
 			callback();
+		})
+		.catch(function(error) {
+			notify("Error: " + error, 30, "error");
 		});
 	}
 }
@@ -648,7 +654,7 @@ function dilemma_sort_cases(state) {
 
 // TODO: Handle request errors.
 function load_state(url, callback) {
-	console.log("Loading state for " + url + "...");
+	notify("Loading state for " + url + "...", 5);
 	if(url.path.length == 0) {
 		api.get('dilemmas')
 		.select('*,cases{id}')
@@ -704,7 +710,7 @@ function load_state(url, callback) {
 }
 
 function load_page(url, state) {
-	console.log("Constructing page for " + url + "...");
+	notify("Constructing page for " + url + "...", 5);
 	state = deep_copy_object(state);
 	for_each(document.querySelectorAll('main, header > #head > div'), function(el) {
 		el.classList.add('hidden');
@@ -758,7 +764,7 @@ function load_page(url, state) {
 
 function go_to(url) {
 	url = parse_url(url);
-	console.log("Going to " + url + "...");
+	notify("Going to " + url + "...", 5);
 	load_state(url, function(state) {
 		load_page(url, state);
 		window.history.pushState(state, "", url);
@@ -768,32 +774,32 @@ function go_to(url) {
 window.addEventListener('DOMContentLoaded', function() {
 	var url = parse_url(window.document.location);
 	if(window.history.state === null || true) {
-		console.log("Starting on " + url + "...");
+		notify("Starting on " + url + "...", 5);
 		load_state(url, function(state){
 			load_page(url, state);
 			window.history.replaceState(state, "", window.document.location.href);
 		});
 	} else {
-		console.log("Using cached state...");
+		notify("Using cached state...", 5);
 		load_page(url, window.history.state);
 	}
 });
 
 window.addEventListener('popstate', function(event) {
 	var url = parse_url(window.document.location);
-	console.log("Going back to " + url + "...");
+	notify("Going back to " + url + "...", 5);
 	
 	load_page(url, event.state);
 });
 
 document.addEventListener('log_in_try', function(event) {
-	console.log("Trying to log in...");
+	notify("Trying to log in...", 5);
 	document.getElementById('throbber_login').classList.remove('hidden');
 	document.getElementById('button_login').classList.add('hidden');
 	document.getElementById('button_logout').classList.add('hidden');
 });
 document.addEventListener('log_in', function(event) {
-	console.log("Logged in as " + user_profile.nickname + " (" + user_id + ")");
+	notify("Logged in as " + user_profile.nickname + " (" + user_id + ")", 5);
 	document.getElementById('throbber_login').classList.add('hidden');
 	document.getElementById('button_login').classList.add('hidden');
 	document.getElementById('button_logout').classList.remove('hidden');
@@ -801,12 +807,13 @@ document.addEventListener('log_in', function(event) {
 	show_edit_buttons();
 });
 document.addEventListener('log_out', function(event) {
-	console.log("Not logged in");
+	notify("Logged out", 5);
 	document.getElementById('throbber_login').classList.add('hidden');
 	document.getElementById('button_login').classList.remove('hidden');
 	document.getElementById('button_logout').classList.add('hidden');
 	show_edit_buttons();
 });
+
 
 </script>
 </body>
