@@ -804,6 +804,29 @@ function go_to(url) {
 	});
 }
 
+// Intercept hyperlinks
+document.addEventListener('click', function(e) {
+	
+	// Filter anything but normal site-local link click
+	if(e.type != 'click')
+		return;
+	if(e.button != 0)
+		return;
+	if(e.shiftKey || e.altKey || e.ctrlKey || e.metaKey)
+		return;
+	if(e.target.tagName != 'A')
+		return;
+	if(e.target.hostname != window.location.hostname)
+		return;
+	
+	// Use go_to instead of a loading a page
+	go_to(e.target.href);
+	
+	// Tell the browser to further ignore the click
+	e.preventDefault();
+	
+});
+
 window.addEventListener('DOMContentLoaded', function() {
 	var url = parse_url(window.document.location);
 	if(window.history.state === null || true) {
