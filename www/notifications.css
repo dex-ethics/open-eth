@@ -50,6 +50,10 @@
 	}
 }
 
+#notifications > div.debug {
+	background-color: #a1fcee;
+}
+
 #notifications > div.info {
 	background-color: #a1fca6;
 }

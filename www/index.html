@@ -687,7 +687,7 @@ function dilemma_sort_cases(state) {
 }
 
 function load_state(url, callback) {
-	notify("Loading state for " + url + "...", 5);
+	notify("Loading state for " + url + "...", 5, "debug");
 	if(url.path.length == 0) {
 		api.get('dilemmas')
 		.select('*,cases{id}')
@@ -742,7 +742,7 @@ function load_state(url, callback) {
 }
 
 function load_page(url, state) {
-	notify("Constructing page for " + url + "...", 5);
+	notify("Constructing page for " + url + "...", 5, "debug");
 	state = deep_copy_object(state);
 	for_each(document.querySelectorAll('main, header > #head > div'), function(el) {
 		el.classList.add('hidden');
@@ -796,7 +796,7 @@ function load_page(url, state) {
 
 function go_to(url) {
 	url = parse_url(url);
-	notify("Going to " + url + "...", 5);
+	notify("Going to " + url + "...", 5, "debug");
 	load_state(url, function(state) {
 		load_page(url, state);
 		window.history.pushState(state, "", url);
@@ -806,26 +806,26 @@ function go_to(url) {
 window.addEventListener('DOMContentLoaded', function() {
 	var url = parse_url(window.document.location);
 	if(window.history.state === null || true) {
-		notify("Starting on " + url + "...", 5);
+		notify("Starting on " + url + "...", 5, "debug");
 		load_state(url, function(state){
 			load_page(url, state);
 			window.history.replaceState(state, "", window.document.location.href);
 		});
 	} else {
-		notify("Using cached state...", 5);
+		notify("Using cached state...", 5, "debug");
 		load_page(url, window.history.state);
 	}
 });
 
 window.addEventListener('popstate', function(event) {
 	var url = parse_url(window.document.location);
-	notify("Going back to " + url + "...", 5);
+	notify("Going back to " + url + "...", 5, "debug");
 	
 	load_page(url, event.state);
 });
 
 document.addEventListener('log_in_try', function(event) {
-	notify("Trying to log in...", 5);
+	notify("Trying to log in...", 5, "debug");
 	document.getElementById('throbber_login').classList.remove('hidden');
 	document.getElementById('button_login').classList.add('hidden');
 	document.getElementById('button_logout').classList.add('hidden');

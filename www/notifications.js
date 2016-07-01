@@ -6,7 +6,17 @@ function notify(message, timeout, msg_class, callback) {
 	if(timeout === undefined)
 		timeout = 10;
 	
-	console.log(msg_class + ": " + message);
+	// Show all messages in the console.
+	var prefix = msg_class.charAt(0).toUpperCase() + msg_class.slice(1);
+	console.log(prefix + ": " + message);
+	
+	// Do not show debug messages in the UI, except when on staging.*
+	var staging = window.location.hostname.startsWith("staging.");
+	if(msg_class === "debug" && !staging) {
+		if(callback !== undefined)
+			window.setTimeout(callback, 100);
+		return;
+	}
 	
 	var notifications = document.getElementById('notifications');
 	if(notifications === null) {
@@ -29,7 +39,6 @@ function notify(message, timeout, msg_class, callback) {
 		if(closed)
 			return;
 		closed = true;
-		console.log("Removing..." + notification);
 		notification.classList.add('hide');
 		if(callback !== undefined)
 			callback();
