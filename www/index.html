@@ -381,10 +381,11 @@
 		information theirin at your own risk.
 	</p>
 </footer>
+<script type="text/javascript" src="/notifications.js"></script>
 <script type="text/javascript" src="//cdn.auth0.com/js/lock-9.0.js"></script>
+<script type="text/javascript" src="/authentication.js"></script>
 <script type="text/javascript" src="/script.js"></script>
 <script type="text/javascript" src="/openeth.js"></script>
-<script type="text/javascript" src="/notifications.js"></script>
 <script type="text/javascript">
 
 
@@ -831,13 +832,24 @@ document.addEventListener('log_in_try', function(event) {
 	document.getElementById('button_logout').classList.add('hidden');
 });
 document.addEventListener('log_in', function(event) {
-	notify("Logged in as " + user_profile.nickname + " (" + user_id + ")", 5);
+	notify("Logged in as " + user_profile.nickname, 5);
 	document.getElementById('throbber_login').classList.add('hidden');
 	document.getElementById('button_login').classList.add('hidden');
 	document.getElementById('button_logout').classList.remove('hidden');
 	document.getElementById('add_dilemma').classList.remove('hidden');
 	show_edit_buttons();
 });
+
+// In case the user is already logged in on page load.
+if(user_profile) {
+	notify("Logged in as " + user_profile.nickname, 5, 'debug');
+	document.getElementById('throbber_login').classList.add('hidden');
+	document.getElementById('button_login').classList.add('hidden');
+	document.getElementById('button_logout').classList.remove('hidden');
+	document.getElementById('add_dilemma').classList.remove('hidden');
+	show_edit_buttons();
+}
+
 document.addEventListener('log_out', function(event) {
 	notify("Logged out", 5);
 	document.getElementById('throbber_login').classList.add('hidden');
