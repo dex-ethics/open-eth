@@ -1,0 +1,9 @@
+.spinner-before:before {
+	display: inline-block;
+	margin-left: -1.5em;
+	margin-right: 0.5em;
+	width: 1em;
+	font-family: 'FontAwesome';
+	content: "\f110";
+	animation: spin 1s infinite steps(8);
+}

@@ -584,6 +584,28 @@ input[type=range]:disabled::-webkit-slider-thumb {
 	background: #F2F2F2;
 }
 
+
+body > header button.done {
+	background-color: #ffffff;
+}
+body > header button.active {
+	background-color: #a1fcee;
+}
+
+body > header button.error {
+	background-color: #fca1a3;
+}
+body > header label {
+	color: inherit;
+}
+body > header input[type=checkbox] + span:before {
+	border-color: #888888;
+}
+body > header input[type=checkbox]:checked + span:before {
+	background-color: #ffffff;
+}
+
+
 body > footer {
 	background: #5D5D5D;
 	color: #F2F2F2;

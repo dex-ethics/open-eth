@@ -7,6 +7,7 @@
 	<meta name="description" content="Community-driven ethical explication system.">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<link rel="stylesheet" type="text/css" href="/style.css">
+	<link rel="stylesheet" type="text/css" href="/spinner.css">
 	<link rel="stylesheet" type="text/css" href="/notifications.css">
 </head>
 <body>
@@ -38,13 +39,29 @@
 		</div>
 		<div id="head_edit_dilemma" class="hidden">
 			<p class="one-column">Edit dilemma</p>
-			<p><button class="button save" onclick="store_dilemma()">Save</button></p>
-			<p><button class="button delete" onclick="delete_dilemma()">Delete</button></p>
+			<p>
+				<button id="dilemma_save" class="button save" onclick="store_dilemma()">
+					<span>Save</span>
+				</button>
+			</p>
+			<p>
+				<button id="dilemma_delete" class="button delete" onclick="delete_dilemma()">
+					<span>Delete</span>
+				</button>
+			</p>
 		</div>
 		<div id="head_edit_case" class="hidden">
 			<p class="one-column">Edit case</p>
-			<p><button class="button save" onclick="store_case()">Save</button></p>
-			<p><button class="button delete" onclick="delete_case()">Delete</button></p>
+			<p>
+				<button id="case_save" class="button save" onclick="store_case()">
+					<span>Save</span>
+				</button>
+			</p>
+			<p>
+				<button id="case_delete" class="button delete" onclick="delete_case()">
+					<span>Delete</span>
+				</button>
+			</p>
 		</div>
 	</div>
 </header>
@@ -455,15 +472,37 @@ function store_dilemma(callback) {
 		callback = go_to.bind(null, ['/']);
 	}
 	
+	// Style the button
+	var button = document.getElementById('dilemma_save');
+	var span = button.getElementsByTagName('span')[0];
+	button.classList.remove('done');
+	button.classList.remove('error');
+	button.classList.add('active');
+	span.classList.add('spinner-before');
+	var done = function() {
+		console.log("ASD");
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('done');
+		notify('Dilemma saved', 5, "info");
+		callback();
+	}
+	var failed = function(error) {
+		console.log("ASD");
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('error');
+		notify("Error: " + error, 30, "error");
+	};
+	
+	// Insert or Update
 	if(dilemma.id) {
 		// Update
 		api.patch('dilemmas')
 		.eq('id', dilemma.id)
 		.body(body)
-		.then(callback)
-		.catch(function(error) {
-			notify("Error: " + error, 30, "error");
-		});
+		.then(done)
+		.catch(failed);
 
 		// TODO: Cases
 		
@@ -474,27 +513,45 @@ function store_dilemma(callback) {
 		.select('id, author')
 		.body(body)
 		.then(function(result) {
-			console.log(result);
 			join('edit_dilemma', {id: result.id, author: result.author});
 			
 			// Update URL
 			window.history.replaceState(null, "", "/dilemmas/" + result.id + "?edit");
-			callback();
+			done();
 		})
-		.catch(function(error) {
-			notify("Error: " + error, 30, "error");
-		});
+		.catch(failed);
 	}
 }
 
 function delete_dilemma() {
 	var dilemma = extract('edit_dilemma');
+	
+	// Style the button
+	var button = document.getElementById('dilemma_delete');
+	var span = button.getElementsByTagName('span')[0];
+	button.classList.remove('done');
+	button.classList.remove('error');
+	button.classList.add('active');
+	span.classList.add('spinner-before');
+	var done = function() {
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('done');
+		notify('Dilemma deleted', 5, "info");
+		go_to('/');
+	}
+	var failed = function(error) {
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('error');
+		notify("Error: " + error, 30, "error");
+	};
+	
 	if(dilemma.id) {
 		api.delete('dilemmas')
 		.eq('id', dilemma.id)
-		.then(function(){
-			go_to('/');
-		});
+		.then(done)
+		.catch(failed);
 	} else {
 		go_to('/');
 	}
@@ -594,15 +651,36 @@ function store_case() {
 		features: get_feature_sliders()
 	};
 	
+	// Style the button
+	var button = document.getElementById('case_save');
+	var span = button.getElementsByTagName('span')[0];
+	button.classList.remove('done');
+	button.classList.remove('error');
+	button.classList.add('active');
+	span.classList.add('spinner-before');
+	var done = function() {
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('done');
+		notify('Case saved', 5, "info");
+		go_to('/dilemmas/' + data.dilemma_id + '?edit');
+	}
+	var failed = function(error) {
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('error');
+		notify("Error: " + error, 30, "error");
+		go_to('/dilemmas/' + data.dilemma_id + '?edit');
+	};
+	
 	if(data.id) {
 		// Update
 		delete body.dilemma;
 		api.patch('cases')
 		.eq('id', data.id)
 		.body(body)
-		.then(function(){
-			go_to('/dilemmas/' + data.dilemma_id + '?edit');
-		});
+		.then(done)
+		.catch(failed);
 		
 	} else {
 		// Insert
@@ -611,26 +689,47 @@ function store_case() {
 		.select('id')
 		.body(body)
 		.then(function(result) {
-			console.log(result);
 			join('edit_case', {id: result.id});
 			
 			// Update URL
 			window.history.replaceState(null, "", "/cases/" + result.id + "?edit");
 			
-			// Go to dilemma
-			go_to('/dilemmas/' + data.dilemma_id + '?edit');
-		});
+			done();
+		})
+		.catch(failed);
 	}
 }
 
 function delete_case() {
 	var data = extract('edit_case');
+	
+	// Style the button
+	var button = document.getElementById('case_delete');
+	var span = button.getElementsByTagName('span')[0];
+	button.classList.remove('done');
+	button.classList.remove('error');
+	button.classList.add('active');
+	span.classList.add('spinner-before');
+	var done = function() {
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('done');
+		notify('Case deleted', 5, "info");
+		go_to('/dilemmas/' + data.dilemma_id + '?edit');
+	}
+	var failed = function(error) {
+		button.classList.remove('active');
+		span.classList.remove('spinner-before');
+		button.classList.add('error');
+		notify("Error: " + error, 30, "error");
+		go_to('/dilemmas/' + data.dilemma_id + '?edit');
+	};
+	
 	if(data.id) {
 		api.delete('cases')
 		.eq('id', data.id)
-		.then(function(){
-			go_to('/dilemmas/' + data.dilemma_id + '?edit');
-		});
+		.then(done)
+		.catch(failed);
 	} else {
 		go_to('/dilemmas/' + data.dilemma_id + '?edit');
 	}
@@ -751,6 +850,17 @@ function load_page(url, state) {
 	for_each(document.querySelectorAll('main, header > #head > div'), function(el) {
 		el.classList.add('hidden');
 	});
+	
+	// Reset button states
+	for_each(document.querySelectorAll('body > header button'), function(button) {
+		button.classList.remove('done');
+		button.classList.remove('error');
+		button.classList.remove('active');
+	});
+	for_each(document.querySelectorAll('body > header button span.spinner-before'), function(el) {
+		el.classList.remove('spinner-before');
+	});
+	
 	//try {
 		if(url.path.length == 0) {
 			state = { dilemmas: state };
