@@ -637,6 +637,10 @@ function delete_case() {
 }
 
 function show_edit_buttons() {
+	
+	// Check if we are moderator
+	var moderator = user_profile != null && user_profile.role == 'moderator';
+	
 	// Dilemmas overview
 	for_each(document.querySelectorAll("#start section.dilemma"), function(el) {
 		var author = el.getElementsByTagName('input')[1].value;
@@ -646,12 +650,11 @@ function show_edit_buttons() {
 			el.classList.remove('editable');
 		}
 	});
-	
-	
+		
 	// Dilemma
 	var data = extract(document.getElementById('dilemma'));
 	var button = document.querySelectorAll('#head_dilemma button.edit')[0];
-	if(data.author == user_id) {
+	if(moderator || data.author == user_id) {
 		button.classList.remove('hidden');
 	} else {
 		button.classList.add('hidden');
@@ -660,7 +663,7 @@ function show_edit_buttons() {
 	// Case
 	var data = extract(document.getElementById('case'));
 	var button = document.querySelectorAll('#head_case button.edit')[0];
-	if(data.author == user_id) {
+	if(moderator || data.author == user_id) {
 		button.classList.remove('hidden');
 	} else {
 		button.classList.add('hidden');
