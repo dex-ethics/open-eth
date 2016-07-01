@@ -15,6 +15,7 @@ AS $$
 	VALUES ("csp-report")
 $$;
 
+-- Anyone can report Content Security Policy Violations
 GRANT EXECUTE ON FUNCTION csp_report(json) TO anonymous;
 
 COMMIT;

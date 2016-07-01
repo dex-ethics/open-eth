@@ -17,7 +17,7 @@ CREATE TABLE dilemmas (
 
 -- TODO: constrain 'actions' to have two elements
 
--- Anonymous can read all.
+-- Anonymous can read all dilemmas.
 GRANT SELECT ON TABLE dilemmas TO anonymous;
 
 -- Author can modify name and description…
@@ -44,6 +44,12 @@ CREATE POLICY author_eigenupdate ON dilemmas FOR UPDATE
 CREATE POLICY author_eigendelete ON dilemmas FOR DELETE
 	USING (author = current_user_id());
 
+-- Moderator can modify all
+-- (note that moderator inherits author policies)
+CREATE POLICY moderator	ON dilemmas FOR ALL TO moderator
+	USING (TRUE)
+	WITH CHECK(TRUE);
+
 --------------------------------------------------------------------------------
 
 CREATE TABLE cases (
@@ -65,7 +71,7 @@ CREATE TABLE cases (
 -- TODO: features constraint that its dimensions are
 ---      dilemma.actions.length × dilemma.features.length
 
--- Anonymous can read all.
+-- Anonymous can read all cases.
 GRANT SELECT ON TABLE cases TO anonymous;
 
 -- Author of dilemma can modify…
@@ -91,6 +97,12 @@ CREATE POLICY author_eigenupdate ON cases FOR UPDATE
 
 CREATE POLICY author_eigendelete ON cases FOR DELETE
 	USING ((SELECT author FROM dilemmas WHERE dilemmas.id = dilemma) = current_user_id());
+
+-- Moderator can modify all
+-- (note that moderator inherits author policies)
+CREATE POLICY moderator	ON cases FOR ALL TO moderator
+	USING (TRUE)
+	WITH CHECK(TRUE);
 
 
 COMMIT;

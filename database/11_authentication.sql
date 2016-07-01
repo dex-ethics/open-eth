@@ -8,11 +8,23 @@ BEGIN;
 -- HTTP request. If the client included no (or an invalid) JWT
 -- then PostgREST selects the role "anonymous".
 
-CREATE ROLE anonymous;
-CREATE ROLE author;
-GRANT anonymous, author TO authenticator;
+CREATE ROLE anonymous;  -- Not logged in
+CREATE ROLE onymous;    -- Logged in
+CREATE ROLE author;     -- Allowed to author own content (default user role)
+CREATE ROLE moderator;  -- Allowed to auther all content
 
-GRANT USAGE ON SCHEMA public TO anonymous, author;
+-- The priviliges are strictly increasing
+GRANT anonymous TO onymous;
+GRANT onymous TO author;
+GRANT author TO moderator;
+
+-- The initial connection is set up using user authenticator, which
+-- subsequently needs to be able to drop priviliges to the approriate
+-- role.
+GRANT anonymous, onymous, author, moderator TO authenticator;
+
+-- Anyone can read the public tables
+GRANT USAGE ON SCHEMA public TO anonymous;
 
 --------------------------------------------------------------------------------
 -- The user id is a string stored in postgrest.claims.sub. Let's
@@ -30,7 +42,7 @@ EXCEPTION
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION current_user_id() TO anonymous, author;
+GRANT EXECUTE ON FUNCTION current_user_id() TO anonymous;
 
 --------------------------------------------------------------------------------
 -- We put things inside the hidden schema to hide
@@ -66,7 +78,8 @@ AS $$
 		EXCLUDED.profile);
 $$;
 
-GRANT EXECUTE ON FUNCTION login(json) TO author;
+-- Any logged in user can update his/her profile
+GRANT EXECUTE ON FUNCTION login(json) TO onymous;
 
 -- TODO: Investigate implementation without 'SECURITY DEFINER'
 -- TODO: Fail on current_user_id() = ''
