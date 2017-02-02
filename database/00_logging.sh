@@ -1,12 +1,9 @@
-chown -R postgres /var/log
-chmod -R o+rwX /var/log
 echo "
 
 # LOG LOCATION
 
 log_destination = stderr
 logging_collector = true
-log_directory = '/var/log/'
 
 # ERROR REPORTING AND LOGGING
 
