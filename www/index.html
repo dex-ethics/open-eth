@@ -1,34 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8">
-	<!--<base href="https://openeth.com/">-->
-	<title>OpenEth</title>
-	<meta name="description" content="Community-driven ethical explication system.">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-	<link rel="stylesheet" type="text/css" href="/style.css">
-	<link rel="stylesheet" type="text/css" href="/spinner.css">
-	<link rel="stylesheet" type="text/css" href="/notifications.css">
+<head>  
+      <title>OpenEth</title>
+		<base href="/">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">    
+      <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+      <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+      <link href="openeth.css" rel="stylesheet">
 </head>
 <body>
-
-<header>
-	<nav>
-		<a href="/">OpenEth</a>
-		<a href="/featured">Featured Dilemmas</a>
-		<a href="/play">Play with Ethics</a>
-		<a href="/guidance">Guidance</a>
-		<div id="throbber_login" class="hidden"><span class="spinner"></span></div>
-		<button id="button_login" onclick="login()">Log in</button>
-		<button id="button_logout" class="hidden" onclick="logout()">Log out</button>
+	<nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>    
+              </button>
+              <a class="navbar-brand" href="#mainPage"><img src="images/brand_logo.png" class="hidden-xs" alt="openeth"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+              <ul class="nav navbar-nav">
+                <li><a href="/">home</a></li>
+                <li><a href="/play">play</a></li>
+                <li><a href="/blog">blog</a></li>
+                <li><a href="/about">about</a></li>
+                <li><a href="/contact">contact</a></li>
+				<li><a class="button" id="register" onclick="register()">Join OpenEth</a></li>
+                <li><a id="button_login" onclick="login()" href="#">log in</a></li>
+                <li><a id="button_logout" class="hidden" onclick="logout()" href="#">log out</a></li>
+              </ul>
+            </div>
+          </div>
+			<div id="throbber_login" class="hidden"><span class="spinner"></span></div>
 	</nav>
-	<div id="head">
-		<div id="head_start" class="hidden">
-			<p class="one-column">OpenEth is a project designed to enable a crowd-sourced analysis of ethical
-			dilemmas, to enable better decisions based upon available information, and its 
-			relative likelihood.</p>
-			<p><button class="button" id="register" onclick="register()">Join OpenEth</button></p>
-		</div>
 		<div id="head_dilemma" class="hidden">
 			<p class="one-column" data-content="name"></p>
 			<p><button class="button edit" onclick="edit_current_dilemma()">Edit</button></p>
@@ -36,19 +43,6 @@
 		<div id="head_case" class="hidden">
 			<p class="one-column" data-content="name"></p>
 			<p><button class="button edit" onclick="edit_current_case()">Edit</button></p>
-		</div>
-		<div id="head_edit_dilemma" class="hidden">
-			<p class="one-column">Edit dilemma</p>
-			<p>
-				<button id="dilemma_save" class="button save" onclick="store_dilemma()">
-					<span>Save</span>
-				</button>
-			</p>
-			<p>
-				<button id="dilemma_delete" class="button delete" onclick="delete_dilemma()">
-					<span>Delete</span>
-				</button>
-			</p>
 		</div>
 		<div id="head_edit_case" class="hidden">
 			<p class="one-column">Edit case</p>
@@ -64,150 +58,353 @@
 			</p>
 		</div>
 	</div>
-</header>
 
 <main id="start" class="hidden">
-<article class="dilemmas">
-	<section>
-		<header>
-			<h1>Featured dilemmas</h1>
-		</header>
-		<div class="dilemmas">
+	<div class="container">
+		<div class="row">
+        	<div class="col-lg-12">
+            	<h3 class="page-header">Choose your challenge*</h3>
+            </div>
+        </div>
+        <div class="container">
+        	<div class="row contentdiv">
+            	<div class="col-md-6 col-sm-6 col-xs-12">
+                	<h2 class="main-h2">Level 1: Fast<br><small>OPEN ACCESS</small></h2>
+                    <img src="images/fast.jpg" class="img-position"/>
+                    <p class="main-p">Have fun answering questions, use your intuition, race with time, leave 
+                       your footprint on understanding ethical decisions.
+                    </p>
+                    <button type="button" class="main-button"><a href="#">PLAY</a></button>
+               </div>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                    <h2 class="main-h2">Level 2: Slow<br>
+                        <small>NOT TOO SEVERE RESTRICTIONS ADDED</small>
+                    </h2>
+                    <img src="images/slow.jpg" class="img-position"/>
+                    <p class="main-p">Explore the intricate wolrd of ethics, share your doubts, discuss with
+                        others, build useful ethics systems.
+                    </p>
+                    <button type="button" class="main-button"><a href="#">PLAY</a></button>
+                </div>
+            </div>
+        </div>  
+     	<div class="row">
+        	<div class="col-lg-12">
+                 <h3 class="page-content">*Why challenges?</h3>
+                 <p class="quote"><i>Whatever Daniel K. quote there is to pick</i></p>
+                 <p class="author">-Whatever Author, Title, year</p>
+                 <h6 class="text-field">Maybe some text overhere. If yes, please be short.</h6>
+                 <h6 class="text-field">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dapibus vulputate diam eu pretium. 
+                	Mauris elit orci, ultricies id fermentum vel, porta et eros. Vestibulum
+            	</h6>
+        	</div>
+    	</div>
+	</div>
+	<div class="container">
+    	<div class="row">
+        	<div class="col-lg-12 headerdiv">
+            	<h3 class="dilemma-header">Dilemmas*</h3>
+              	<p class="dialog">Play with ethics exploring and adding dilemmas.<br>
+                Help to list and specify more and less preferable ethical scenarios.
+                </p>
+            </div>
+        </div>
+		<div class="container">
+        	<div class="row resize-row">
+            	<div class="col-sm-3">
+                	<a href="#" class="dilemma-link add dilemma" id="add_dilemma" onclick="go_to('/dilemmas/new?edit')">+ ADD DILEMMA</a>
+                </div>
+                <div class="col-sm-offset-4 col-sm-5">    
+                	<div class="input-group stylish-input-group">
+                    	<span class="input-group-addon">
+                        	<button type="submit">
+                            	<span class="glyphicon glyphicon-search"></span>
+                            </button>  
+                        </span>
+                        <input type="search" class="form-control"  placeholder="Search" >
+                    </div>
+               </div>
+            </div>
+       	</div>
+		<div class="container">
 			<template data-array="dilemmas">
-				<section class="dilemma button vertical" onclick="open_dilemma(this)">
+				<div class="col-md-4 col-sm-6 col-xs-12 dilemma-content" onclick="open_dilemma(this)">
 					<input type="hidden" data-value="id">
 					<input type="hidden" data-value="author">
-					<header class="horizontal">
-						<h1 class="adjust" >
-							<span class="ellipsis" data-content="name"></span>
-						</h1>
-						<button class="edit" onclick="edit_dilemma(event, this)">
-							<input type="hidden" data-value="id">
-							Edit
-						</button>
-					</header>
-					<p class="adjust" data-content="description"></p>
-					<ul>
-						<template data-array="features">
-							<li data-content=""></li>
-						</template>
-					</ul>
-					<footer>
-						<span data-content="num_cases"></span>
-						<span>Cases</span>
-						<!-- TODO: Auther name -->
-					</footer>
-				</section>
+                	<h2 class="main-h2" data-content="name"></h2>
+                    <img src="images/vehicles.jpg" class="img-position"/>
+                    <p class="dilemma-text" data-content="description"></p>
+                    <button type="button" class="main-button" onclick="edit_dilemma(event, this)">
+						<input type="hidden" data-value="id">
+						PLAY
+					</button>
+					<!--<template data-array="features">
+						<li data-content=""></li>
+					</template>-->
+					<!--<span data-content="num_cases"></span>-->
+				</div>
 			</template>
-			<button id="add_dilemma" class="add dilemma hidden" onclick="go_to('/dilemmas/new?edit')">
-				<span class="icon">⊕</span>
-				<span class="label">Add a dilemma</span>
-			</button>
-		</div>
-	</section>
-</article>
+	</div>
 </main>
 
 <main id="dilemma" class="hidden">
 	<input type="hidden" data-value="id">
 	<input type="hidden" data-value="author">
-	<article class="dilemma">
-		<section>
-			<p class="two-column" data-content="description"></p>
-		</section>
-		<section>
-			<header>
-				<h1>Actions</h1>
-			</header>
-			<ul>
-				<template data-array="actions">
-					<li data-content=""></li>
-				</template>
-			</ul>
-		</section>
-		<section>
-			<header>
-				<h1>Features</h1>
-			</header>
-			<ul>
-				<template data-array="features">
-					<li data-content=""></li>
-				</template>
-			</ul>
-		</section>
-		<section class="collapsable">
-			<header>
-				<h1>Cases</h1>
-			</header>
-			<div class="flex-4">
-				<template data-array="cases">
-					<section class="case button vertical" onclick="open_case(this)">
-						<input type="hidden" data-value="id">
-						<h2 class="ellipsis" data-content="name"></h2>
-						<p class="description adjust" data-content="description"></p>
-						<h3>Correct Action</h3>
-						<p class="action ellipsis" data-content="action"></p>
-					</section>
-				</template>
+
+	<div class="container">
+    	<div class="row list-header-margin">
+        	<div class="col-lg-offset-1 col-lg-2 col-md-2 col-sm-offset-1 col-sm-1 col-xs-2 list-margin">    
+            	<a href="/" class="icon">
+					<img src="images/arrow.jpg">
+                	<span class="hidden-sm hidden-xs list-font">List of Dilemma</span>
+				</a>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-10 col-xs-8">
+            	<img src="images/vehicles.jpg" class="resize-img hidden-xs"/>    
+                <p class="title-margin" data-content="name"></p>
+                <small>Added by Remco Bloemen</small>    
+            </div>  
+		</div>
+       	<div class="row text-bar">
+        	<div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12">
+            	<ul class="li-position">
+                	<li class="li-style"><a href="#dilemmadesc" data-toggle="tab" class="li-link">DILEMMA DESCRIPTION</a></li>
+                    <li class="li-style"><a href="#dilemmacases" data-toggle="tab" class="li-link">CASES</a></li>
+                    <li class="li-style"><a href="#dilemmadiscussion" data-toggle="tab" class="li-link">DISCUSSION</a></li>
+                </ul>
 			</div>
-		</section>
-		<section>
-			<header>
-				<h1>Key Takeaway / Duties</h1>
-			</header>
-			<p>It can be inferred that there are (prima facie) duties to:</p>
-			<ul>
-				<template data-array="duties">
-					<li data-content=""></li>
-				</template>
-			</ul>
-		</section>
-		<section>
-			<header>
-				<h1>Rules</h1>
-			</header>
-			<div class="principles">
-				<ul class="principles flex-2">
-					<template data-array="principles">
-						<li class="principle">
-							<p>An action is ethically preferable to another if it</p>
-							<ul class="clauses">
-								<template data-array="clauses">
-									<li class="clause" data-content=""></li>
-								</template>
-							</ul>
-						</li>
-					</template>
-				</ul>
+       	</div>
+		<div class="tab-content clearfix">
+			<div class="tab-pane active" id="dilemmadesc">
+				<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12">    
+        			<p class="reposition-desc-text">Description</p>
+        		</div>
+        		<div class="col-lg-7 col-sm-12 col-xs-12 dilemma-desc">
+					<p data-content="description"></p>
+				</div>
+				<div class="row">
+        			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">    
+            			<p>Correct actions</p>
+           			</div>
+            		<div class="col-lg-7 col-sm-12 col-xs-12 list-content-margin">
+						<template data-array="actions">
+							<li class="dilemma-list dilemma-position" data-content=""></li>
+						</template>
+            		</div>
+       			</div>
+       			<div class="row">
+           			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">
+            		   <p>Features</p>
+           			</div>
+           			<div class="col-lg-7 col-sm-12 col-xs-12 list-content-margin">
+						<template data-array="features">
+						<li class="dilemma-list dilemma-position" data-content=""></li>
+						</template>
+           			</div>
+       			</div>
+       			<div class="row">
+           			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">
+            	   		<p>Key takeaway/Duties</p>
+           			</div>
+           			<div class="col-lg-7 col-sm-12 col-xs-12 list-content-margin">
+            			<p>It can be inferred that there are (prima facie) duties to:</p>
+						<template data-array="duties">
+							<li class="dilemma-list dilemma-position" data-content=""></li>
+						</template>
+           			</div>
+       			</div>
+				<div class="row">
+        			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">
+            			<p>Rules</p>
+            		</div>
+            		<div class="col-lg-7 col-sm-12 col-xs-12 rule-dilemma">
+						<ul class="principles">
+							<template data-array="principles">
+								<li class="principle dilemma-list">
+									<p>An action is ethically preferable to another if it</p>
+									<ul class="clauses">
+										<template data-array="clauses">
+											<li class="clause dilemma-list" data-content=""></li>
+										</template>
+									</ul>
+								</li>
+							</template>
+						</ul>
+            		</div>
+        		</div>
 			</div>
-		</section>
-	</article>
+			<div class="tab-pane" id="dilemmacases">
+				<div class="row">
+        			<div class="col-lg-offset-1 col-lg-2 col-md-12 col-sm-12 col-xs-12 list-margin">
+            			<p>Cases</p>
+            		</div>
+            		<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 case-content">
+            		  	 <div class="row">
+							<template data-array="cases">
+								<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 " onclick="open_case(this)">
+									<input type="hidden" data-value="id">
+            		            	<p class="case-margin" data-content="name"></p> <a href="#" onclick="open_case(this)" class="case-link">READ MORE</a>
+            		                <br>
+									<p class="cursor" data-content="description"></p>
+            		                <p class="case-position">Correct action: &nbsp;</p>
+									<p class="case-position" data-content="action"></p>
+            		            </div>
+							</template>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="dilemmadiscussion">
+				<div class="row">
+                	<div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12 list-margin">
+                	    <a href="#" class="li-content-link">+ADD COMMENT</a>&nbsp; &nbsp; &nbsp;<a href="#" class="li-content-link">+ADD FILTERS</a>&nbsp;<span>(no filters)</span>
+                	</div>    
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                	    <img src="images/star.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                	        <p><b>Remco Bloemen</b> added case: <b>Name 1</b>
+                	        </p>
+                	        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; <a href="#" class="tab">Comment</a>&nbsp; &nbsp;<img src="images/heart.jpg"/>
+                	        </span>
+                	</div>  
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                    	<img src="images/yellowstar.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> added dillema : <b>Autonomous car</b>
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; <a href="#" class="tab">Comment</a>&nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                	</div>  
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                	    <img src="images/lightmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> added on case <b>Name 1</b> :Somehow comments at least two levels facebook like comment.
+                        <br>Mentions @Nell Watson (one more color needed)
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                        <div class="div-margin">
+                            <p><b>Nell Watson</b>Writes something</p>
+                            <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                            </span>
+                        </div>
+                	</div>  
+            	</div>
+				<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1  col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                	    <img src="images/yellowmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> on dillema <b>Autonomous Vehicles</b> :Somehow comments at least two levels facebook
+                            like comment. Mentions @Nell Watson (one more color needed)
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                	</div>
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">
+                	    <img src="images/message.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Ola</b> on feature <b>Harm</b> :Lorem ipsum dolores etc.
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                	</div>
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1  col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">
+                    	<img src="images/yellowmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> on dillema <b>Autonomous Vehicles</b> :
+                        </p>
+                        <div class="">
+                            <p><i>Part of the dilemma, lorem ipsum</i></p>
+                        </div>
+                        <p>Somehow comments at least two levels facebook like comment. Mentions
+                            @Nell Watson (one more color needed)
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/blackheart.jpg"/>
+                        </span>
+                	</div>
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1  col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">
+                	    <img src="images/yellowmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                	        <p><b>Remco Bloemen</b> on dillema <b>Autonomous Vehicles</b> :
+                	        </p>
+                	        <p>The driver of the car is either speeding, comment comment comment comment commet certain
+                	            circumstances, normal rules of the road can be fairly circumvented. Comment comment comment
+                	            Alternative version of a comment with a quote.
+                	        </p>
+                	        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/blackheart.jpg"/>
+                	        </span>
+                	</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </main>
 
 <main id="case" class="hidden">
 	<input type="hidden" data-value="id">
 	<input type="hidden" data-value="dilemma_id">
 	<input type="hidden" data-value="author">
-	<article class="dilemma">
-		<section>
-			<p class="two-column" data-content="description"></p>
-		</section>
-		<section>
-			<header>
-				<h1>Correct Action</h1>
-			</header>
-			<p data-content="action_label"></p>
-		</section>
-		<section>
-			<header>
-				<h1>Features</h1>
-			</header>
-			<table>
+
+	<div class="container">
+    	<div class="row list-header-margin">
+        	<div class="col-lg-offset-1 col-lg-2 col-md-2 col-sm-offset-1 col-sm-1 col-xs-2 list-margin">    
+            	<a href="#" class="icon"><img src="images/arrow.jpg">
+                	<span class="hidden-sm hidden-xs list-font">List of Dilemma</span>
+                </a>
+           </div>
+           <div class="col-lg-9 col-md-9 col-sm-10 col-xs-8">
+                <img src="images/vehicles.jpg" class="resize-img hidden-xs"/>    
+                <p class="title-margin">Autonomous Vehicles</p>
+                <small>Added by Remco Bloemen</small>    
+            </div>  
+       </div>    
+       <div class="row text-bar">
+       		<div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12">
+        		<ul class="li-position">
+            		<li class="addcase-style"><a href="#">+ADD CASE</a></li>
+                	<li class="addcase-style"><a href="#">EDIT</a></li>
+            	</ul>
+       		</div>
+   		</div>    
+		<div class="row">    
+    		<div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-12 col-xs-12 viewcase-reposition">
+        		<p class="addcase-margin">Asimov Classics</p>
+                <small>Added by Remco Bloemen</small><br><br>   
+                <p data-content="description"></p> 
+                <p>Correct action:</p>             
+				<p data-content="action_label"></p>
+            </div>
+        </div>
+       	<div class="row">
+        	<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">
+           	   <p>Features</p>
+           	</div>
+           	<div class="col-lg-7 col-sm-12 col-xs-12 list-content-margin">
+				<table>
 				<thead>
 					<tr>
 						<th>Feature</th>
 						<template data-array="actions">
-							<th data-content=""></th>
+							<th class="table-margin" data-content=""></th>
 						</template>
 					</tr>
 				</thead>
@@ -216,142 +413,379 @@
 						<tr>
 							<td data-content="feature"></td>
 							<template data-array="values">
-								<td data-content=""></td>
+								<td class="table-margin" data-content=""></td>
 							</template>
 						</tr>
 					</template>
 				</tbody>
-			</table>
-		</section>
-	</article>
+				</table>
+           	</div>
+       	</div>
+    </div>          
 </main>
 
 <main id="edit_dilemma" class="hidden">
 	<input type="hidden" data-value="id">
 	<input type="hidden" data-value="dilemma_id">
 	<input type="hidden" data-value="author">
-	<article class="dilemma">
-		<section>
-			<header>
-				<h1>Features</h1>
-			</header>
-			<input type="text" class="heading" data-value="name" placeholder="Name">
-		</section>
-		<section>
-			<header>
-				<h1>Description</h1>
-			</header>
-			<textarea data-value="description" placeholder="Description"></textarea>
-		</section>
-		<section>
-			<header>
-				<h1>Actions</h1>
-			</header>
-			<template data-array="actions">
-				<input type="text" data-value="">
-			</template>
-		</section>
-		<section>
-			<header>
-				<h1>Features</h1>
-			</header>
-			<ul>
-				<template data-array="features">
-					<li>
-						<input type="text" data-value="" oninput="console.log('input')">
-						<button class="remove" onclick="remove_feature(this)">Remove</button>
-					</li>
-				</template>
-				<li>
-					<input type="text" placeholder="Add a feature" onchange="add_feature(this)">
-				</li>
-			</ul>
-		</section>
-		<section class="collapsable">
-			<header>
-				<h1>Cases</h1>
-			</header>
-			<div class="flex-4">
-				<template data-array="cases">
-					<section class="case button vertical" onclick="edit_case(this)">
-						<input type="hidden" data-value="id">
-						<h2 class="ellipsis" data-content="name"></h2>
-						<p class="description adjust" data-content="description"></p>
-						<h3>Correct Action</h3>
-						<p class="action ellipsis" data-content="action"></p>
-					</section>
-				</template>
-				<button class="case add" onclick="add_case(this)">
-					<span class="icon">⊕</span>
-					<span class="label">Add a case</span>
-				</button>
+
+	<div class="container">
+    	<div class="row list-header-margin">
+        	<div class="col-lg-offset-1 col-lg-2 col-md-2 col-sm-offset-1 col-sm-1 col-xs-2 list-margin">    
+            	<a href="/" class="icon">
+					<img src="images/arrow.jpg">
+                	<span class="hidden-sm hidden-xs list-font">List of Dilemma</span>
+				</a>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-10 col-xs-8">
+            	<img src="images/vehicles.jpg" class="resize-img hidden-xs"/>    
+                <p class="title-margin" data-content="name"></p>
+                <small>Added by Remco Bloemen</small>    
+            </div>  
+		</div>
+       	<div class="row text-bar">
+        	<div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12">
+            	<ul class="li-position">
+                	<li class="li-style"><a href="#editdilemmadesc" data-toggle="tab" class="li-link">DILEMMA DESCRIPTION</a></li>
+                    <li class="li-style"><a href="#editdilemmacases" data-toggle="tab" class="li-link">CASES</a></li>
+                    <li class="li-style"><a href="#editdilemmadiscussion" data-toggle="tab" class="li-link">DISCUSSION</a></li>
+                </ul>
+            </div>
+       	</div>
+		<div class="tab-content clearfix">
+			<div class="tab-pane active" id="editdilemmadesc">
+				<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin ">    
+        			<p class="editdesc-text">Description</p>
+        		</div>
+        		<div class="col-lg-7 col-sm-12 col-xs-12 list-margin mobilelist-margin">
+					<textarea data-value="description" class="desc-margin"></textarea>
+				</div>
+				<div class="row">
+        			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">    
+            			<p>Correct actions</p>
+           			</div>
+            		<div class="col-lg-7 col-sm-12 col-xs-12 list-content-margin">
+						<template data-array="actions">
+							<li class="dilemma-list editdil-position"><input type="text" data-value=""></li>|
+						</template>
+            		</div>
+       			</div>
+       			<div class="row">
+           			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">
+            		   <p>Features</p>
+           			</div>
+           			<div class="col-lg-7 col-sm-12 col-xs-12 list-content-margin">
+						<template data-array="features">
+						<li class="dilemma-list">
+							<input type="text" data-value="" oninput="console.log('input')">
+							<a class="remove" onclick="remove_feature(this)"><img src="images/close.png" class="close-btn" alt="close" data-toggle="tooltip" title="Remove"></a>
+						</li><br>
+						</template>
+						<li class="dilemma-list">
+							<input type="text" placeholder="Add a feature" onchange="add_feature(this)">
+						</li>
+           			</div>
+       			</div>
+       			<div class="row">
+           			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">
+            	   		<p>Key takeaway/Duties</p>
+           			</div>
+           			<div class="col-lg-7 col-sm-12 col-xs-12 list-content-margin">
+            			<p>It can be inferred that there are (prima facie) duties to:</p>
+						<template data-array="duties">
+							<li class="dilemma-list editdil-position"><input type="text" data-value=""></li>
+						</template>
+           			</div>
+       			</div>
+				<div class="row">
+        			<div class="col-lg-offset-1 col-lg-2 col-sm-12 col-xs-12 list-margin">
+            			<p>Rules</p>
+            		</div>
+            		<div class="col-lg-7 col-sm-12 col-xs-12 rule-dilemma">
+						<ul class="principles">
+							<template data-array="principles">
+								<li class="principle dilemma-list">
+									<p>An action is ethically preferable to another if it</p>
+									<ul class="clauses">
+										<template data-array="clauses">
+											<li class="clause dilemma-list"><input type="text" data-value=""></li>
+										</template>
+									</ul>
+								</li>
+							</template>
+						</ul>
+            		</div>
+        		</div>
+				<div class="row">
+					<div class="col-lg-offset-1 col-lg-11 col-sm-12 col-xs-12">
+						<button id="dilemma_save" class="btn btn-primary save" onclick="store_dilemma()">
+							<span>Save</span>
+						</button>
+						<button id="dilemma_delete" class="btn btn-danger delete" onclick="delete_dilemma()">
+							<span>Delete</span>
+						</button>
+					</div>
+				</div>
 			</div>
-		</section>
-	</article>
+			<div class="tab-pane" id="editdilemmacases">
+				<div class="row">
+        			<div class="col-lg-offset-1 col-lg-2 col-md-12 col-sm-12 col-xs-12 list-margin">
+            			<p>Cases</p>
+            		</div>
+            		<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12 list-content-margin">
+            		  	 <div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            		        	<a href="#" class="li-content-link" onclick="add_case(this)">+ ADD CASE</a>
+							</div>
+							<template data-array="cases">
+								<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" onclick="edit_case(this)">
+									<input type="hidden" data-value="id">
+            		            	<br>
+            		                <p data-content="name"></p> <a href="#" class="li-content-link">READ MORE</a>
+            		                <br>
+									<p data-content="description"></p>
+            		                Correct action:
+									<p data-content="action"></p>
+            		            </div>
+							</template>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="editdilemmadiscussion">
+				<div class="row">
+                	<div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12 list-margin">
+                	    <a href="#" class="li-content-link">+ADD COMMENT</a>&nbsp; &nbsp; &nbsp;<a href="#" class="li-content-link">+ADD FILTERS</a>&nbsp;<span>(no filters)</span>
+                	</div>    
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                	    <img src="images/star.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                	        <p><b>Remco Bloemen</b> added case: <b>Name</b>
+                	        </p>
+                	        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; <a href="#" class="tab">Comment</a>&nbsp; &nbsp;<img src="images/heart.jpg"/>
+                	        </span>
+                	</div>  
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                    	<img src="images/yellowstar.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> added dillema : <b>Autonomous car</b>
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; <a href="#" class="tab">Comment</a>&nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                	</div>  
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                	    <img src="images/lightmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> added on case <b>Name 1</b> :Somehow comments at least two levels facebook like comment.
+                        <br>Mentions @Nell Watson (one more color needed)
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                        <div class="div-margin">
+                            <p><b>Nell Watson</b>Writes something</p>
+                            <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                            </span>
+                        </div>
+                	</div>  
+            	</div>
+				<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1  col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">    
+                	    <img src="images/yellowmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> on dillema <b>Autonomous Vehicles</b> :Somehow comments at least two levels facebook
+                            like comment. Mentions @Nell Watson (one more color needed)
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                	</div>
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1 col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">
+                	    <img src="images/message.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Ola</b> on feature <b>Harm</b> :Lorem ipsum dolores etc.
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/heart.jpg"/>
+                        </span>
+                	</div>
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1  col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">
+                    	<img src="images/yellowmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                        <p><b>Remco Bloemen</b> on dillema <b>Autonomous Vehicles</b> :
+                        </p>
+                        <div class="">
+                            <p><i>Part of the dilemma, lorem ipsum</i></p>
+                        </div>
+                        <p>Somehow comments at least two levels facebook like comment. Mentions
+                            @Nell Watson (one more color needed)
+                        </p>
+                        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/blackheart.jpg"/>
+                        </span>
+                	</div>
+            	</div>
+            	<div class="row">
+                	<div class="col-lg-offset-2 col-lg-1  col-md-offset-2 col-md-1 col-sm-2 col-xs-2 list-margin">
+                	    <img src="images/yellowmessage.jpg"/>
+                	</div>
+                	<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 comment-margin">
+                	        <p><b>Remco Bloemen</b> on dillema <b>Autonomous Vehicles</b> :
+                	        </p>
+                	        <p>The driver of the car is either speeding, comment comment comment comment commet certain
+                	            circumstances, normal rules of the road can be fairly circumvented. Comment comment comment
+                	            Alternative version of a comment with a quote.
+                	        </p>
+                	        <span><a href="#" class="tab">Reply</a>&nbsp; &nbsp; &nbsp; &nbsp;<img src="images/blackheart.jpg"/>
+                	        </span>
+                	</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </main>
 
 <main id="edit_case" class="hidden">
 	<input type="hidden" data-value="id">
 	<input type="hidden" data-value="position">
 	<input type="hidden" data-value="dilemma_id">
-	<article class="dilemma">
-		<section>
-			<header>
-				<h1>Name</h1>
-			</header>
-			<input type="text" class="heading" data-value="name" placeholder="Name">
-		</section>
-		<section>
-			<header>
-				<h1>Description</h1>
-			</header>
-			<textarea data-value="description" placeholder="Description"></textarea>
-		</section>
-		<section>
-			<header>
-				<h1>Correct action</h1>
-			</header>
-			<label data-action-index="0">
-				<input type="radio" name="correct_action">
-				<span data-content="action_0"></span>
-			</label>
-			<label data-action-index="1">
-				<input type="radio" name="correct_action">
-				<span data-content="action_1"></span>
-			</label>
-		</section>
-		<section data>
-			<header>
-				<h1>Features</h1>
-			</header>
-			<div class="flex-2">
-				<div>
-					<h1 class="ellipsis" data-content="action_0"></h1>
-					<template data-array="feature_labels">
-						<div class="vertical feature_slider" data-action="0">
-							<label>
-								<input type="checkbox" data-value="">
-								<span data-content=""></span>
-							</label>
-							<input type="range" min="-3" max="3">
+
+    <div class="container">
+		<div class="row list-header-margin">
+   			<div class="col-lg-offset-2 col-lg-10 col-md-offset-2 col-md-10 col-sm-12 col-xs-12">
+        		<img src="images/vehicles.jpg" class="resize-img hidden-xs"/>    
+        	    	<p class="title-margin">Autonomous Vehicles</p>
+        	        <small>Added by Remco Bloemen</small>    
+        	</div>  
+        </div>
+		<div class="row text-bar">
+		   <div class="col-lg-offset-2 col-lg-10 col-md-offset-2 col-md-10 col-sm-12 col-xs-12">
+			  <ul class="li-position">
+				  <li class="li-style"><a href="#" class="field-li-link">+ADD CASE</a></li>
+				  <li class="li-style">
+					  <a href="#" class="field-li-link"><b>EDITED</b></a>
+				  </li>
+				</ul>
+			</div>
+		</div>			
+		<div class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
+			<div class="form-group">
+				<label for="title" class="title-margin">Title</label>
+				<input type="title" class="form-control" id="title" data-value="name" placeholder="Input value">
+			</div>
+			<div class="form-group">
+				<label for="description">Description</label>
+				<textarea name="description" id="description" data-value="description">Text area content
+				</textarea>
+			</div>
+			<div class="form-group">
+				<label for="actions">Actions</label>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<input type="actions" class="form-control" id="actions" placeholder="Input value"><br>
+							<input type="actions" class="form-control" id="actions" placeholder="Input value"><br>
+							<a href="#" class="form-link">+ADD ACTION</a>
 						</div>
-					</template>
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+							<input type="actions" class="form-control" id="actions" placeholder="Input value"><br>
+							<input type="actions" class="form-control" id="actions" placeholder="Input value">
+						</div>
+					</div>
+			</div>
+			<div class="form-group">						
+				<label for="actions">Features</label>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<template data-array="feature_labels">
+							<div class="vertical feature_slider" data-action="0">
+								<label><input type="checkbox" data-value=""><span data-content=""></span></label>									
+								<input type="range" min="-3" max="3" step="1" /><br>								
+							</div>							
+						</template>
+						<a href="#" class="form-link">+ADD FEATURE</a>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<template data-array="feature_labels">
+							<div class="vertical feature_slider" data-action="0">
+								<label><input type="checkbox" data-value=""><span data-content=""></span></label>									
+								<input type="range" min="-3" max="3" step="1" /><br>
+							</div>
+						</template>
+					</div>				
 				</div>
-				<div>
-					<h1 class="ellipsis" data-content="action_1"></h1>
-					<template data-array="feature_labels">
-						<div class="vertical feature_slider" data-action="1">
-							<label>
-								<input type="checkbox" data-value="">
-								<span data-content=""></span>
-							</label>
-							<input type="range" min="-3" max="3">
-						</div>
-					</template>
+			</div>						
+		</div>				
+		<div class="row">
+			<div class="col-lg-offset-2 col-lg-10 col-md-offset-2 col-md-10 col-sm-12 col-xs-12">
+				<div class="form-group">
+				<button id="case_save" class="btn btn-primary save" onclick="store_case()">
+					<span>Save</span>
+				</button>
+				<button id="case_delete" class="btn btn-danger delete" onclick="delete_case()">
+					<span>Delete</span>
+				</button>
 				</div>
 			</div>
-		</section>
-	</article>
+		</div>
+	</div>
+</main>
+
+<main id="add_comment" class="hidden">
+	<div class="container">
+    	<div class="row list-header-margin">
+        	<div class="col-lg-offset-3 col-lg-9 col-md-offset-2 col-md-10 col-sm-12 col-xs-12">
+            	<img src="images/vehicles.jpg" class="resize-img hidden-xs"/>    
+                <p class="title-margin">Autonomous Vehicles</p>
+                <small>Added by Remco Bloemen</small>    
+            </div>  
+        </div>
+        <div class="row text-bar">
+           <div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12">
+               <ul class="li-position">
+                   <li class="li-style"><p class="field-li-link">New Comment on</p></li>
+                   <li class="li-style">
+                       <select name="field">
+                           <option value="DILEMMA" selected><b>DILEMMA</b></option>
+                           <option value="CASE"><b>CASE</b></option>
+                           <option value="FEATURE"><b>FEATURE</b></option>
+                       </select>
+                   </li>
+              </ul>
+           </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12">
+				<!-- TODO only show if this is a comment on a case -->
+				<select name="cases" class="select-margin">
+                   <option value=""><b>KILLING AN OLD COUPLE OVER A CHILD</b></option>
+                   <option value=""></option>
+                </select>
+				<!-- END TODO -->
+				<!-- TODO only show if this is a comment on a feature -->
+				<select name="cases" class="select-margin">
+                    <option value=""><b>HARM</b></option>
+                    <option value=""></option>
+                </select>
+				<!-- END TODO -->
+               <p>Comment</p>
+               <textarea name="message">The driver of the car is either speeding, not staying in his/her lane,or about to hit an object. A range of circumstances might influence the driver's behaviour. In certain circumstances, normal rules of theroad can be fairly circumvented. Should an autonomous system take control of the car, and if so, at what point?
+               </textarea>
+               <button type="button" class="save-btn">SAVE</button>
+            </div>
+        </div>
+	</div>
 </main>
 
 <main id="not_found" class="hidden">
@@ -359,46 +793,15 @@
 	<p class="one-column">(it might be under construction, check back later!)</p>
 </main>
 
-<footer>
-	<p>
-		Brought to you by the Dex Ethics team.
-		We are deeply thankful for generous support from the
-			 <a href="https://www.sidn.nl/a/about-sidn/sidn-fund/">SIDN Fund</a>.
-		Follow our development chat on
-			<a href="https://gitter.im/dex-ethics/open-eth">Gitter</a>.
-		See our source code on
-			<a href="https://github.com/dex-ethics/open-eth">GitHub</a>.
-		Open Eth would not be possible without all the wonderful work done by
-			<a href="https://www.postgresql.org/">PostgSQL</a>,
-			<a href="https://auth0.com/">Auth0</a>,
-			<a href="http://postgrest.com/">PostgREST</a>,
-			<a href="https://www.nginx.com/">Nginx</a>,
-			<a href="https://letsencrypt.org/">Lets' encrypt</a>,
-			<a href="http://docker.io/">Docker</a>,
-			<a href="https://www.mozilla.org/">Mozilla</a>,
-			<a href="https://git-scm.com/">Git</a>,
-			<a href="http://www.linux.org/">Linux</a>,
-			<a href="http://www.ubuntu.com/">Ubuntu</a>,
-			<a href="https://www.debian.org/">Debian</a>,
-			<a href="https://www.eff.org/">EFF</a>,
-			<a href="https://www.gnu.org/">GNU</a>,
-			<a href="https://www.fsf.org/">FSF</a>,
-			<a href="https://creativecommons.org/">CC</a>, and many others. Very special thanks to 
-			<a href="http://uhaweb.hartford.edu/anderson/Site/GenEth.html">GenEth.</a>
-	</p>
-	<p>
-		All content on this website is available under the
-			<a href="https://creativecommons.org/licenses/by/4.0/">
-				Creative Commons Attribution 4.0 International</a>
-		license. By using this site, you agree to license your content under
-		this licence or a similar one and accept a hyperlink or URI to your
-		content on Open Eth as sufficient attribution.
-	</p>
-	<p>
-		Open Eth is an experiment in computational ethics. Use Open Eth and the
-		information theirin at your own risk.
-	</p>
+<footer class="page-footer">
+	<div class="col-lg-12">
+		<span>&nbsp;&nbsp;Contact:team@openeth.com</span>&nbsp;&nbsp;&nbsp;&nbsp;
+		<span>&copy; OpenEth 2016</span>
+	</div>
+   
 </footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/notifications.js"></script>
 <script type="text/javascript" src="//cdn.auth0.com/js/lock-9.0.js"></script>
 <script type="text/javascript" src="/authentication.js"></script>
@@ -866,14 +1269,14 @@ function load_page(url, state) {
 		if(url.path.length == 0) {
 			state = { dilemmas: state };
 			dilemmas_add_cases_count(state);
-			join('head_start', state).classList.remove('hidden');
+			//join('head_start', state).classList.remove('hidden');
 			join('start', state).classList.remove('hidden');
 		} else if(url.path.length == 2 && url.path[0] == 'dilemmas') {
 			dilemma_sort_cases(state);
 			solve_dilemma(state);
 			dilemma_map_actions(state);
 			if('edit' in url.query) {
-				join('head_edit_dilemma', state).classList.remove('hidden');
+				//join('head_edit_dilemma', state).classList.remove('hidden');
 				join('edit_dilemma', state).classList.remove('hidden');
 				rescale_textareas();
 			} else {
@@ -889,7 +1292,7 @@ function load_page(url, state) {
 			state.feature_labels= state.dilemma.features;
 			state.action_label = state.actions[state.action];
 			if('edit' in url.query) {
-				join('head_edit_case', state).classList.remove('hidden');
+				//join('head_edit_case', state).classList.remove('hidden');
 				join('edit_case', state).classList.remove('hidden');
 				rescale_textareas();
 				set_correct_action(state.action);
@@ -910,6 +1313,10 @@ function load_page(url, state) {
 }
 
 function go_to(url) {
+	if(url.indexOf("#") != -1)
+	{
+		return;
+	}
 	url = parse_url(url);
 	notify("Going to " + url + "...", 5, "debug");
 	load_state(url, function(state) {

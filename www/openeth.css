@@ -1,0 +1,736 @@
+*{
+	font-family:Montserrat;
+}
+
+html {
+	position: relative;
+	min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+	margin-bottom: 100px;
+}
+.page-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+  /* Set the fixed height of the footer here */
+	height: 0px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #dcd6d6; 
+	font-size: 10px;
+	border-top: 1px solid #dcd6d6;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 10%;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #000;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: 500;
+    font-style: normal;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.navbar-default {
+    background-color: #fff;
+    border-color: white;
+    padding-top: 16px;
+}
+
+.navbar-brand>img {
+    display: block;
+    width: 10em;
+}
+
+ul.nav.navbar-nav{
+	margin-top:6px;
+}
+
+.navbar-toggle{
+	position: relative;
+    float: left;
+    padding: 9px 10px;
+    margin-top: 8px;
+    margin-left: 15px;
+    margin-bottom: 8px;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.page-header{
+	padding-bottom: 30px;
+    margin: 115px 0 20px;
+    font-size: 15px;
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+    font-family: Montserrat;
+	border-bottom: 1px solid #dcd6d6;
+    
+
+}
+
+.contentdiv{
+	border-bottom: 1px solid #dcd6d6;
+    padding-bottom: 50px;
+  }
+
+.main-h2{
+	font-size: 15px;
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+    font-family: Montserrat;
+	letter-spacing: .05em;
+	
+}
+
+.main-p{
+	font-weight:bold;
+	color: #666;
+	font-family: Montserrat;
+	text-align:center;	
+	font-size:12px;
+}
+
+small{
+	font-weight: bolder!important;
+    letter-spacing: 0em;
+}
+
+.main-button
+{
+	border: 2px solid #000;
+    width: 87px;
+    font-size: 8px;
+    padding: 10px 26px;
+    border-radius: 4px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+	font-weight: 900;
+	background-color: transparent;
+	transition: 0.1s background-color linear, 0.1s color linear;
+}
+
+.main-button a{
+	color:#000;
+	text-decoration:none;
+	background-color: transparent;
+}
+
+
+.img-position{
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 20px;
+    margin-bottom: 22px;
+}
+
+.page-content{
+	padding-bottom: 30px;
+    margin: 35px 0 20px;
+    font-size: 15px;
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+    font-family: Montserrat;
+}
+
+.quote{
+	font-size: 25px;
+}
+
+.author{
+	text-align: right;
+    font-size: 10px;
+	margin-bottom: 40px;
+}
+
+.text-field{
+	font-size:10px;
+}
+
+
+/*For Dilemmas*/
+.headerdiv{
+	border-bottom: 1px solid #dcd6d6;
+    padding-bottom: 20px;
+}
+
+.dilemma-header{
+	padding-bottom: 30px;
+    margin: 115px 0 20px;
+    font-size: 15px;
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+    font-family: Montserrat;
+}
+
+.dilemma-content{
+	min-height:420px;
+}
+
+.dilemma-content img{
+	cursor: pointer;
+}
+
+.dilemma-text{
+	font-weight:bold;
+	color: #666;
+	font-family: Montserrat;
+	text-align:center;	
+	font-size:12px;
+	min-height: 85px;
+	max-height: 50px;
+    overflow: hidden;
+	cursor: pointer;
+}
+
+.dialog{
+	font-size: 15px;
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+    font-family: Montserrat;
+	letter-spacing: .05em;
+}
+
+.resize-row{
+	margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+.dilemma-link{
+	text-decoration:none;
+	color:#666;
+	font-weight: 900;
+    font-size: 12px;	
+}
+
+.dilemma-link:hover{
+	text-decoration:none;
+	color:#666;
+}
+
+.stylish-input-group .input-group-addon{
+    background: yellow !important; 
+	padding: 0px 7px;
+}
+.stylish-input-group .form-control{
+	box-shadow:0 0 0; 
+	border-color:#ccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+
+.div-margin{
+	margin-top:20px;
+	margin-bottom:35px;
+}
+
+/*For discussion*/
+.comment-margin{
+	margin-top:35px;
+	}
+
+/*For List of Dilemmas*/
+.list-header-margin{
+	margin-top: 8%;
+    margin-bottom: 20px;
+}
+
+.list-font{
+	font-size:10px;
+}
+
+.icon{
+	color:#666;
+	margin-right: 10px;
+}
+
+.resize-img{
+	width:90px;
+	float:left;
+	margin-right: 5%;
+}
+
+.list-margin{
+	margin-top: 35px;
+}
+
+.title-margin{
+	line-height: 0px;
+    margin-top: 38px;
+	font-weight: bold;
+    font-size: 16px;
+    
+}
+
+.li-position{
+	display: inline-flex;
+    list-style: none;
+	color: #666;
+    font-weight: bold;
+    font-family: Montserrat;
+	margin-left:-35px;
+	
+}
+
+.li-link{
+	text-decoration:none;
+	color:#666;
+}
+
+.li-link:hover{
+	text-decoration:none;
+	color:#666;
+}
+
+.list-content-margin{
+	margin-top: 34px;
+	margin-left: 9px;
+}
+
+.li-style{
+	 padding: 20px 30px 10px 5px;
+}
+
+.text-bar{
+	border-top:1px solid #dcd6d6;
+	border-bottom:1px solid #dcd6d6;
+}
+
+.li-content-link{
+	text-decoration:none;
+	color:#000;
+	font-weight:800;
+}
+
+.li-content-link:hover{
+	text-decoration:none;
+	color:#000;
+}
+
+.dilemma-list{
+	list-style: none;
+	
+}
+
+.dilemma-position{
+	float:left;
+	margin: 0px 50px 0px 0px;
+}
+
+.rule-dilemma{
+	margin-top: 36px;
+    margin-left: -31px;
+}
+
+.principle{
+	margin-bottom: 10px;
+}
+
+.principle p{
+	margin-bottom: -1px;
+	font-weight:bold;
+}
+
+.clause{
+	margin-left: -41px;
+}
+
+li.clause input{
+	word-break: keep-all;
+	width:100%;
+	text-overflow: ellipsis;
+}
+
+li.dilemma-list input{
+	border-top:none;
+	border-left:none;
+	border-right:none;
+	border-bottom:1px solid transparent;
+	text-overflow: ellipsis;
+}
+
+li.dilemma-list input:focus{
+	border-bottom-color: #fcc26a;
+}
+
+li.dilemma-list input[type=text]:focus{
+	border-bottom-color: #fcc26a;
+}
+
+
+textarea:focus{
+	border-bottom-color: #fcc26a;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+
+.reposition-desc-text{
+	margin-left:-12px;
+	margin-top: 35px;
+}
+
+
+.dilemma-desc{
+	margin-top:34px;
+}
+
+/*For edit dilemma and cases*/
+.editdesc-text{
+	margin-left:-13px;
+}
+
+.editdil-position{
+	float:left;
+}
+
+.btn-reposition{
+	margin-left:20px;
+}
+
+.close-btn{
+	width:10px;
+	height:10px;
+	cursor: pointer;
+}
+
+
+
+/*For cases*/
+.div-margin{
+	margin-left: 30px;
+    margin-top: 20px;
+}
+
+.tab{
+	color: #666;
+    text-decoration: none;
+    font-size: 10px;
+}
+
+.tab:hover{
+	color:#666;
+	text-decoration: none;
+    font-size: 10px;
+}
+
+.case-margin{
+	margin-top:35px;
+	cursor: pointer;
+}
+
+.cursor{
+	cursor:pointer;
+}
+
+.case-link{
+	text-decoration: none;
+    color: #000;
+    font-weight: 800;
+	font-size: 13px;
+}
+
+.case-link:hover{
+	text-decoration: none;
+    color: #000;
+}
+
+.case-position{
+	float:left;
+}
+
+.case-content{
+	margin-left:10px;
+}
+
+.table-margin{
+	padding-left:25px;
+	text-align:right;
+}
+
+.viewcase-reposition{
+	padding-left: 24px;
+}
+
+/*For field*/
+select{
+	border:none;
+	font-weight:bold;
+}
+
+.select-margin{
+	margin-top: 35px;
+    margin-left: -4px;
+}
+
+textarea {
+    width: 95%;
+    min-height: 60px!important;
+    background-color: #f8f8f8;
+    font-size: 15px;
+	border-top:none;
+	border-left:none;
+	border-right:none;
+	border-bottom:1px solid transparent;
+	font-weight: lighter;
+    resize: none;
+}
+
+
+.save-btn{
+	border: 2px solid #000;
+    width: 87px;
+    font-size: 10px;
+	font-weight:800;
+    padding: 10px 26px;
+    background-color: transparent;
+	margin-top:20px;
+}
+
+form p{
+	padding-top:30px;
+}
+
+.field-li-link{
+	text-decoration:none;
+	color:#666;
+	margin-left: -10px;
+}
+
+.field-li-link:hover{
+	text-decoration:none;
+	color:#666;
+}
+
+/*For form*/
+.title-margin{
+	margin-top:35px;
+}
+
+#title{
+	width:90%;
+}
+
+#actions{
+	width:85%;
+}
+
+.form-link{
+	text-decoration:none;
+	color:#666;
+	font-weight: 800;
+    font-size: 12px;	
+}
+
+.form-link:hover{
+	text-decoration:none;
+	color:#666;
+}
+
+.form-img{
+	width: 20px;
+    height: 20px;
+    margin-top: 10px;
+}
+
+/*For add case*/
+.addcase-style{
+	text-decoration: none;
+    color: #000;
+	padding: 9px 30px 0px 0px;
+}
+
+.addcase-style a{
+	text-decoration: none;
+    color: #000;
+	padding: 9px 30px 0px 0px;
+}
+
+.addcase-style a:hover{
+	text-decoration:none;
+    color: #000;
+}
+
+.addcase-margin{
+	margin-bottom:-2px;
+	margin-top:20px;
+}
+
+/*For media screen*/
+
+@media only screen and (min-width: 320px) and (max-width: 420px){
+	/*.navbar-brand>img {
+		display:none!important;
+	}*/
+	
+	
+	.navbar-default {
+    background-color: #fff;
+    border-color: white;
+    margin-top: 0;
+	padding-top:10px;
+	}
+	
+	.page-header{
+		margin: 76px 0 20px;
+	}
+	
+	.navbar-default .navbar-toggle .icon-bar {
+    background-color: #000;
+	}
+	
+	.title-margin {
+    margin-top: 46px;
+	}
+
+/*For Dilemmas*/
+	.div-margin {
+		margin-left: 0;
+		margin-top: 10px;
+	}
+	
+	.main-button{
+		margin-bottom:15px;
+	}
+	
+	.rule-dilemma {
+		margin-top: 2px;
+		margin-left: -36px;
+	}
+
+	.editdesc-text {
+		margin-bottom: -19px;
+	}
+	
+	
+	textarea {
+		width: 95%;
+		min-height: 120px!important;
+		background-color: #f8f8f8;
+		font-size: 14px;
+		border: none;
+		font-weight: lighter;
+		resize: none;
+	}
+
+	.dilemma-desc {
+		margin-top: 1px;
+		margin-left: -11px;
+	}
+	
+	.desc-margin{
+		margin-left:-13px!important;
+	}
+
+
+/*For List of Dilemmas*/
+	.li-style {
+		padding: 9px 30px 0px 0px;
+		font-size: 0.75em;
+	}
+
+	.list-content-margin {
+    margin-top: 2px;
+    margin-left: 0;
+	}
+	
+	.comment-margin{
+		margin-top:35px;
+	}
+	
+	.dilemma-header {
+    padding-bottom: 8px;
+    margin: 62px 0 20px;
+	}
+	
+	.list-header-margin{
+	margin-top: 10%;
+    margin-left: 2px;
+    margin-right: 1px;
+    margin-bottom: 20px;
+	}
+	
+	/*For cases*/
+	.field-li-link {
+    text-decoration: none;
+    color: #666;
+    margin-left: 13px;
+	}
+	
+	.case-margin {
+    margin-top: 0px;
+	}
+	
+	.case-content {
+    margin-left: 1px;
+}
+	
+}
+
+	
+@media only screen and (min-width: 768px) and (max-width:1024px){
+	.list-content-margin {
+    margin-top: 0!important;
+    margin-left: 0!important;
+	}
+	
+	.dilemma-desc {
+    margin-top: 5px;
+    margin-left: -9px;
+	}
+	
+	.rule-dilemma {
+    margin-top: 4px;
+    margin-left: -37px;
+	}
+	
+	.list-header-margin {
+    margin-top: 18%;
+    margin-bottom: 20px;
+	}
+	
+	.mobilelist-margin{
+		margin-top:2px!important;
+		margin-left:-13px;
+	}
+	
+	.case-margin {
+    margin-top: 8px;
+    cursor: pointer;
+	}
+	
+	.case-content {
+    margin-left: 2px;
+	}
+	
+}
+
+@media only screen and (min-width: 1200px){
+	.btn-reposition {
+    margin-left: 72px;
+	}
+}
+
+@media only screen and (min-width: 1600px){
+	.btn-reposition {
+    margin-left: 144px;
+	}
+
+}
