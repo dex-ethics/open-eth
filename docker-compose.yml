@@ -7,25 +7,25 @@
 #
 version: '2'
 services:
-  len:
-    image: recmo/docker-lets-encrypt-proxy
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    links:
-      - web
-    environment:
-      - DOMAINS=^(|www\\.)openeth\\.com$$
-      - ORIGIN_HOST=web
-      - ORIGIN_PORT=8080
-    volumes:
-      - ./cache:/cache:rw
+   len:
+      image: recmo/docker-lets-encrypt-proxy
+      restart: always
+      ports:
+        - "80:80"
+        - "443:443"
+      links:
+        - web
+      environment:
+        - DOMAINS=^(|www\\.)openeth\\.com$$
+        - ORIGIN_HOST=web
+        - ORIGIN_PORT=80
+      volumes:
+        - ./cache:/cache:rw
    web:
       image: nginx
       volumes:
          - ./www:/srv/www:ro
-         - ./nginx.conf:/etc/nginx/nginx.conf:ro
+         - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
          - ./log/web:/var/log/nginx:rw
          - ./empty:/var/empty:ro
       links:
