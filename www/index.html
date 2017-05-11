@@ -19,15 +19,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>    
               </button>
-              <a class="navbar-brand" href="#mainPage"><img src="images/brand_logo.png" class="hidden-xs" alt="openeth"></a>
+              <a class="navbar-brand" href="index.html"><img src="images/brand_logo.png" class="hidden-xs" alt="openeth"></a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <li><a href="/">home</a></li>
-                <li><a href="/play">play</a></li>
-                <li><a href="/blog">blog</a></li>
-                <li><a href="/about">about</a></li>
-                <li><a href="/contact">contact</a></li>
+                <li><a href="index.html">home</a></li>
+                <li><a href="index.html">play</a></li>
+                <li><a href="blog.html">blog</a></li>
+                <li><a href="about.html">about</a></li>
+                <li><a href="contact.html">contact</a></li>
 				<li><a class="button" id="register" onclick="register()">Join OpenEth</a></li>
                 <li><a id="button_login" onclick="login()" href="#">log in</a></li>
                 <li><a id="button_logout" class="hidden" onclick="logout()" href="#">log out</a></li>
@@ -380,7 +380,7 @@
        <div class="row text-bar">
        		<div class="col-lg-offset-3 col-lg-9 col-md-offset-3 col-md-9 col-sm-12 col-xs-12">
         		<ul class="li-position">
-            		<li class="addcase-style"><a href="#">+ADD CASE</a></li>
+            		<li class="addcase-style"><a href="#" onclick="add_case(this)">+ADD CASE</a></li>
                 	<li class="addcase-style"><a href="#">EDIT</a></li>
             	</ul>
        		</div>
@@ -673,7 +673,7 @@
 		<div class="row text-bar">
 		   <div class="col-lg-offset-2 col-lg-10 col-md-offset-2 col-md-10 col-sm-12 col-xs-12">
 			  <ul class="li-position">
-				  <li class="li-style"><a href="#" class="field-li-link">+ADD CASE</a></li>
+				  <li class="li-style"><a href="#" class="field-li-link" onclick="add_case(this)">+ADD CASE</a></li>
 				  <li class="li-style">
 					  <a href="#" class="field-li-link"><b>EDITED</b></a>
 				  </li>
@@ -691,17 +691,14 @@
 				</textarea>
 			</div>
 			<div class="form-group">
-				<label for="actions">Actions</label>
+				<label for="actions">Correct Action</label>
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<input type="actions" class="form-control" id="actions" placeholder="Input value"><br>
-							<input type="actions" class="form-control" id="actions" placeholder="Input value"><br>
-							<a href="#" class="form-link">+ADD ACTION</a>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-							<input type="actions" class="form-control" id="actions" placeholder="Input value"><br>
-							<input type="actions" class="form-control" id="actions" placeholder="Input value">
-						</div>
+						<input type="radio" name="correct_action[]">Action A<br>
+						<input type="radio" name="correct_action[]">Action B<br>
+						<br>
+						<a href="#" class="form-link">+ADD ACTION</a>
+						</div>						
 					</div>
 			</div>
 			<div class="form-group">						
