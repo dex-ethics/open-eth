@@ -1,0 +1,323 @@
+body{
+	background:#f5f5f5 !important;
+	padding:50px 0;	
+	position:relative;
+}
+a, a:hover, a:focus{color:iherit; text-decoration:none;}
+
+.effects{display: block; width: 100%; margin: 0 auto; text-align: center;}
+.effectsDiv{display:block; width:100%; border-top: 1px solid #000; padding: 25px 0;}
+.socialIcon{display:inline-block; margin:0 25px 0 0;}
+.socialIcon a {color: #333; text-decoration: none; font-size: 12px; position: relative;}
+
+span.icon {
+	display: inline-block; width: 22px; height: 22px; color: #fff; background: #999; border-radius: 50%; padding: 0px 5px; margin:0 2px 0 0; -webkit-transition: background-color, opacity .5s ease-out; transition: background-color, opacity .5s ease-out; position: relative;}	
+.share span.icon:hover{background:#000; transition:all 0.25s ease-in-out;}
+.like span.icon:hover .pulse {
+	display: inline-block; vertical-align: middle; -webkit-transform: perspective(1px) translateZ(0); transform: perspective(1px) translateZ(0); box-shadow: 0 0 1px transparent;}
+.share span.icon{position:relative;}
+.active span.icon{background-color:#d10000;}
+
+/* ========= Btn Effects ========= */	
+	
+@keyframes pulse_animation {
+	0% {transform: scale(1);}
+	30% {transform: scale(1);}
+	40% {transform: scale(1.5);}
+	50% {transform: scale(1);}
+	60% {transform: scale(1);}
+	70% {transform: scale(1.5);}
+	80% {transform: scale(1);}
+	100% {transform: scale(1);}
+}
+
+/* Pulse */
+
+.hvr-pulse {
+	display: inline-block; vertical-align: middle; -webkit-transform: perspective(1px) translateZ(0); transform: perspective(1px) translateZ(0); box-shadow: 0 0 1px transparent;}
+.hvr-pulse:hover, .hvr-pulse:focus, .hvr-pulse:active {
+	-webkit-animation-name: hvr-pulse; animation-name: hvr-pulse; -webkit-animation-duration: 1s; animation-duration: 1s; -webkit-animation-timing-function: linear; animation-timing-function: linear; -webkit-animation-iteration-count: infinite;animation-iteration-count: infinite;}
+
+@-webkit-keyframes hvr-pulse {
+  25% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  75% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+}
+@keyframes hvr-pulse {
+  25% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  75% {
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
+  }
+}
+
+/* Pulse Grow */
+
+.hvr-pulse-grow {
+	display: inline-block; vertical-align: middle; -webkit-transform: perspective(1px) translateZ(0); transform: perspective(1px) translateZ(0); box-shadow: 0 0 1px transparent;}
+.hvr-pulse-grow:hover, .hvr-pulse-grow:focus, .hvr-pulse-grow:active {
+	background-color: #d10000; -webkit-animation-name: hvr-pulse-grow; animation-name: hvr-pulse-grow; -webkit-animation-duration: 0.3s; animation-duration: 0.3s; -webkit-animation-timing-function: linear; animation-timing-function: linear; -webkit-animation-iteration-count: infinite; animation-iteration-count: infinite; -webkit-animation-direction: alternate; animation-direction: alternate;}
+	
+@-webkit-keyframes hvr-pulse-grow {
+  to {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+}
+@keyframes hvr-pulse-grow {
+  to {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+}
+
+/* ========== Hearts Effects ========== */
+
+#background-wrap {
+	/* display: inline-block; position: fixed; top: 0;  bottom: 0; left: 0;  right: 25%; z-index: -1; */
+	/* width: 50%; display: inline-block;  position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 0; margin: 0 auto; */
+	
+	width: 50%; display: inline-block; position: absolute; top: 0; bottom: 0; left: 0; right: 12%; z-index: 0; margin: -25px auto;
+	}		
+
+/* OBJECTS */
+
+/* .heart {
+	width: 16px;  height: 16px; background-color: #d10000; display: inline-block; margin: 0 10px;  transform: rotate(-45deg)  !important; position: relative; top: 0;}
+.heart:before,.heart:after {
+	content: ""; background-color: #d10000; border-radius: 50%; height: 16px; position: absolute; width: 16px;}
+.heart:before {top: -9px; left: 0;}
+.heart:after {left: 9px; top: 0;} */
+
+
+/* KEYFRAMES */
+/*
+@keyframes sideWays { 
+    0% { 
+       
+		margin-top:35px;
+    }
+			
+	35%{
+		margin-left:50px;
+		margin-top:50px;
+	}
+	70%{
+		margin-left:100px;
+	}
+    100% { 
+        display:none; opacity: 0; visibility: hidden;
+    }
+}
+
+@keyframes side { 
+    0% { 
+        margin-left:0px;
+		margin-top:20px;
+    }
+			
+	35%{
+		margin-left:50px;
+		margin-top:50px;
+	}
+	70%{
+		margin-left:100px;
+	}
+    100% { 
+        display:none; opacity: 0; visibility: hidden;
+    }
+}
+
+*/
+
+/* @keyframes sideWays { 
+    0% { 
+        margin-left:150px;
+    }
+	35%{
+		margin-left:0px;
+	}
+	70%{
+		margin-left:-50px;
+	}
+    100% { 
+        display:none; opacity: 0; visibility: hidden;
+    }
+}
+ */
+/* ANIMATIONS */
+
+/* .x1 {
+    -webkit-animation: animateBubble 25s linear , sideWays 2s ease-in-out alternate;
+    -moz-animation: animateBubble 25s linear , sideWays 2s ease-in-out alternate;
+    animation:  25s linear, 2s ease-in-out alternate;
+    left: -100px;
+    top: 0;
+    -webkit-transform: scale(0.6);
+    -moz-transform: scale(0.6);
+    transform: scale(0.6);
+}
+
+.x2 {
+    -webkit-animation: animateBubble 20s linear , sideWays 4s ease-in-out  alternate;
+    -moz-animation: animateBubble 20s linear , sideWays 4s ease-in-out  alternate;
+    animation: animateBubble 20s linear , sideWays 4s ease-in-out  alternate;
+    left: -50px;
+    top: -25px;
+    -webkit-transform: scale(0.4);
+    -moz-transform: scale(0.4);
+    transform: scale(0.4);
+}
+
+.x3 {
+    -webkit-animation: animateBubble 28s linear , sideWays 2s ease-in-out  alternate;
+    -moz-animation: animateBubble 28s linear , sideWays 2s ease-in-out  alternate;
+    animation: animateBubble 28s linear, sideWays 2s ease-in-out alternate;
+    left: 10px;
+    top: -50px;
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    transform: scale(0.7);
+}
+
+.x4 {
+    -webkit-animation: animateBubble 22s linear , sideWays 3s ease-in-out  alternate;
+    -moz-animation: animateBubble 22s linear , sideWays 3s ease-in-out  alternate;
+    animation: animateBubble 22s linear , sideWays 3s ease-in-out  alternate;
+    left: -25px;
+    top: -25px;
+    -webkit-transform: scale(0.3);
+    -moz-transform: scale(0.3);
+    transform: scale(0.3);
+}
+
+.x5 {
+    -webkit-animation: animateBubble 29s linear , sideWays 4s ease-in-out  alternate;
+    -moz-animation: animateBubble 29s linear , sideWays 4s ease-in-out  alternate;
+    animation: animateBubble 29s linear , sideWays 4s ease-in-out  alternate;
+    left: 0;
+    top: -100px;
+    -webkit-transform: scale(0.5);
+    -moz-transform: scale(0.5);
+    transform: scale(0.5);
+} */
+
+@-webkit-keyframes mymove {
+    from {left: 0px;}
+    to {left: 100px; top: 100px;}
+}
+
+@-webkit-keyframes mymove1 {
+    from {left: 0px;}
+    to {left: 100px; top: -50px;}
+}
+
+@-webkit-keyframes mymove2 {
+    from {right: 0px;}
+    to {right: 100px; top: 100px;}
+}
+
+@-webkit-keyframes mymove3 {
+    from {right: 0px;}
+    to {right: 100px; top: -100px;}
+}
+
+@-webkit-keyframes mymove4 {
+    from {right: 0px;}
+    to {right: 100px; top: -20px;}
+}
+
+
+.x1 {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transform: scale(1);
+    animation: mymove 7s ;
+
+}
+
+.x2 {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transform: scale(1);
+    animation: mymove1 7s ;
+}
+
+.x3 {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transform: scale(1);
+    animation: mymove2 7s ;
+
+}
+
+.x4 {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transform: scale(1);
+       animation: mymove3 7s ;
+
+} 
+
+.x5 {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transform: scale(1);
+   animation: mymove4 7s ;
+}
+
+div.heart1 {
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+div.heart2 {
+    position: absolute;
+    top: 0;
+    left: 50px;
+}
+div.heart3 {
+    position: absolute;
+    top: 0;
+    right: 50px;
+}
+
+div.heart4 {
+    position: absolute;
+    top: -50px;
+    /* left: 100px; */
+    bottom: 50px;
+}
+div.heart5 {
+    position: absolute;
+    top: 0px;
+    /* left: 100px; */
+    bottom: 50px;
+}
+
+
+
+.open>.dropdown-menu {display: inline-block !important; /* width: 100%; */}
+ul.dropdown-menu {width: 100px; min-width: 100px; padding: 10px 10px; margin: 10px 0 0;}
+ul.dropdown-menu li{width: 100%; background: #ddd; color: #fff; margin: 0 0 5px;}
+/* ul.dropdown-menu li:hover{background:#333 !important;} */
+ul.dropdown-menu li a{color:#fff !important; padding:3px 6px !important;}
+ul.dropdown-menu li a i{margin-right:10px !important;}
+
+ul.dropdown-menu li.fb{background:#3a589e;}
+ul.dropdown-menu li.tw{background:#429cd6;}
+ul.dropdown-menu li.linkd{background:#0d77b7;}
+ul.dropdown-menu li.insta{background:#cd486b;}
+ul.dropdown-menu li.gp{background:#df4b37;}
+
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{background:#333 !important;}
+
+
