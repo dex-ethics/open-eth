@@ -1,6 +1,6 @@
 # Welcome to Open Eth!
 
-You can play with ethics on [**openeth.com**](https://openeth.com/).
+You can play with ethics on [**legacy.ethicsnet.org**](http://legacy.ethicsnet.org/).
 
 You can chat with the developers on [**gitter**](https://gitter.im/dex-ethics/open-eth).
 
