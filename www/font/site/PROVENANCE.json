@@ -1,0 +1,49 @@
+{
+  "stylesheet_source": "https://fonts.googleapis.com/css?family=Montserrat|Lato",
+  "downloaded": "2026-10-11",
+  "assets": [
+    {
+      "file": "font-00.woff2",
+      "source": "https://fonts.gstatic.com/s/lato/v25/S6uyw4BMUTPHjxAwXjeu.woff2",
+      "sha256": "8b9fc9737043f88c1a9a7195c27a239bd329cc33d928ffb67736c61ae7a1dbbd"
+    },
+    {
+      "file": "font-01.woff2",
+      "source": "https://fonts.gstatic.com/s/lato/v25/S6uyw4BMUTPHjx4wXg.woff2",
+      "sha256": "918b7dc3e2e2d015c16ce08b57bcb64d2253bafc1707658f361e72865498e537"
+    },
+    {
+      "file": "font-02.woff2",
+      "source": "https://fonts.gstatic.com/s/montserrat/v31/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Hw0aXpsog.woff2",
+      "sha256": "d2b0f62ec1a296267618c01aae126ee87540b548f647776cd12dd9ef2a533265"
+    },
+    {
+      "file": "font-03.woff2",
+      "source": "https://fonts.gstatic.com/s/montserrat/v31/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Hw9aXpsog.woff2",
+      "sha256": "b2e276e2401a1539faea5639b69df0bfed888c2b26178d990c7af37a420a678b"
+    },
+    {
+      "file": "font-04.woff2",
+      "source": "https://fonts.gstatic.com/s/montserrat/v31/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Hw2aXpsog.woff2",
+      "sha256": "575aa330708efd0385558f2649d4deedcfdab42059eeffbd5e53dcacddf614b0"
+    },
+    {
+      "file": "font-05.woff2",
+      "source": "https://fonts.gstatic.com/s/montserrat/v31/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Hw3aXpsog.woff2",
+      "sha256": "30f166cea0894715f7b1342798306dd4206bc1d0331440d543f6e7f7fff04539"
+    },
+    {
+      "file": "font-06.woff2",
+      "source": "https://fonts.gstatic.com/s/montserrat/v31/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Hw5aXo.woff2",
+      "sha256": "e66bcd2761ab6924b25ce70dafe10e57a39193c4fea1516730bd9cb5240af6c8"
+    },
+    {
+      "file": "Montserrat-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/montserrat/OFL.txt"
+    },
+    {
+      "file": "Lato-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/lato/OFL.txt"
+    }
+  ]
+}
